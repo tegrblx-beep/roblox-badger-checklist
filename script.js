@@ -1089,6 +1089,29 @@ var BADGERS = [
       { link: "https://www.roblox.com/badges/2124855991/Completed-Lab-Hidden-Ending" },
     ]
   },
+  {
+    id: "the-noobs-farthead-badger",
+    name: "The Noob's Farthead Badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/16008796752/A-Noobs-Farthead-Badger",
+    milestones: [
+      { name: "Winner!", target: 11 }
+    ],
+    sheetUrl: "",
+    badges: [
+      { link: "https://www.roblox.com/badges/2124843436/Scared-Of-The-Dark" },
+      { link: "https://www.roblox.com/badges/4034435236286271/Apprentice-of-the-Horse" },
+      { link: "https://www.roblox.com/badges/2139674870/aqua" },
+      { link: "https://www.roblox.com/badges/2148138325/Secret-7" },
+      { link: "https://www.roblox.com/badges/2140855244/TNT-Storehouse-Complete" },
+      { link: "https://www.roblox.com/badges/2132179395/Hard-To-Destroy" },
+      { link: "https://www.roblox.com/badges/2141365298/Harold" },
+      { link: "https://www.roblox.com/badges/2125896013/Locked-In-and-Praying" },
+      { link: "https://www.roblox.com/badges/2125909825/Split-Second-Thinking" },
+      { link: "https://www.roblox.com/badges/2127250002/Secret-Ending-Farewell-In-Veil" },
+      { link: "https://www.roblox.com/badges/2124914803/You-walked-50K-studs" },
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ==================================================================================
