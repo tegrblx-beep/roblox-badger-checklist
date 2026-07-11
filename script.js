@@ -1092,7 +1092,7 @@ var BADGERS = [
   {
     id: "the-noobs-farthead-badger",
     name: "The Noob's Farthead Badger",
-    difficulty: "Hard",
+    difficulty: "Intense",
     gameLink: "https://www.roblox.com/games/16008796752/A-Noobs-Farthead-Badger",
     milestones: [
       { name: "Winner!", target: 11 }
