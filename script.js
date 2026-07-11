@@ -8,6 +8,8 @@ favicon.href =
     icon +
     "</text></svg>";
 
+document.head.appendChild(favicon);
+
 
 var BADGERS = [
   {
