@@ -27,7 +27,7 @@
     --border: #2A2E3A; --border-strong: #383D4C;
     --text: #ECE9E2; --text-dim: #9497A8; --text-faint: #62667A;
     --gold: #E8B23D; --gold-dim: #6b5726;
-    --green: #58D6A0; --amber: #F0B94A; --coral: #EE6F6F; --violet: #B48CF2; --neutral-diff: #8B8FA3;
+    --green: #58D6A0; --amber: #F0B94A; --coral: #EE6F6F; --violet: #4a7fea; --red: #930000; --gray: #686868; --darkgray: #ff00ff; --neutral-diff: #ffffff;
     --radius: 10px;
   }
   *{ box-sizing: border-box; }
@@ -1207,8 +1207,11 @@ var BADGERS = [
 
   function difficultyColor(text){
     var t = (text||'').toLowerCase();
-    if (/extreme|insane|impossible|nightmare/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--violet');
-    if (/hard|difficult|tough/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--coral');
+    if (/extreme|insane/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--violet');
+    if (/hard|tough/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--coral');
+    if (/impossible|nil/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--darkgray');
+    if (/intense/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--gray');
+    if (/difficult|challenging/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--red');
     if (/med|moderate|normal/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--amber');
     if (/easy|simple|beginner/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--green');
     return getComputedStyle(document.documentElement).getPropertyValue('--neutral-diff');
