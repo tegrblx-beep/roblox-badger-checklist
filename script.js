@@ -1044,6 +1044,51 @@ var BADGERS = [
       { link: "https://www.roblox.com/badges/2124910870/Beaten-Challenging" },
     ]
   },
+  {
+    id: "the-noobs-farthead-badger",
+    name: "The Noob's Farthead Badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/16008796752/A-Noobs-Farthead-Badger",
+    milestones: [
+      { name: "Noob Ascension Completed", target: 33 }
+    ],
+    sheetUrl: "",
+    badges: [
+      { link: "https://www.roblox.com/badges/2124450085/Glitch-Master" },
+      { link: "https://www.roblox.com/badges/968392659/12-Secret-Trials" },
+      { link: "https://www.roblox.com/badges/66918948/Surfs-Up" },
+      { link: "https://www.roblox.com/badges/2124485632/Elephants-Cant-Fly" },
+      { link: "https://www.roblox.com/badges/2124486439/One-HP-Wonder" },
+      { link: "https://www.roblox.com/badges/1879570125883748/Beat-World-3" },
+      { link: "https://www.roblox.com/badges/2127966083/Sshh" },
+      { link: "https://www.roblox.com/badges/2124637036/The-Secret-Badge" },
+      { link: "https://www.roblox.com/badges/2128618422/got-exploded-100-times" },
+      { link: "https://www.roblox.com/badges/2129212145/Plate-Master" },
+      { link: "https://www.roblox.com/badges/851853565/Master-Boater" },
+      { link: "https://www.roblox.com/badges/176685508/Manager" },
+      { link: "https://www.roblox.com/badges/2130236466/Stage-2740" },
+      { link: "https://www.roblox.com/badges/682460336484221/100-Streak" },
+      { link: "https://www.roblox.com/badges/2125985611/vehicular-manslaughter" },
+      { link: "https://www.roblox.com/badges/1182327518010206/He-smells-you" },
+      { link: "https://www.roblox.com/badges/2149971690/Atrium-Temporis" },
+      { link: "https://www.roblox.com/badges/2127570327/Most-Valuable-Player" },
+      { link: "https://www.roblox.com/badges/2151335389/Shatterproof" },
+      { link: "https://www.roblox.com/badges/2124732728/All-Alone" },
+      { link: "https://www.roblox.com/badges/189799502/Winner" },
+      { link: "https://www.roblox.com/badges/2124830765/Time-Flies-By" },
+      { link: "https://www.roblox.com/badges/1218609350208126/Hidden" },
+      { link: "https://www.roblox.com/badges/2152592792/5-Wins" },
+      { link: "https://www.roblox.com/badges/2147389053/The-End" },
+      { link: "https://www.roblox.com/badges/2151997834/You-Pushed-the-Button" },
+      { link: "https://www.roblox.com/badges/2129096087/Potty-Shot" },
+      { link: "https://www.roblox.com/badges/249079321/Intensity-Intensifies" },
+      { link: "https://www.roblox.com/badges/2124949570/Sharpshooter" },
+      { link: "https://www.roblox.com/badges/2124871530/Pack-Mule" },
+      { link: "https://www.roblox.com/badges/2152790954/Nightmare-Mode" },
+      { link: "https://www.roblox.com/badges/2164034205040063/You-Touched-The-Strong-Noob" },
+      { link: "https://www.roblox.com/badges/2124855991/Completed-Lab-Hidden-Ending" },
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ==================================================================================
