@@ -1364,6 +1364,16 @@ var BADGERS = [
   }
 
   // ---------------- Home view ----------------
+
+  async function updateBadgerCounter(){
+    var total = BADGERS.length;
+    var results = await Promise.all(BADGERS.map(function(b){
+      return storageGet('badgerdone-' + b.id);
+    }));
+    var done = results.filter(function(v){ return v === '1'; }).length;
+    document.getElementById('badgerCounterCount').textContent = done + ' / ' + total;
+  }
+
   async function renderHome(filter){
     var listEl = document.getElementById('badgerList');
     var emptyEl = document.getElementById('homeEmpty');
@@ -1393,9 +1403,10 @@ var BADGERS = [
         seal.setAttribute('aria-label', 'Mark ' + badger.name + ' badger as complete');
         seal.addEventListener('click', function(e){ e.stopPropagation(); });
         seal.addEventListener('change', function(){
-          storageSet('badgerdone-' + badger.id, seal.checked ? '1' : '');
-          card.classList.toggle('badger-card-done', seal.checked);
-        });
+  storageSet('badgerdone-' + badger.id, seal.checked ? '1' : '');
+  card.classList.toggle('badger-card-done', seal.checked);
+  updateBadgerCounter();
+});
         storageGet('badgerdone-' + badger.id).then(function(v){
           seal.checked = v === '1';
           card.classList.toggle('badger-card-done', seal.checked);
@@ -1445,6 +1456,7 @@ var BADGERS = [
         });
       })(matches[i], i);
     }
+    updateBadgerCounter();
   }
 
   var searchInput = document.getElementById('homeSearch');
