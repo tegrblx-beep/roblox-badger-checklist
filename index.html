@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <script>
+        const icons = ["🥇", "🏅", "🏆", "🦡"];
+        const icon = icons[Math.floor(Math.random() * icons.length)];
+
+        const favicon = document.createElement("link");
+        favicon.rel = "icon";
+        favicon.href =
+            "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>" +
+            icon +
+            "</text></svg>";
+
+        document.head.appendChild(favicon);
+    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Badger Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+  :root{
+    --bg: #12141A; --panel: #1B1E27; --panel-2: #21252F;
+    --border: #2A2E3A; --border-strong: #383D4C;
+    --text: #ECE9E2; --text-dim: #9497A8; --text-faint: #62667A;
+    --gold: #E8B23D; --gold-dim: #6b5726;
+    --green: #58D6A0; --amber: #F0B94A; --coral: #EE6F6F; --violet: #B48CF2; --neutral-diff: #8B8FA3;
+    --radius: 10px;
+  }
+  *{ box-sizing: border-box; }
+  body{ margin:0; background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; padding: 0 0 4rem; }
+  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  a{ color: inherit; }
+
+  /* ---------- Home / search view ---------- */
+  #homeView header{ padding: 3rem 0 1.5rem; }
+  #homeView h1{ font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 0.02em; margin: 0 0 8px; line-height: 1; }
+  #homeView .sub{ color: var(--text-dim); font-size: 15px; margin: 0 0 1.5rem; max-width: 520px; line-height: 1.5; }
+
+  .search-wrap{ position: relative; margin-bottom: 20px; }
+  .search-icon{ position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-faint); pointer-events: none; }
+  #homeSearch{
+    width:100%; background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    border-radius: 10px; padding: 13px 40px 13px 42px; font-size: 15px; font-family: inherit;
+  }
+  #homeSearch::placeholder{ color: var(--text-faint); }
+  #homeSearch:focus{ outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,178,61,0.15); }
+  .search-clear{
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    background: var(--panel-2); border: none; color: var(--text-faint);
+    width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
+    display: none; align-items: center; justify-content: center; font-size: 13px; line-height:1;
+  }
+  .search-clear:hover{ color: var(--text); }
+  .search-clear.visible{ display: flex; }
+  .badger-card-name mark{ background: none; color: var(--gold); font-weight: inherit; }
+
+  #badgerList{ display:flex; flex-direction:column; gap: 10px; }
+  .badger-card{
+    display:flex; align-items:center; justify-content: space-between; gap: 16px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 20px; cursor: pointer; text-align:left; width:100%;
+    font-family: inherit; transition: border-color 0.15s ease;
+  }
+  .badger-card:hover{ border-color: var(--border-strong); }
+  .badger-card:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce){ .badger-card{ transition: none; } }
+  .badger-card.badger-card-done{ border-color: var(--gold-dim); opacity: 0.7; }
+  .badger-seal{ flex-shrink: 0; margin: 0; }
+  .badger-card-left{ display:flex; flex-direction:column; gap:4px; flex: 1; min-width: 0; }
+  .badger-card-name{ font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.01em; line-height:1; }
+  .badger-card-diff{ font-family:'IBM Plex Mono', monospace; font-size: 12px; font-weight:600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .badger-card-right{ text-align:right; display:flex; flex-direction:column; gap:4px; flex-shrink:0; }
+  .badger-card-count{ font-family:'IBM Plex Mono', monospace; font-size: 15px; color: var(--text); }
+  .badger-card-bar-track{ width: 100px; height:6px; border-radius:4px; background: var(--panel-2); border:1px solid var(--border); overflow:hidden; }
+  .badger-card-bar-fill{ height:100%; background: var(--gold); }
+  .empty{ color: var(--text-faint); font-size: 14px; padding: 40px 0; text-align:center; }
+
+  /* ---------- Detail view ---------- */
+  #detailView{ display:none; }
+  .back-btn{
+    background:none; border:none; color: var(--text-faint); font-size: 14px; cursor:pointer;
+    padding: 2rem 0 0; font-family: inherit; display:flex; align-items:center; gap:6px;
+  }
+  .back-btn:hover{ color: var(--gold); }
+
+  header.detail-header{ padding: 1rem 0 1.5rem; }
+  .badger-name{ font-family: 'Bebas Neue', sans-serif; font-size: 56px; letter-spacing: 0.02em; line-height: 1; margin: 0 0 6px; }
+  .difficulty-label{ font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .game-link-line{ margin-bottom: 1rem; }
+  .game-link-line a{ color: var(--text-faint); font-size: 13px; }
+
+  .stat-line{ display:flex; align-items: baseline; gap: 14px; margin-top: 0.5rem; font-family: 'IBM Plex Mono', monospace; }
+  .stat-count{ font-size: 22px; font-weight: 600; color: var(--text); }
+  .stat-pct{ font-size: 15px; color: var(--gold); }
+  .stat-label{ font-size: 12px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; }
+  .progress-bar-track{ height: 8px; border-radius: 5px; background: var(--panel-2); border: 1px solid var(--border); overflow:hidden; margin-top: 10px; }
+  .progress-bar-fill{ height: 100%; background: var(--gold); border-radius: 5px; width:0%; transition: width 0.4s ease; }
+  @media (prefers-reduced-motion: reduce){ .progress-bar-fill{ transition: none; } }
+
+  .milestones{ display:flex; flex-wrap:wrap; gap: 8px; margin-top: 14px; }
+  .milestone{
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 12px; font-size: 13px; font-family: 'IBM Plex Mono', monospace; color: var(--text-dim);
+  }
+  .list-status-row{ display:flex; align-items:center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+  .list-status{ font-size: 13px; color: var(--text-faint); min-height: 16px; }
+  .list-status.err{ color: var(--coral); }
+
+  .controls-row{ display:flex; gap:12px; margin: 1.5rem 0 16px; }
+  .controls-row input[type=text]{
+    flex:1; background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    border-radius: 8px; padding: 9px 12px; font-size: 13px; font-family: inherit;
+  }
+  .controls-row label{ display:flex; align-items:center; gap:6px; font-size: 13px; color: var(--text-dim); white-space: nowrap; }
+  .bulk-btn{
+    background: var(--panel); border: 1px solid var(--border-strong); color: var(--text-dim);
+    border-radius: 8px; padding: 8px 14px; font-size: 13px; cursor: pointer; font-family: inherit; white-space: nowrap;
+  }
+  .bulk-btn:hover{ border-color: var(--gold); color: var(--gold); }
+
+  #list{ display:flex; flex-direction:column; gap: 10px; }
+  .row{ display:flex; align-items:flex-start; gap: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .row.done{ opacity: 0.55; }
+
+  .seal{
+    width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--border-strong);
+    background: transparent; flex-shrink:0; cursor: pointer; position: relative; margin-top: 4px;
+    appearance: none; -webkit-appearance: none;
+  }
+  .seal:checked{ background: var(--gold); border-color: var(--gold); }
+  .seal:checked::after{ content: '✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#24190A; font-size: 12px; font-weight: 700; }
+  .seal:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .row-image{
+    width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex-shrink: 0;
+    background: var(--panel-2); border: 1px solid var(--border);
+  }
+  .row-image-placeholder{
+    width: 48px; height: 48px; border-radius: 8px; flex-shrink: 0;
+    background: var(--panel-2); border: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; color: var(--text-faint); font-size: 18px;
+  }
+
+  .row-main{ flex: 1; min-width: 0; }
+  .row-name{ font-size: 15px; font-weight: 600; }
+  .row.done .row-name{ text-decoration: line-through; text-decoration-color: var(--text-faint); }
+  .row-desc{ font-size: 13px; color: var(--text-dim); margin-top: 3px; line-height: 1.4; }
+  .row-type{ display:block; font-size: 11px; font-family: 'IBM Plex Mono', monospace; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 4px; }
+  .row-meta{ display:flex; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
+  .row-meta span, .row-meta a{ font-size: 12px; color: var(--text-faint); }
+  .row-meta a:hover{ color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ===================== HOME VIEW ===================== -->
+  <div id="homeView">
+    <header>
+      <h1>Badger Checklist</h1>
+      <p class="sub">Search for a badger and jump straight into its checklist.</p>
+    </header>
+    <div class="search-wrap">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="homeSearch" placeholder="Search for a badger" autocomplete="off" />
+      <button type="button" class="search-clear" id="searchClearBtn" aria-label="Clear search">✕</button>
+    </div>
+    <div id="badgerList"></div>
+    <div class="empty" id="homeEmpty" style="display:none;">No badger matches that search.</div>
+  </div>
+
+  <!-- ===================== DETAIL VIEW ===================== -->
+  <div id="detailView">
+    <button class="back-btn" id="backBtn">← All badgers</button>
+    <header class="detail-header">
+      <h2 class="badger-name" id="detailName"></h2>
+      <div class="difficulty-label" id="detailDifficulty"></div>
+      <div class="game-link-line" id="detailGameLink"></div>
+      <div class="stat-line">
+        <span class="stat-count" id="statCount">0 / 0</span>
+        <span class="stat-pct" id="statPct">0%</span>
+        <span class="stat-label">collected</span>
+      </div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+      <div class="milestones" id="milestones"></div>
+      <div class="list-status-row">
+        <div id="listStatus" class="list-status"></div>
+        <button type="button" class="bulk-btn" id="refreshBtn" style="display:none;">🔄 Refresh from sheet</button>
+      </div>
+    </header>
+
+    <div class="controls-row">
+      <input type="text" id="badgeSearch" placeholder="Filter by badge or game name" />
+      <label><input type="checkbox" id="hideDoneBox"> Hide collected</label>
+      <button type="button" class="bulk-btn" id="checkAllBtn">Check all</button>
+      <button type="button" class="bulk-btn" id="uncheckAllBtn">Uncheck all</button>
+    </div>
+
+    <div id="list"></div>
+  </div>
+
+</div>
+
+<script>
+// ==================================================================================
+//  EDIT THIS SECTION IN VS CODE — this is your entire badger database.
+//
+//  Each badger looks like this:
+//  {
+//    id: "unique-id-no-spaces",       // used internally, keep it unique
+//    name: "EToH Badger",             // shown as the big heading
+//    difficulty: "Extreme",           // shown under the name, auto color-coded
+//                                     // (easy/medium/hard/extreme keywords change the color)
+//    gameLink: "https://www.roblox.com/games/...",
+//    milestones: [                    // add as many as you want, or leave empty []
+//      { name: "Halfway there", target: 8 },
+//      { name: "Beat EToH Badger", target: 15 }
+//    ],
+//    sheetUrl: "https://docs.google.com/spreadsheets/d/.../edit?gid=123",
+//                                     // OPTIONAL: checklist auto-loads from this sheet.
+//                                     // The sheet needs a header row with these columns
+//                                     // (any order, names are matched loosely):
+//                                     //   badge name | game | link | image | description | type
+//                                     //   namecolor | gamecolor | descriptioncolor | typecolor | bgcolor
+//                                     // (the color columns are all optional too)
+//                                     // Leave blank to use only the manual `badges` list.
+//    badges: [                        // manual entries - always shown, ADDED ON TOP of
+//                                     // anything loaded from sheetUrl. Use this for badges
+//                                     // not in the sheet, or to override a sheet row (a
+//                                     // manual entry with the same name+link replaces the
+//                                     // sheet's version). Add/edit/remove entries here in
+//                                     // VS Code - there are no edit buttons on the page.
+//                                     //
+//                                     // Every field except `link` is optional - you can leave
+//                                     // them out entirely, not just blank. This is a complete,
+//                                     // valid entry on its own:
+//                                     //   { link: "https://www.roblox.com/badges/123456/Badge-Name" }
+//                                     // name/game/image/description all auto-fill from Roblox
+//                                     // once the page loads. Everything below just shows every
+//                                     // field spelled out for reference:
+//      {
+//        name: "",                                                  // auto-filled if blank
+//        game: "",                                                  // auto-filled if blank
+//        link: "https://www.roblox.com/badges/123456/Badge-Name",
+//        image: "",                                                 // auto-filled if blank
+//        description: "",                                           // auto-filled if blank
+//        type: "Easy",                                              // optional, hidden entirely if left out
+//        nameColor: "",                                             // optional, any CSS color e.g. "#ff8800" or "gold"
+//        gameColor: "",                                             // optional
+//        descriptionColor: "",                                      // optional
+//        typeColor: "",                                             // optional, overrides the auto easy/hard/etc color
+//        bgColor: ""                                                // optional, colors the whole badge row's background
+//      }
+//    ]
+//  }
+// ==================================================================================
+var BADGERS = [
+  {
+    id: "hidden-badge-hub",
+    name: "Hidden Badge Hub",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/15484862973/Hidden-Badge-Hub",
+    milestones: [
+      { name: "Hidden Badge 61", target: 55 },
+    ],
+    sheetUrl: "",
+    badges: [
+      {link: "https://www.roblox.com/badges/2124472953/You-have-driven-1-000-miles",},
+      {link: "https://www.roblox.com/badges/2125206535/Witness-The-Nuke"},
+      {link: "https://www.roblox.com/badges/2273926518094043/Hidden-Badge-3"},
+      {link: "https://www.roblox.com/badges/2153303182/Just-Desserts"},
+      {link: "https://www.roblox.com/badges/2125766083/200-Draws-Completed"},
+      {link: "https://www.roblox.com/badges/2130910016/Balloon-Fridge"},
+      {link: "https://www.roblox.com/badges/2144905124/IMPRESSIVE"},
+      {link: "https://www.roblox.com/badges/2124439928/Shipwreck-Bay"},
+      {link: "https://www.roblox.com/badges/2124871492/First-Win"},
+      {link: "https://www.roblox.com/badges/2124913147/No-u"},
+      {link: "https://www.roblox.com/badges/2128202645/You-toppled-the-tower"},
+      {link: "https://www.roblox.com/badges/2124765933/Level-20"},
+      {link: "https://www.roblox.com/badges/2151997834/You-Pushed-the-Button"},
+      {link: "https://www.roblox.com/badges/2129793326/Final-Blow"},
+      {link: "https://www.roblox.com/badges/2125767760/Artifact-Returned-Badge"},
+      {link: "https://www.roblox.com/badges/1188525255176965/Hidden-Badge-16"},
+      {link: "https://www.roblox.com/badges/2129473448/PASSED-THE-BORDER"},
+      {link: "https://www.roblox.com/badges/291411595824611/Hidden-Badge-18"},
+      {link: "https://www.roblox.com/badges/2152349949/Last-Dropper"},
+      {link: "https://www.roblox.com/badges/2130232184/British-Bingo-Full-House"},
+      {link: "https://www.roblox.com/badges/2124618868/Pick-up-something-at-a-meteorite"},
+      {link: "https://www.roblox.com/badges/2130232659/Light-Master"},
+      {link: "https://www.roblox.com/badges/2124758664/You-Beat-Difficult"},
+      {link: "https://www.roblox.com/badges/2153849644/25-Rebirths"},
+      {link: "https://www.roblox.com/badges/2148064179/Decompolize"},
+      {link: "https://www.roblox.com/badges/2172376888202828/Beat-World-4"},
+      {link: "https://www.roblox.com/badges/2124921452/Youve-beaten-Timebreaker"},
+      {link: "https://www.roblox.com/badges/425693066896023/Hidden-Badge-28"},
+      {link: "https://www.roblox.com/badges/2124571901/Zone-9-Cleared"},
+      {link: "https://www.roblox.com/badges/2126433538/Complete-Floor-81-Logos-02"},
+      {link: "https://www.roblox.com/badges/2153413336/20-Levels"},
+      {link: "https://www.roblox.com/badges/3205440246396686/Chemistry-Master"},
+      {link: "https://www.roblox.com/badges/2152397814/Tutorial"},
+      {link: "https://www.roblox.com/badges/2125827738/BEAT-THE-BOSS-ANY"},
+      {link: "https://www.roblox.com/badges/2124443955/Backdoored"},
+      {link: "https://www.roblox.com/badges/2124577036/Legendary"},
+      {link: "https://www.roblox.com/badges/1988781110526053/Hidden-Badge-37"},
+      {link: "https://www.roblox.com/badges/2153094113/You-Won"},
+      {link: "https://www.roblox.com/badges/1804218231889281/Completed-cruise"},
+      {link: "https://www.roblox.com/badges/2452194598689830/Rank-12"},
+      {link: "https://www.roblox.com/badges/4443219287842754/Hidden-Badge-41"},
+      {link: "https://www.roblox.com/badges/2130010662/You-Beat-Extreme"},
+      {link: "https://www.roblox.com/badges/2152838790/whats-this"},
+      {link: "https://www.roblox.com/badges/2130450566/The-Cycle-Continues"},
+      {link: "https://www.roblox.com/badges/2150515578/Intermediate-Grinder"},
+      {link: "https://www.roblox.com/badges/2130052630/You-Win"},
+      {link: "https://www.roblox.com/badges/69408917043787/Shayphs-Secret"},
+      {link: "https://www.roblox.com/badges/4307401698687448/Hidden-Badge-48"},
+      {link: "https://www.roblox.com/badges/2141554880/Colored-Domino-Rally"},
+      {link: "https://www.roblox.com/badges/1629552005250540/Long-happy-life"},
+      {link: "https://www.roblox.com/badges/2152487890/Totem-Master"},
+      {link: "https://www.roblox.com/badges/2151023846/Oh-god-why"},
+      {link: "https://www.roblox.com/badges/2130069511/Completed-Mob-Psycho-100-Characters-Quiz"},
+      {link: "https://www.roblox.com/badges/2126693306/secret-ending"},
+      {link: "https://www.roblox.com/badges/2888438624546691/FNaF-1-noche-5-completada"},
+      {link: "https://www.roblox.com/badges/2145639961/Can-You-Find-Me"},
+      {link: "https://www.roblox.com/badges/2142543314/16-Map-Streak"},
+      {link: "https://www.roblox.com/badges/3762638419632159/First-Collect"},
+      {link: "https://www.roblox.com/badges/87198892618062/HIDE-Ending"},
+      {link: "https://www.roblox.com/badges/809496256748595/Fatal-Ending"},
+      
+
+    ]
+  },
+  {
+    id: "the-timeless-temple",
+    name: "The Timeless Temple",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/14482612509/The-Timeless-Temple",
+    milestones: [
+      { name: "Beginner Grinder", target: 10 },
+      { name: "Intremediate Grinder", target: 20 },
+      { name: "Advanced Grinder", target: 30 },
+      { name: "Pro Grinder", target: 40 },
+      { name: "BEST GRINDER", target: 50 },
+    ],
+    sheetUrl: "",
+    badges: [
+      {link: "https://www.roblox.com/badges/2130294312/Restored-Order"},
+      {link: "https://www.roblox.com/badges/2130294274/Welcome"},
+      {link: "https://www.roblox.com/badges/2124540781/Completed-Plant-True-Ending"},
+      {link: "https://www.roblox.com/badges/2124505885/Pro"},
+      {link: "https://www.roblox.com/badges/2124457881/Rocket-Escape"},
+      {link: "https://www.roblox.com/badges/2127966083/Sshh"},
+      {link: "https://www.roblox.com/badges/196198776/Level-30"},
+      {link: "https://www.roblox.com/badges/2124534699/Kitty-Win"},
+      {link: "https://www.roblox.com/badges/2130631553/All-Bosses"},
+      {link: "https://www.roblox.com/badges/2126616760/1K-KILLS"},
+      {link: "https://www.roblox.com/badges/2125806448/Billion"},
+      {link: "https://www.roblox.com/badges/2126960809/Tycoon-Completed"},
+      {link: "https://www.roblox.com/badges/2131107811/Wealthy"},
+      {link: "https://www.roblox.com/badges/189373500/Billionaire-10K"},
+      {link: "https://www.roblox.com/badges/2130359664/Beat-the-Awkward-Excursion"},
+      {link: "https://www.roblox.com/badges/2125922217/Friends-Till-the-End"},
+      {link: "https://www.roblox.com/badges/2153710265/ENTER-png"},
+      {link: "https://www.roblox.com/badges/2130187106/Fused-Your-First-Shiny"},
+      {link: "https://www.roblox.com/badges/2130070274/Tree-Climber"},
+      {link: "https://www.roblox.com/badges/2130093187/10-Tickets-Checked"},
+      {link: "https://www.roblox.com/badges/2129741405/Winner-badge"},
+      {link: "https://www.roblox.com/badges/2124574157/Balloon-Popper"},
+      {link: "https://www.roblox.com/badges/2124918557/Welcome"},
+      {link: "https://www.roblox.com/badges/2124692233/You-beat-the-tycoon"},
+      {link: "https://www.roblox.com/badges/1749118820747593/ENDING-B"},
+      {link: "https://www.roblox.com/badges/2124583868/Winners"},
+      {link: "https://www.roblox.com/badges/2151307490/GHOST-OF-THE-PAST"},
+      {link: "https://www.roblox.com/badges/2145445160/SO-LONG-MY-FRIEND"},
+      {link: "https://www.roblox.com/badges/2124451982/Gamemode-Expert"},
+      {link: "https://www.roblox.com/badges/3388064527990298/Welcome"},
+      {link: "https://www.roblox.com/badges/2142627973/Impossible"},
+      {link: "https://www.roblox.com/badges/2147899102/Famous"},
+      {link: "https://www.roblox.com/badges/2129717814/Demo"},
+      {link: "https://www.roblox.com/badges/2128502915/Welcome"},
+      {link: "https://www.roblox.com/badges/2124985220/Intense"},
+      {link: "https://www.roblox.com/badges/2143377464/1-Trillion-Cookies"},
+      {link: "https://www.roblox.com/badges/2904819966736756/Welcome"},
+      {link: "https://www.roblox.com/badges/2147116564/Defeat-AI-Champion"},
+      {link: "https://www.roblox.com/badges/2146014788/Stage-170-World-3"},
+      {link: "https://www.roblox.com/badges/2124454554/Hard-Mode"},
+      {link: "https://www.roblox.com/badges/2128825212/Obtain-the-Secret-Orb"},
+      {link: "https://www.roblox.com/badges/2146471376/End-2000-stage"},
+      {link: "https://www.roblox.com/badges/2128931585/Spiky-That-hurts"},
+      {link: "https://www.roblox.com/badges/2149933736/Bronze-Partier"},
+      {link: "https://www.roblox.com/badges/2127494557/Upgrade-5-times-Sheep-Factory"},
+      {link: "https://www.roblox.com/badges/2125766078/100-Draws-Completed"},
+      {link: "https://www.roblox.com/badges/4160850305692544/First-Rebirth"},
+      {link: "https://www.roblox.com/badges/2124848395/You-presented"},
+      {link: "https://www.roblox.com/badges/2150276720/Advanced"},
+      {link: "https://www.roblox.com/badges/2124935409/Welcome"},
+    ]
+  },
+  {
+    id: "the-impossible-badge-challenge-hub",
+    name: 'The "Impossible" Badge Challenge Hub',
+    difficulty: "Impossible",
+    gameLink: "https://www.roblox.com/games/15218996446/The-Impossible-Badge-Challenge-Hub",
+    milestones: [
+      { name: "1/4", target: 25 },
+      { name: "1/2", target: 50 },
+      { name: "3/4", target: 75 },
+      { name: "Done!", target: 100 },    ],
+    sheetUrl: "",
+    badges: [
+      {link: "https://www.roblox.com/badges/2124979505/Warmonger"},
+      {link: "https://www.roblox.com/badges/2124818370/II-SATISFACTORY"},
+      {link: "https://www.roblox.com/badges/2127610756/More-of-This-Desolate-World"},
+      {link: "https://www.roblox.com/badges/2124701089/Cautionary-Tale"},
+      {link: "https://www.roblox.com/badges/2124845516/Fortnite-Amogus"},
+      {link: "https://www.roblox.com/badges/2151726675/Family-Feud"},
+      {link: "https://www.roblox.com/badges/2124643707/Bejeweled"},
+      {link: "https://www.roblox.com/badges/2124425442/Token-Maniac-A"},
+      {link: "https://www.roblox.com/badges/2124525343/Completed-Silhouette"},
+      {link: "https://www.roblox.com/badges/2124450213/The-Edge"},
+      {link: "https://www.roblox.com/badges/2146030775/Sub-60-Seconds"},
+      { link: "https://www.roblox.com/badges/2128542420/2-Challenges" },
+      { link: "https://www.roblox.com/badges/2150721969/Secret-43" },
+      { link: "https://www.roblox.com/badges/4198878575463170/It-was-all-just-a-bad-dream" },
+      { link: "https://www.roblox.com/badges/3470534424164839/Pardoned" },
+      { link: "https://www.roblox.com/badges/2267240436731981/Wings-of-Valor" },
+      { link: "https://www.roblox.com/badges/2124779938/airplane" },
+      { link: "https://www.roblox.com/badges/2145521968/unusual-authority" },
+      { link: "https://www.roblox.com/badges/2129745220/Mirror-Madness" },
+      { link: "https://www.roblox.com/badges/2128256477/6-20" },
+      { link: "https://www.roblox.com/badges/2128256476/Overtime" },
+      { link: "https://www.roblox.com/badges/2125132951/Cursed-Blessed-Life" },
+      { link: "https://www.roblox.com/badges/2127570934/CHALLENGING" },
+      { link: "https://www.roblox.com/badges/2151397610/Finished-Phase-4" },
+      { link: "https://www.roblox.com/badges/2127561122/The-Orbit" },
+      { link: "https://www.roblox.com/badges/2124669676/Obtained-All-Weapons-In-One-Life" },
+      { link: "https://www.roblox.com/badges/1441855899/Speed-Run" },
+      { link: "https://www.roblox.com/badges/1440936785/No-Witnesses" },
+      { link: "https://www.roblox.com/badges/2152864244/Professional-Refiller" },
+      { link: "https://www.roblox.com/badges/2144689453/Fearless" },
+      { link: "https://www.roblox.com/badges/2645515839565592/Sequence-3-Full-Stars" },
+      { link: "https://www.roblox.com/badges/2128388625/Intentional-Exit" },
+      { link: "https://www.roblox.com/badges/2124906971/Teamwork" },
+      { link: "https://www.roblox.com/badges/2149842826/World-Tour" },
+      { link: "https://www.roblox.com/badges/2152150502/Secret-of-the-Mansion" },
+      { link: "https://www.roblox.com/badges/2125831062/The-Halfway-Point" },
+      { link: "https://www.roblox.com/badges/2143265636/Peripeteia" },
+      { link: "https://www.roblox.com/badges/2126113040/Broken-Promises-Thrown-in-the-Wind-Like-Paper-Bags" },
+      { link: "https://www.roblox.com/badges/2125205311/Starglass" },
+      { link: "https://www.roblox.com/badges/2124913685/lamp" },
+      { link: "https://www.roblox.com/badges/2125127863/2-7-Offsuit" },
+      { link: "https://www.roblox.com/badges/2152448885/APPRENTICE" },
+      { link: "https://www.roblox.com/badges/2124472865/You-Made-It" },
+      { link: "https://www.roblox.com/badges/2128756567/Uber-Secret-Chomik" },
+      { link: "https://www.roblox.com/badges/2141039757/Vector-Space-Solved" },
+      { link: "https://www.roblox.com/badges/2127793826/1000-deaths" },
+      { link: "https://www.roblox.com/badges/2129719638/the-gift-of-giving" },
+      { link: "https://www.roblox.com/badges/2128140926/unnamed" },
+      { link: "https://www.roblox.com/badges/2124839334/First-Solo-ISS-Docking" },
+      { link: "https://www.roblox.com/badges/14417332/John-Loved-of-Muses" },
+      { link: "https://www.roblox.com/badges/14469303/Blademaster" },
+      { link: "https://www.roblox.com/badges/2148917078/Me-Myself-and-I" },
+      { link: "https://www.roblox.com/badges/2127570330/High-Precision" },
+      { link: "https://www.roblox.com/badges/2144785434/TRUE-CAPITALISM" },
+      { link: "https://www.roblox.com/badges/4242977845091255/Method-One" },
+      { link: "https://www.roblox.com/badges/2127776978/meow" },
+      { link: "https://www.roblox.com/badges/2148048392/Right-Back-At-Ya" },
+      { link: "https://www.roblox.com/badges/2146154975/You-did-this-to-Yourself" },
+      { link: "https://www.roblox.com/badges/2124523663/attempt10000" },
+      { link: "https://www.roblox.com/badges/2152978856/reach-catastrophic" },
+      { link: "https://www.roblox.com/badges/2129137514/intense-secret-level-DISCONTINUED" },
+      { link: "https://www.roblox.com/badges/2124672279/when-it-came-to-you" },
+      { link: "https://www.roblox.com/badges/2124446322/50-rounds" },
+      { link: "https://www.roblox.com/badges/2124897375/Untouchable" },
+      { link: "https://www.roblox.com/badges/2142167749/You-can-run" },
+      { link: "https://www.roblox.com/badges/2128253679/Survive-the-Third-Impact" },
+      { link: "https://www.roblox.com/badges/2124752043/Woodworm" },
+      { link: "https://www.roblox.com/badges/2129986343/Hellzone-Champion" },
+      { link: "https://www.roblox.com/badges/2141365298/Harold" },
+      { link: "https://www.roblox.com/badges/2129986534/Sword-Master" },
+      { link: "https://www.roblox.com/badges/2124780471/Purple-coin-master" },
+      { link: "https://www.roblox.com/badges/2124694495/Round-50" },
+      { link: "https://www.roblox.com/badges/2153335580/Ascended" },
+      { link: "https://www.roblox.com/badges/958186367/Most-Valuable-Player-MVP" },
+      { link: "https://www.roblox.com/badges/2125416865/Beat-The-Tower-of-Thinning-Layers" },
+      { link: "https://www.roblox.com/badges/2124707877/false-eudaemonia" },
+      { link: "https://www.roblox.com/badges/2130333692/3" },
+      { link: "https://www.roblox.com/badges/2124539612/Leave" },
+      { link: "https://www.roblox.com/badges/2125416324/Token-of-Victory" },
+      { link: "https://www.roblox.com/badges/2124535141/Phoenix-Rising" },
+      { link: "https://www.roblox.com/badges/2124541845/All-Artifacts" },
+      { link: "https://www.roblox.com/badges/2307283420500836/Pearl-Towers" },
+      { link: "https://www.roblox.com/badges/2128807836/Realization" },
+      { link: "https://www.roblox.com/badges/403413110381615/Nyctophobia" },
+      { link: "https://www.roblox.com/badges/2148731159/Its-Not-Over" },
+      { link: "https://www.roblox.com/badges/2129769259/Hard-Endless-1000" },
+      { link: "https://www.roblox.com/badges/2142582950/SA5-Room-27-Completed" },
+      { link: "https://www.roblox.com/badges/2143619653/Campless-Craze" },
+      { link: "https://www.roblox.com/badges/2152453128/Secret-27" },
+      { link: "https://www.roblox.com/badges/1887998554/LAMENTABLE-WOE" },
+      { link: "https://www.roblox.com/badges/2124832361/crystalline-guy" },
+      { link: "https://www.roblox.com/badges/2124859110/Normal-Marathon" },
+      { link: "https://www.roblox.com/badges/2124645455/winner" },
+      { link: "https://www.roblox.com/badges/2124444970/Golden-Scoobis" },
+      { link: "https://www.roblox.com/badges/2124855991/Completed-Lab-Hidden-Ending" },
+      { link: "https://www.roblox.com/badges/2151697967/Snicks-Happy" },
+      { link: "https://www.roblox.com/badges/2151571979/Hat-Trick" },
+      { link: "https://www.roblox.com/badges/2124784110/fate" },
+      { link: "https://www.roblox.com/badges/2124779975/judgement" },
+      { link: "https://www.roblox.com/badges/2124723463/Ascension-15" },
+      { link: "https://www.roblox.com/badges/2124778121/ethers-edge" },
+      { link: "https://www.roblox.com/badges/2153451227/You-Win-Origin-Ending" },
+      { link: "https://www.roblox.com/badges/114541972/Escaped-Extreme" },
+      { link: "https://www.roblox.com/badges/2125766083/200-Draws-Completed" },
+      { link: "https://www.roblox.com/badges/931445681/Item-Hoarder" },
+      { link: "https://www.roblox.com/badges/385984122372643/Level-35-Completed" },
+    ]
+  },
+  {
+    id: "a-timeless-adventure",
+    name: 'A Timeless Adventure',
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/15742018443/A-Timeless-Adventure",
+    milestones: [
+      { name: "The Best Astronaut", target: 100 },
+      { name: "You collected them all...", target: 125 },
+    ],
+    sheetUrl: "",
+    badges: [
+      { link: "https://www.roblox.com/badges/2153631877/Greg" },
+      { link: "https://www.roblox.com/badges/4059130178533796/Completed-Hard" },
+      { link: "https://www.roblox.com/badges/2149278686/10-000-Cash" },
+      { link: "https://www.roblox.com/badges/2140712091/Shipwreck-Shore" },
+      { link: "https://www.roblox.com/badges/2124765934/Level-30" },
+      { link: "https://www.roblox.com/badges/2130109085/You-played" },
+      { link: "https://www.roblox.com/badges/2129373428/50-Jellybeans" },
+      { link: "https://www.roblox.com/badges/2129555791/Prove-mom-wrong" },
+      { link: "https://www.roblox.com/badges/3256577880140855/Research" },
+      { link: "https://www.roblox.com/badges/2124935409/Welcome" },
+      { link: "https://www.roblox.com/badges/2142668773/Found-the-Snowy-Red-Ice-Nine-Drone-Helm" },
+      { link: "https://www.roblox.com/badges/2142924249/Completed-FNAF-2-Night-5" },
+      { link: "https://www.roblox.com/badges/2128499067/Rebirth" },
+      { link: "https://www.roblox.com/badges/2125827701/WINNERS-BADGE-HARD" },
+      { link: "https://www.roblox.com/badges/2142493801/Snowy-Peaks-Hard" },
+      { link: "https://www.roblox.com/badges/2128615119/rode-a-cart-around-nothing-10-times" },
+      { link: "https://www.roblox.com/badges/2148373849/10K-WalkSpeed" },
+      { link: "https://www.roblox.com/badges/2153636343/Sub-3-Minutes" },
+      { link: "https://www.roblox.com/badges/2124913145/Gettin-Dizzy" },
+      { link: "https://www.roblox.com/badges/2150653366/You-won" },
+      { link: "https://www.roblox.com/badges/2124507026/100-Catches" },
+      { link: "https://www.roblox.com/badges/2124480171/Patrons-Pride" },
+      { link: "https://www.roblox.com/badges/2129894177/Impossible-Obby" },
+      { link: "https://www.roblox.com/badges/2124727833/OOF-Cola" },
+      { link: "https://www.roblox.com/badges/2124859108/Challengers-Path" },
+      { link: "https://www.roblox.com/badges/2151534891/Roblox-HQ-100" },
+      { link: "https://www.roblox.com/badges/2151142449/A-way-out" },
+      { link: "https://www.roblox.com/badges/2145465758/Crystal" },
+      { link: "https://www.roblox.com/badges/2148044026/100-meters" },
+      { link: "https://www.roblox.com/badges/2124476323/Perfectly-Balanced" },
+      { link: "https://www.roblox.com/badges/2124679626/Chromatic-Corridors" },
+      { link: "https://www.roblox.com/badges/2127355241/You-Beat-Games" },
+      { link: "https://www.roblox.com/badges/2130635321/100-Accuracy" },
+      { link: "https://www.roblox.com/badges/2124472865/You-Made-It" },
+      { link: "https://www.roblox.com/badges/2144932890/Wild-Pears" },
+      { link: "https://www.roblox.com/badges/2125134619/50-KNOCKOUTS" },
+      { link: "https://www.roblox.com/badges/2124532164/Battle-Hardened" },
+      { link: "https://www.roblox.com/badges/2129717984/Thanks-for-playing" },
+      { link: "https://www.roblox.com/badges/2124545368/MINI-BOSS-A-Programmers-Delusion" },
+      { link: "https://www.roblox.com/badges/2124842576/Sandboy" },
+      { link: "https://www.roblox.com/badges/2124923884/Deeper" },
+      { link: "https://www.roblox.com/badges/2140869510/DEATH-COLLECTOR" },
+      { link: "https://www.roblox.com/badges/2124915019/2048-Block" },
+      { link: "https://www.roblox.com/badges/2148179894/10-Round-Wins" },
+      { link: "https://www.roblox.com/badges/64574845/Secret-badge" },
+      { link: "https://www.roblox.com/badges/2148540112/Defeated-the-Big-Guy" },
+      { link: "https://www.roblox.com/badges/2124563567/100-Kills" },
+      { link: "https://www.roblox.com/badges/2124622325/Extermonist" },
+      { link: "https://www.roblox.com/badges/2146585422/Finished-the-game-under-15-00" },
+      { link: "https://www.roblox.com/badges/4170830584899040/FINISH" },
+      { link: "https://www.roblox.com/badges/2124611183/Power-n-Chill-Millionaire" },
+      { link: "https://www.roblox.com/badges/2127776978/meow" },
+      { link: "https://www.roblox.com/badges/721557757/No-More-Mondays" },
+      { link: "https://www.roblox.com/badges/2149364995/Crumble" },
+      { link: "https://www.roblox.com/badges/2152788770/Completed-basement" },
+      { link: "https://www.roblox.com/badges/2147136828/Village" },
+      { link: "https://www.roblox.com/badges/2151449710/Music-Master" },
+      { link: "https://www.roblox.com/badges/2145699315/First-Rebirth" },
+      { link: "https://www.roblox.com/badges/2152695998/Roll" },
+      { link: "https://www.roblox.com/badges/1803073296/Uncrushable" },
+      { link: "https://www.roblox.com/badges/2124571901/Zone-9-Cleared" },
+      { link: "https://www.roblox.com/badges/2127793826/1000-deaths" },
+      { link: "https://www.roblox.com/badges/2124525343/Completed-Silhouette" },
+      { link: "https://www.roblox.com/badges/2144689453/Fearless" },
+      { link: "https://www.roblox.com/badges/2125703568/Sleeping-Giant" },
+      { link: "https://www.roblox.com/badges/2152197371/Logos" },
+      { link: "https://www.roblox.com/badges/2124626060/Light-Beneath-Closed-Eyes" },
+      { link: "https://www.roblox.com/badges/2128258930/Experienced" },
+      { link: "https://www.roblox.com/badges/2693978053512285/Skull-Emoji" },
+      { link: "https://www.roblox.com/badges/2128698988/1-000-Lockers" },
+      { link: "https://www.roblox.com/badges/2148064235/Harvest" },
+      { link: "https://www.roblox.com/badges/2147482731/bread-ending" },
+      { link: "https://www.roblox.com/badges/2124785788/Novice-Puzzler" },
+      { link: "https://www.roblox.com/badges/1390509276670848/Big-Fish-Wheel-Bonus-Story-Mode" },
+      { link: "https://www.roblox.com/badges/335175009/HARDCORE-PARKOUR" },
+      { link: "https://www.roblox.com/badges/2149149259/50-Arts-Completed" },
+      { link: "https://www.roblox.com/badges/2124540006/Element-Master" },
+      { link: "https://www.roblox.com/badges/4392743239592992/1k-Badge-Points" },
+      { link: "https://www.roblox.com/badges/2124943230/YOU-BEAT-CHAPTER-TWO" },
+      { link: "https://www.roblox.com/badges/2124810354/The-Enchiridion" },
+      { link: "https://www.roblox.com/badges/2124872675/Midnight-Giant" },
+      { link: "https://www.roblox.com/badges/2124784522/Catgirl" },
+      { link: "https://www.roblox.com/badges/2127232907/It-Evaporates" },
+      { link: "https://www.roblox.com/badges/2150530896/Performed-an-Unfailability-Reset" },
+      { link: "https://www.roblox.com/badges/2129766479/STAGE-30" },
+      { link: "https://www.roblox.com/badges/2151944735/200-Meters" },
+      { link: "https://www.roblox.com/badges/2124770247/Beaten-Hard" },
+      { link: "https://www.roblox.com/badges/2144869695/Good-Ending" },
+      { link: "https://www.roblox.com/badges/2126035651/Caught" },
+      { link: "https://www.roblox.com/badges/2124855376/Ghost-Marker" },
+      { link: "https://www.roblox.com/badges/2126458770/you-reached-intense" },
+      { link: "https://www.roblox.com/badges/3198508553429339/You-escaped" },
+      { link: "https://www.roblox.com/badges/2150360414/only-3000" },
+      { link: "https://www.roblox.com/badges/2145807740/1-Rebirth" },
+      { link: "https://www.roblox.com/badges/2148132793/Grade-9" },
+      { link: "https://www.roblox.com/badges/2125527546/Ybgir-Ybgir-Ybgir" },
+      { link: "https://www.roblox.com/badges/2140920501/Ludomania" },
+      { link: "https://www.roblox.com/badges/2144785839/Prestige-Player" },
+      { link: "https://www.roblox.com/badges/2124510988/Whats-the-tea-sis" },
+      { link: "https://www.roblox.com/badges/2124579620/Three" },
+      { link: "https://www.roblox.com/badges/2126474489/NIGHT-1-Finished" },
+      { link: "https://www.roblox.com/badges/2153959315/Proved-Dad-Wrong" },
+      { link: "https://www.roblox.com/badges/4007979342442503/Skilled" },
+      { link: "https://www.roblox.com/badges/2124450441/Reach-Victory-Village" },
+      { link: "https://www.roblox.com/badges/2131229458/unnamed" },
+      { link: "https://www.roblox.com/badges/4089439441826797/Burn-10-items" },
+      { link: "https://www.roblox.com/badges/2141295037/Ace" },
+      { link: "https://www.roblox.com/badges/2127476334/DOPPELGANGER" },
+      { link: "https://www.roblox.com/badges/2152349949/Last-Dropper" },
+      { link: "https://www.roblox.com/badges/2129916112/Level-10" },
+      { link: "https://www.roblox.com/badges/2147041429/A-feast-fit-for-a-king" },
+      { link: "https://www.roblox.com/badges/2124676170/You-reached-Level-10" },
+      { link: "https://www.roblox.com/badges/4234519734404846/Badge-53" },
+      { link: "https://www.roblox.com/badges/2124584239/1000-Mega-Fun-Obby-Rookies" },
+      { link: "https://www.roblox.com/badges/2152494475/100k-Money" },
+      { link: "https://www.roblox.com/badges/140889503/Level-50" },
+      { link: "https://www.roblox.com/badges/2270763083474749/Stage-30" },
+      { link: "https://www.roblox.com/badges/2127905526/PASSED-RYAN-GOSLING-OBBY-PARKOUR" },
+      { link: "https://www.roblox.com/badges/2129336355/Werner-Power-Station" },
+      { link: "https://www.roblox.com/badges/2124783779/On-Top-of-the-World" },
+      { link: "https://www.roblox.com/badges/2028634204/Winners-Badge" },
+      { link: "https://www.roblox.com/badges/2125057382/Winners-Badge-HARD" },
+      { link: "https://www.roblox.com/badges/2147305599/Back-Again" },
+      { link: "https://www.roblox.com/badges/2125253106/Second-Sea" },
+      { link: "https://www.roblox.com/badges/2127589956/Friendship" },
+    ]
+  },
+  {
+    id: "badge-advent-calendar-2023-renewed",
+    name: 'Badge Advent Calendar 2023: Renewed',
+    difficulty: "Medium",
+    gameLink: "https://www.roblox.com/games/109364326386642/Badge-Advent-Calendar-2023-Renewed",
+    milestones: [
+      { name: "Advent Calendar Complete!", target: 24 }
+    ],
+    sheetUrl: "",
+    badges: [
+      { link: "https://www.roblox.com/badges/93370700/You-Are-The-Doctor" },
+      { link: "https://www.roblox.com/badges/2124483428/Find-Snowy" },
+      { link: "https://www.roblox.com/badges/309556153524231/Welcome-To-My-Game" },
+      { link: "https://www.roblox.com/badges/2124660715/Winner" },
+      { link: "https://www.roblox.com/badges/2124913142/Lucky-Hand" },
+      { link: "https://www.roblox.com/badges/26932452/Completion-of-Underground-1" },
+      { link: "https://www.roblox.com/badges/291590700/Unbeatable" },
+      { link: "https://www.roblox.com/badges/4401283933915088/Welcome" },
+      { link: "https://www.roblox.com/badges/14655863/Waterfall-Rafter" },
+      { link: "https://www.roblox.com/badges/162460666/Astrids-Shield" },
+      { link: "https://www.roblox.com/badges/2128614069/speedrun-around-nothing" },
+      { link: "https://www.roblox.com/badges/2124782965/Reach-512" },
+      { link: "https://www.roblox.com/badges/2153451669/Rebirthed" },
+      { link: "https://www.roblox.com/badges/2149200010/Beat-a-World" },
+      { link: "https://www.roblox.com/badges/2150333714/1st-Prestige-Reached" },
+      { link: "https://www.roblox.com/badges/2125141127/Kawaii-Cat" },
+      { link: "https://www.roblox.com/badges/2147158020/Complete-the-glass-bridge" },
+      { link: "https://www.roblox.com/badges/784325559452852/10-Streak" },
+      { link: "https://www.roblox.com/badges/2127836042/Mountain-climber" },
+      { link: "https://www.roblox.com/badges/2152348915/Animals-Easy" },
+      { link: "https://www.roblox.com/badges/2128258911/Beat-the-Easy-Obby" },
+      { link: "https://www.roblox.com/badges/2126811849/Business-Owner" },
+      { link: "https://www.roblox.com/badges/2129465308/Won-Race" },
+      { link: "https://www.roblox.com/badges/2124643553/Its-time-to-help-Santa" },
+    ]
+  },
+  {
+    id: "dystopian-badger",
+    name: 'Dystopian Badger',
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/79757130917226/Dystopian-Badger",
+    milestones: [
+      { name: "25", target: 25 },
+      { name: "50", target: 50 },
+      { name: "75", target: 75 },
+      { name: "100", target: 100 }
+    ],
+    sheetUrl: "",
+    badges: [
+      { link: "https://www.roblox.com/badges/2124426874/Cherree" },
+      { link: "https://www.roblox.com/badges/2127961961/ENDING-1" },
+      { link: "https://www.roblox.com/badges/245257427728683/WHY-png" },
+      { link: "https://www.roblox.com/badges/4363298310742130/Town-Hero" },
+      { link: "https://www.roblox.com/badges/2142661456/Mount-Inconsistent" },
+      { link: "https://www.roblox.com/badges/1518066373290311/End-Of-Chapter-1" },
+      { link: "https://www.roblox.com/badges/140889503/Level-50" },
+      { link: "https://www.roblox.com/badges/2152274273/You-beat-Dark-Skyler" },
+      { link: "https://www.roblox.com/badges/2125729688/resonance-cascade" },
+      { link: "https://www.roblox.com/badges/4321128004776313/Spare-Parts-And-Scrapped-Dreams" },
+      { link: "https://www.roblox.com/badges/1218861306695890/Homebound" },
+      { link: "https://www.roblox.com/badges/3496793484103682/Chapter-4-Completed" },
+      { link: "https://www.roblox.com/badges/2124846514/Speed-Victor" },
+      { link: "https://www.roblox.com/badges/657110580532538/Chapter-1-Part-1-Complete" },
+      { link: "https://www.roblox.com/badges/2141554874/Colored-Bloxburg" },
+      { link: "https://www.roblox.com/badges/2150864340/Cleared-Floor-3" },
+      { link: "https://www.roblox.com/badges/22201415/Mountain-King" },
+      { link: "https://www.roblox.com/badges/2124636789/100-Completed-Game-Easy-Mode" },
+      { link: "https://www.roblox.com/badges/2124665820/in-review" },
+      { link: "https://www.roblox.com/badges/1771016645443603/Classic-Heights-Intermediate" },
+      { link: "https://www.roblox.com/badges/1016732488/THE-ASYLUM" },
+      { link: "https://www.roblox.com/badges/1441837610/Aymegg" },
+      { link: "https://www.roblox.com/badges/272350605/You-won-at-Speed-Run" },
+      { link: "https://www.roblox.com/badges/2148511615/The-Void" },
+      { link: "https://www.roblox.com/badges/797387927812046/Sequence-2" },
+      { link: "https://www.roblox.com/badges/2128668324/Thats-weird" },
+      { link: "https://www.roblox.com/badges/1508629729092094/1-Win" },
+      { link: "https://www.roblox.com/badges/1359093427965720/COLD" },
+      { link: "https://www.roblox.com/badges/2145172272/Fork-in-the-road" },
+      { link: "https://www.roblox.com/badges/645251903377444/Completion" },
+      { link: "https://www.roblox.com/badges/2124968048/Completion" },
+      { link: "https://www.roblox.com/badges/2124807574/unnamed" },
+      { link: "https://www.roblox.com/badges/2129286073/Solo-Victory" },
+      { link: "https://www.roblox.com/badges/2652873727927163/heres-the-kicker" },
+      { link: "https://www.roblox.com/badges/1376601777379015/Really-Useful-Engine" },
+      { link: "https://www.roblox.com/badges/2124734407/uwu-whats-this" },
+      { link: "https://www.roblox.com/badges/2124670450/You-won" },
+      { link: "https://www.roblox.com/badges/2124900285/CHAPTER-ONE" },
+      { link: "https://www.roblox.com/badges/2124508401/Dont-Look-Down" },
+      { link: "https://www.roblox.com/badges/1642752631260575/Maxed-Ship" },
+      { link: "https://www.roblox.com/badges/3793267978693479/Broken-Hardhat" },
+      { link: "https://www.roblox.com/badges/2140720720/Chefs-Helper" },
+      { link: "https://www.roblox.com/badges/4456446753341581/S-T-A-Y" },
+      { link: "https://www.roblox.com/badges/1218430579743537/Open-Your-Heart" },
+      { link: "https://www.roblox.com/badges/1102569122987937/100-World-2" },
+      { link: "https://www.roblox.com/badges/1690380961722005/Orbital-Trial" },
+      { link: "https://www.roblox.com/badges/2124606262/Tower-of-Oddly-Orange" },
+      { link: "https://www.roblox.com/badges/2124537205/Reach-the-Sun" },
+      { link: "https://www.roblox.com/badges/888936476/Welcome-to-BRIBBLECO" },
+      { link: "https://www.roblox.com/badges/926404078156809/GAME-OVER" },
+      { link: "https://www.roblox.com/badges/3933771771916239/Night-3" },
+      { link: "https://www.roblox.com/badges/2129135739/low-proximity-magnetic-distortion" },
+      { link: "https://www.roblox.com/badges/2149199162/Underpass" },
+      { link: "https://www.roblox.com/badges/206456533/Slain" },
+      { link: "https://www.roblox.com/badges/857507063/Ending-Peace" },
+      { link: "https://www.roblox.com/badges/1906736154/Video-Gamer" },
+      { link: "https://www.roblox.com/badges/2124662704/An-Unfinished-Story" },
+      { link: "https://www.roblox.com/badges/1157700497603738/Fabulous-Beasts-Obby-CHAMPION" },
+      { link: "https://www.roblox.com/badges/405215718/Evil-Box" },
+      { link: "https://www.roblox.com/badges/3744201561114135/Summon" },
+      { link: "https://www.roblox.com/badges/2124425217/Obby-Pro" },
+      { link: "https://www.roblox.com/badges/345634711159621/Glitched-out" },
+      { link: "https://www.roblox.com/badges/17713304/Red-Plumber-Obby-Winners" },
+      { link: "https://www.roblox.com/badges/2124428038/Power-Stone" },
+      { link: "https://www.roblox.com/badges/632910554/Reach-The-Summit" },
+      { link: "https://www.roblox.com/badges/1413171644/Reach-The-Summit" },
+      { link: "https://www.roblox.com/badges/2124732313/Reach-the-Summit" },
+      { link: "https://www.roblox.com/badges/2061533361/All-Cubes-Collected" },
+      { link: "https://www.roblox.com/badges/2124725774/bedtime" },
+      { link: "https://www.roblox.com/badges/2124471104/Guinea-Pig" },
+      { link: "https://www.roblox.com/badges/2124794212/Completed-Construction-Site" },
+      { link: "https://www.roblox.com/badges/3851802487507726/Glacial-Canyon" },
+      { link: "https://www.roblox.com/badges/1581974685/Beneath-The-Ruins-Insane" },
+      { link: "https://www.roblox.com/badges/2124584239/1000-Mega-Fun-Obby-Rookies" },
+      { link: "https://www.roblox.com/badges/2124781949/Badge" },
+      { link: "https://www.roblox.com/badges/2153335580/Ascended" },
+      { link: "https://www.roblox.com/badges/2641051844781207/Mrs-Congeniality" },
+      { link: "https://www.roblox.com/badges/2148882740/Ending" },
+      { link: "https://www.roblox.com/badges/2126733824/3-Rebirths" },
+      { link: "https://www.roblox.com/badges/4124802520602108/unnamed" },
+      { link: "https://www.roblox.com/badges/2124529980/Easy-Way-Out" },
+      { link: "https://www.roblox.com/badges/2127756147/Do-the-Brew" },
+      { link: "https://www.roblox.com/badges/2152592786/1-Win" },
+      { link: "https://www.roblox.com/badges/2151091976/Complete-Solo-Part-1" },
+      { link: "https://www.roblox.com/badges/2124700762/unnamed" },
+      { link: "https://www.roblox.com/badges/3859208746971267/A-Fate-Worse-Than-Death" },
+      { link: "https://www.roblox.com/badges/26932452/Completion-of-Underground-1" },
+      { link: "https://www.roblox.com/badges/26931820/Completion-of-Underground-2" },
+      { link: "https://www.roblox.com/badges/2124525343/Completed-Silhouette" },
+      { link: "https://www.roblox.com/badges/2127776978/meow" },
+      { link: "https://www.roblox.com/badges/2145107243/pilow-acquisition" },
+      { link: "https://www.roblox.com/badges/1181461817087556/Mr-Watson" },
+      { link: "https://www.roblox.com/badges/53484450065768/Auxiliary" },
+      { link: "https://www.roblox.com/badges/2152150502/Secret-of-the-Mansion" },
+      { link: "https://www.roblox.com/badges/2124467057/riddle" },
+      { link: "https://www.roblox.com/badges/1554861163915615/Phase-II-Another-Memory" },
+      { link: "https://www.roblox.com/badges/3161638311754390/Eye-of-the-Storm-COMPLETE" },
+      { link: "https://www.roblox.com/badges/1821347990731704/truest-end" },
+      { link: "https://www.roblox.com/badges/2151085005/The-summit" },
+      { link: "https://www.roblox.com/badges/2124610837/Checkpoint-6-Exit" },
+    ]
+  },
+  {
+    id: "trustys-badger",
+    name: "Trusty's Badger",
+    difficulty: "Difficult",
+    gameLink: "https://www.roblox.com/games/79757130917226/Dystopian-Badger",
+    milestones: [
+      { name: "One Quarter of the way!", target: 3 },
+      { name: "Halfway there!", target: 6 },
+      { name: "3/4ths done!", target: 9 },
+      { name: "You beat the badger!", target: 12 }
+    ],
+    sheetUrl: "",
+    badges: [
+      { link: "https://www.roblox.com/badges/2127776978/meow" },
+      { link: "https://www.roblox.com/badges/2124498196/The-Key" },
+      { link: "https://www.roblox.com/badges/2124780139/Unending" },
+      { link: "https://www.roblox.com/badges/2124472865/You-Made-It" },
+      { link: "https://www.roblox.com/badges/2125365543/Beat-The-Citadel-of-Heights-and-Depths" },
+      { link: "https://www.roblox.com/badges/2124859128/106-2-Adventure" },
+      { link: "https://www.roblox.com/badges/2133310831/Finished" },
+      { link: "https://www.roblox.com/badges/2313865288194464/WINNER" },
+      { link: "https://www.roblox.com/badges/2149971690/Atrium-Temporis" },
+      { link: "https://www.roblox.com/badges/2124757555/Nightmare" },
+      { link: "https://www.roblox.com/badges/2141981045/Level-7" },
+      { link: "https://www.roblox.com/badges/2129793326/Final-Blow" },
+    ]
+  },
+  // Add more badger objects here, separated by commas.
+];
+// ==================================================================================
+
+(function(){
+  var storageMode = 'memory';
+  var currentBadger = null;
+  var currentBadges = [];
+  var progressData = {}; // key -> boolean
+
+  function detectStorage(){
+    if (typeof window.storage !== 'undefined' && window.storage && typeof window.storage.get === 'function') return 'artifact';
+    try { var k='__t__'; localStorage.setItem(k,'1'); localStorage.removeItem(k); return 'local'; } catch(e){ return 'memory'; }
+  }
+  async function storageGet(key){
+    if (storageMode === 'artifact') { try { var r = await window.storage.get(key); return r ? r.value : null; } catch(e){ return null; } }
+    if (storageMode === 'local') return localStorage.getItem(key);
+    return null;
+  }
+  async function storageSet(key, value){
+    if (storageMode === 'artifact') { try { await window.storage.set(key, value); } catch(e){} }
+    else if (storageMode === 'local') { try { localStorage.setItem(key, value); } catch(e){} }
+  }
+
+  function difficultyColor(text){
+    var t = (text||'').toLowerCase();
+    if (/extreme|insane|impossible|nightmare/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--violet');
+    if (/hard|difficult|tough/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--coral');
+    if (/med|moderate|normal/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--amber');
+    if (/easy|simple|beginner/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--green');
+    return getComputedStyle(document.documentElement).getPropertyValue('--neutral-diff');
+  }
+
+  function badgeKey(badgerId, badge){
+    var stableId = extractBadgeIdFromLink(badge.link) || badge.link || badge.name || '';
+    return badgerId + '||' + stableId;
+  }
+
+  // ---- Sheet loading (optional, per-badger) ----
+  function findColumnIndex(headerRow, candidates){
+    var lower = headerRow.map(function(f){ return (f||'').trim().toLowerCase(); });
+    for (var i=0;i<candidates.length;i++){ var idx = lower.indexOf(candidates[i]); if (idx !== -1) return idx; }
+    for (var i=0;i<lower.length;i++){ for (var j=0;j<candidates.length;j++){ if (lower[i].indexOf(candidates[j]) !== -1) return i; } }
+    return -1;
+  }
+  function sheetUrlToCsvUrl(url){
+    var m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    if (!m) throw new Error('Could not find a spreadsheet ID in that link.');
+    var sheetId = m[1];
+    var gidMatch = url.match(/[?#&]gid=(\d+)/);
+    var gid = gidMatch ? gidMatch[1] : '0';
+    return 'https://docs.google.com/spreadsheets/d/' + sheetId + '/export?format=csv&gid=' + gid;
+  }
+  function parseSheetBadges(csvText){
+    var parsed = Papa.parse(csvText, { skipEmptyLines: false });
+    var rows = parsed.data;
+    var headerRowIdx = -1, nameCol = -1, gameCol = -1, linkCol = -1, imageCol = -1, descCol = -1, typeCol = -1;
+    var nameColorCol = -1, gameColorCol = -1, descColorCol = -1, typeColorCol = -1, bgColorCol = -1;
+    for (var r = 0; r < rows.length; r++){
+      var idx = findColumnIndex(rows[r], ['badge name','badge_name']);
+      if (idx !== -1){
+        headerRowIdx = r; nameCol = idx;
+        gameCol = findColumnIndex(rows[r], ['game','game name']);
+        linkCol = findColumnIndex(rows[r], ['link','badge link','url']);
+        imageCol = findColumnIndex(rows[r], ['image','badge image','icon','badge icon']);
+        descCol = findColumnIndex(rows[r], ['description','badge description','desc']);
+        typeCol = findColumnIndex(rows[r], ['type','types','badge type']);
+        nameColorCol = findColumnIndex(rows[r], ['namecolor','name color']);
+        gameColorCol = findColumnIndex(rows[r], ['gamecolor','game color']);
+        descColorCol = findColumnIndex(rows[r], ['descriptioncolor','description color','desccolor']);
+        typeColorCol = findColumnIndex(rows[r], ['typecolor','type color']);
+        bgColorCol = findColumnIndex(rows[r], ['bgcolor','background color','backgroundcolor','bg color']);
+        break;
+      }
+    }
+    if (headerRowIdx === -1) return [];
+    var out = [];
+    for (var r2 = headerRowIdx + 1; r2 < rows.length; r2++){
+      var row = rows[r2];
+      var name = nameCol !== -1 ? (row[nameCol]||'').trim() : '';
+      var linkVal = linkCol !== -1 ? (row[linkCol]||'').trim() : '';
+      if (!name && !linkVal) continue;
+      var typeVal = typeCol !== -1 ? (row[typeCol]||'').trim() : '';
+      out.push({
+        name: name,
+        game: gameCol !== -1 ? (row[gameCol]||'').trim() : '',
+        link: linkVal,
+        image: imageCol !== -1 ? (row[imageCol]||'').trim() : '',
+        description: descCol !== -1 ? (row[descCol]||'').trim() : '',
+        type: typeVal,
+        nameColor: nameColorCol !== -1 ? (row[nameColorCol]||'').trim() : '',
+        gameColor: gameColorCol !== -1 ? (row[gameColorCol]||'').trim() : '',
+        descriptionColor: descColorCol !== -1 ? (row[descColorCol]||'').trim() : '',
+        typeColor: typeColorCol !== -1 ? (row[typeColorCol]||'').trim() : '',
+        bgColor: bgColorCol !== -1 ? (row[bgColorCol]||'').trim() : ''
+      });
+    }
+    return out;
+  }
+  async function fetchSheetBadges(sheetUrl){
+    var csvUrl = sheetUrlToCsvUrl(sheetUrl);
+    var resp = await fetch(csvUrl);
+    if (!resp.ok) throw new Error('Sheet request failed (HTTP ' + resp.status + ').');
+    var text = await resp.text();
+    return parseSheetBadges(text);
+  }
+
+  // Merge sheet-loaded badges with the manual `badges` array. A manual entry
+  // with the same name+link as a sheet row overrides it; otherwise manual
+  // entries are added alongside whatever the sheet provided.
+  function mergeBadges(sheetBadges, manualBadges){
+    var map = {};
+    var order = [];
+    function keyOf(b){ return (b.name||'').toLowerCase() + '||' + (b.link||''); }
+    (sheetBadges || []).forEach(function(b){
+      var k = keyOf(b);
+      if (!(k in map)) order.push(k);
+      map[k] = b;
+    });
+    (manualBadges || []).forEach(function(b){
+      var k = keyOf(b);
+      if (!(k in map)) order.push(k);
+      map[k] = b;
+    });
+    return order.map(function(k){ return map[k]; });
+  }
+
+  async function getEffectiveBadges(badger){
+    var manual = badger.badges || [];
+    if (!badger.sheetUrl) return { badges: manual, status: '', isErr: false };
+    try {
+      var sheetBadges = await fetchSheetBadges(badger.sheetUrl);
+      return {
+        badges: mergeBadges(sheetBadges, manual),
+        status: sheetBadges.length + ' badge(s) loaded from sheet' + (manual.length ? (' + ' + manual.length + ' manual') : '') + '.',
+        isErr: false
+      };
+    } catch(e){
+      return { badges: manual, status: 'Could not load the sheet (' + e.message + '). Showing manual badges only.', isErr: true };
+    }
+  }
+
+  // Caches each badge's Roblox lookup result (name/game/image/description) by
+  // its badge ID, globally - shared across every badger, not per-badger. This
+  // means editing your `badges` array in code always takes effect immediately
+  // (nothing about the list itself is cached), while a badge ID that's been
+  // looked up before - even in a different badger - loads instantly instead
+  // of hitting Roblox again. Only genuinely new badge IDs trigger a lookup.
+  var enrichmentCache = null; // loaded once, kept in memory for the session
+  async function getEnrichmentCache(){
+    if (enrichmentCache) return enrichmentCache;
+    var raw = await storageGet('roblox-enrichment-cache-v2');
+    enrichmentCache = raw ? JSON.parse(raw) : {};
+    return enrichmentCache;
+  }
+  function saveEnrichmentCache(){
+    storageSet('roblox-enrichment-cache-v2', JSON.stringify(enrichmentCache || {}));
+  }
+
+  function extractBadgeIdFromLink(link){
+    if (!link) return null;
+    var m = link.match(/\/badges\/(\d+)/);
+    return m ? m[1] : null;
+  }
+
+  // Fills in `image` and `description` for any badge that's missing them,
+  // by looking up its Roblox badge ID (from `link`) against Roblox's public
+  // badge API. Runs quietly in the background after the list first renders,
+  // so a slow/blocked lookup never delays showing the checklist itself.
+  // NOTE: this calls Roblox's API directly from the browser. If Roblox blocks
+  // cross-site requests to these endpoints, lookups will just silently fail
+  // and badges keep whatever image/description they already had (or none).
+  // Roblox's badge/thumbnail APIs don't send CORS headers, so a direct
+  // browser fetch() to them fails. RoProxy (roproxy.com) is a community-run
+  // mirror built specifically for Roblox's APIs with CORS enabled - it's
+  // not run by us or Roblox, but is widely used for exactly this purpose.
+  // A generic proxy is tried as a last-resort backup if RoProxy is down.
+  async function corsFetch(robloxUrl){
+    try {
+      var direct = await fetch(robloxUrl);
+      if (direct.ok) return direct;
+      console.warn('Direct fetch to ' + robloxUrl + ' returned HTTP ' + direct.status);
+    } catch(e){ console.warn('Direct fetch to ' + robloxUrl + ' blocked (likely CORS):', e.message); }
+
+    try {
+      var roproxyUrl = robloxUrl.replace(
+        /^https:\/\/([a-z]+)\.roblox\.com/,
+        'https://$1.roproxy.com'
+      );
+      var viaRoproxy = await fetch(roproxyUrl);
+      if (viaRoproxy.ok) return viaRoproxy;
+      console.warn('RoProxy fetch to ' + roproxyUrl + ' returned HTTP ' + viaRoproxy.status);
+    } catch(e){ console.warn('RoProxy fetch failed:', e.message); }
+
+    console.warn('Falling back to generic proxy for ' + robloxUrl);
+    return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(robloxUrl));
+  }
+
+  async function enrichBadgesFromRoblox(badges, onProgress){
+    var cache = await getEnrichmentCache();
+
+    // Step 1: apply anything we already know about this badge ID, instantly,
+    // no network call at all.
+    var cacheHit = false;
+    badges.forEach(function(b){
+      var id = extractBadgeIdFromLink(b.link);
+      if (!id || !cache[id]) return;
+      var c = cache[id];
+      if (!b.name && c.name){ b.name = c.name; cacheHit = true; }
+      if (!b.game && c.game){ b.game = c.game; cacheHit = true; }
+      if (!b.description && c.description){ b.description = c.description; cacheHit = true; }
+      if (!b.image && c.image){ b.image = c.image; cacheHit = true; }
+    });
+    if (cacheHit) onProgress();
+
+    // Step 2: only badges still missing something, and not yet cached, get a
+    // real network lookup - this is what makes newly-added badges work while
+    // previously-seen ones stay instant.
+    var needsAny = badges.filter(function(b){
+      return (!b.name || !b.game || !b.description || !b.image) && extractBadgeIdFromLink(b.link);
+    });
+    if (needsAny.length === 0) return;
+
+    for (var i = 0; i < needsAny.length; i++){
+      var b = needsAny[i];
+      if (b.name && b.game && b.description) continue;
+      var id = extractBadgeIdFromLink(b.link);
+      try {
+        var resp = await corsFetch('https://badges.roblox.com/v1/badges/' + id);
+        if (resp.ok){
+          var data = await resp.json();
+          var changed = false;
+          var fetchedName = data.displayName || data.name || '';
+          var fetchedGame = (data.awardingUniverse && data.awardingUniverse.name) || '';
+          var fetchedDesc = data.description || '';
+          if (!b.name && fetchedName){ b.name = fetchedName; changed = true; }
+          if (!b.game && fetchedGame){ b.game = fetchedGame; changed = true; }
+          if (!b.description && fetchedDesc){ b.description = fetchedDesc; changed = true; }
+          if (changed){
+            // Only cache what THIS fetch actually returned - not whatever
+            // b.name/b.game/b.description happen to currently hold, which
+            // could be stale placeholder text unrelated to Roblox's data.
+            cache[id] = cache[id] || {};
+            if (fetchedName) cache[id].name = fetchedName;
+            if (fetchedGame) cache[id].game = fetchedGame;
+            if (fetchedDesc) cache[id].description = fetchedDesc;
+            saveEnrichmentCache();
+            onProgress();
+          } else {
+            console.warn('Badge lookup for ' + id + ' succeeded but response was missing expected fields:', data);
+          }
+        } else {
+          console.error('Badge lookup for ' + id + ' failed: HTTP ' + resp.status);
+        }
+      } catch(e){
+        console.error('Badge lookup for ' + id + ' failed (both direct and proxy):', e);
+      }
+      await new Promise(function(r){ setTimeout(r, 120); });
+    }
+
+    // Images: batched, up to 100 badge IDs per request. Skip any badge ID
+    // whose image we already have cached.
+    var needsImage = badges.filter(function(b){ return !b.image && extractBadgeIdFromLink(b.link); });
+    for (var i2 = 0; i2 < needsImage.length; i2 += 100){
+      var batch = needsImage.slice(i2, i2 + 100);
+      var ids = batch.map(function(b){ return extractBadgeIdFromLink(b.link); });
+      try {
+        var resp2 = await corsFetch('https://thumbnails.roblox.com/v1/badges/icons?badgeIds=' + ids.join(',') + '&size=150x150&format=Png&isCircular=false');
+        if (resp2.ok){
+          var data2 = await resp2.json();
+          var byId = {};
+          (data2.data || []).forEach(function(d){ byId[d.targetId] = d.imageUrl; });
+          batch.forEach(function(b){
+            var bid = extractBadgeIdFromLink(b.link);
+            if (byId[bid]){
+              b.image = byId[bid];
+              cache[bid] = cache[bid] || {};
+              cache[bid].image = byId[bid];
+            }
+          });
+          saveEnrichmentCache();
+          onProgress();
+        }
+      } catch(e){ /* both direct and proxy failed - skip this batch */ }
+    }
+  }
+
+  function countDone(badgerId, badges, prog){
+    return badges.filter(function(b){ return !!prog[badgeKey(badgerId, b)]; }).length;
+  }
+
+  async function loadBadgerProgress(badgerId){
+    var raw = await storageGet('progress-' + badgerId);
+    return raw ? JSON.parse(raw) : {};
+  }
+  var saveTimer = null;
+  function saveBadgerProgress(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      storageSet('progress-' + currentBadger.id, JSON.stringify(progressData));
+    }, 250);
+  }
+
+  function highlightMatch(name, filter){
+    if (!filter) return document.createTextNode(name);
+    var idx = name.toLowerCase().indexOf(filter.toLowerCase());
+    if (idx === -1) return document.createTextNode(name);
+    var frag = document.createDocumentFragment();
+    frag.appendChild(document.createTextNode(name.slice(0, idx)));
+    var mark = document.createElement('mark');
+    mark.textContent = name.slice(idx, idx + filter.length);
+    frag.appendChild(mark);
+    frag.appendChild(document.createTextNode(name.slice(idx + filter.length)));
+    return frag;
+  }
+
+  // ---------------- Home view ----------------
+  async function renderHome(filter){
+    var listEl = document.getElementById('badgerList');
+    var emptyEl = document.getElementById('homeEmpty');
+    listEl.innerHTML = '';
+    var f = (filter||'').toLowerCase();
+    var matches = BADGERS.filter(function(b){ return !f || b.name.toLowerCase().indexOf(f) !== -1; });
+
+    document.getElementById('searchClearBtn').classList.toggle('visible', !!filter);
+
+    if (matches.length === 0){
+      emptyEl.style.display = 'block';
+      return;
+    }
+    emptyEl.style.display = 'none';
+
+    for (var i=0;i<matches.length;i++){
+      (function(badger, index){
+        var card = document.createElement('div');
+        card.className = 'badger-card';
+        card.tabIndex = 0;
+        card.setAttribute('role', 'button');
+        card.setAttribute('data-index', index);
+
+        var seal = document.createElement('input');
+        seal.type = 'checkbox';
+        seal.className = 'seal badger-seal';
+        seal.setAttribute('aria-label', 'Mark ' + badger.name + ' badger as complete');
+        seal.addEventListener('click', function(e){ e.stopPropagation(); });
+        seal.addEventListener('change', function(){
+          storageSet('badgerdone-' + badger.id, seal.checked ? '1' : '');
+          card.classList.toggle('badger-card-done', seal.checked);
+        });
+        storageGet('badgerdone-' + badger.id).then(function(v){
+          seal.checked = v === '1';
+          card.classList.toggle('badger-card-done', seal.checked);
+        });
+
+        var left = document.createElement('div');
+        left.className = 'badger-card-left';
+        var nameDiv = document.createElement('div');
+        nameDiv.className = 'badger-card-name';
+        nameDiv.appendChild(highlightMatch(badger.name, filter));
+        var diffDiv = document.createElement('div');
+        diffDiv.className = 'badger-card-diff';
+        diffDiv.textContent = badger.difficulty || '';
+        diffDiv.style.color = difficultyColor(badger.difficulty);
+        left.appendChild(nameDiv);
+        left.appendChild(diffDiv);
+
+        var right = document.createElement('div');
+        right.className = 'badger-card-right';
+        var countDiv = document.createElement('div');
+        countDiv.className = 'badger-card-count';
+        countDiv.textContent = '… / ' + badger.badges.length;
+        var barTrack = document.createElement('div');
+        barTrack.className = 'badger-card-bar-track';
+        var barFill = document.createElement('div');
+        barFill.className = 'badger-card-bar-fill';
+        barTrack.appendChild(barFill);
+        right.appendChild(countDiv);
+        right.appendChild(barTrack);
+
+        card.appendChild(seal);
+        card.appendChild(left);
+        card.appendChild(right);
+        card.addEventListener('click', function(){ openBadger(badger); });
+        card.addEventListener('keydown', function(e){
+          if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openBadger(badger); }
+        });
+        listEl.appendChild(card);
+
+        var effectiveBadges = badger.badges || [];
+        loadBadgerProgress(badger.id).then(function(p){
+          var done = countDone(badger.id, effectiveBadges, p);
+          var total = effectiveBadges.length;
+          var pct = total ? Math.round((done/total)*100) : 0;
+          countDiv.textContent = done + ' / ' + total;
+          barFill.style.width = pct + '%';
+        });
+      })(matches[i], i);
+    }
+  }
+
+  var searchInput = document.getElementById('homeSearch');
+  var clearBtn = document.getElementById('searchClearBtn');
+
+  searchInput.addEventListener('input', function(){ renderHome(this.value); });
+  clearBtn.addEventListener('click', function(){ searchInput.value=''; searchInput.focus(); renderHome(''); });
+  searchInput.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){ searchInput.value=''; renderHome(''); return; }
+    if (e.key === 'Enter'){ var first = document.querySelector('.badger-card[data-index="0"]'); if (first) first.click(); return; }
+    if (e.key === 'ArrowDown'){ e.preventDefault(); var fc = document.querySelector('.badger-card'); if (fc) fc.focus(); }
+  });
+  document.getElementById('badgerList').addEventListener('keydown', function(e){
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.badger-card'));
+    var currentIdx = cards.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown'){ e.preventDefault(); var next = cards[currentIdx+1]; if (next) next.focus(); }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); if (currentIdx===0){ searchInput.focus(); } else if (currentIdx>0){ cards[currentIdx-1].focus(); } }
+  });
+
+  // ---------------- Detail view ----------------
+  async function openBadger(badger){
+    currentBadger = badger;
+    progressData = await loadBadgerProgress(badger.id);
+
+    document.getElementById('homeView').style.display = 'none';
+    document.getElementById('detailView').style.display = 'block';
+
+    document.getElementById('detailName').textContent = badger.name;
+    var diffEl = document.getElementById('detailDifficulty');
+    diffEl.textContent = badger.difficulty || '';
+    diffEl.style.color = difficultyColor(badger.difficulty);
+
+    var linkEl = document.getElementById('detailGameLink');
+    linkEl.innerHTML = '';
+    if (badger.gameLink){
+      var a = document.createElement('a');
+      a.href = badger.gameLink; a.target = '_blank'; a.rel = 'noopener';
+      a.textContent = 'Open game ↗';
+      linkEl.appendChild(a);
+    }
+
+    document.getElementById('badgeSearch').value = '';
+    document.getElementById('hideDoneBox').checked = false;
+    document.getElementById('refreshBtn').style.display = badger.sheetUrl ? 'inline-flex' : 'none';
+
+    // Always start from the live `badges` config - never cached, so code
+    // edits show up immediately every time.
+    currentBadges = badger.badges || [];
+    setListStatus(badger.sheetUrl ? 'Loading checklist from sheet…' : '', false);
+    renderMilestones();
+    renderList();
+    updateStats();
+
+    await refreshBadger(badger);
+  }
+
+  // Merges in the sheet (if any) and runs Roblox enrichment - fast for badge
+  // IDs seen before (pulled from the shared cache, no network), and only
+  // slow for genuinely new ones. Called automatically on open, and manually
+  // via the Refresh button to pick up new sheet rows.
+  async function refreshBadger(badger){
+    if (badger.sheetUrl){
+      var result = await getEffectiveBadges(badger);
+      if (currentBadger !== badger) return; // user navigated away before this resolved
+      currentBadges = result.badges;
+      setListStatus(result.status, result.isErr);
+      renderMilestones();
+      renderList();
+      updateStats();
+    } else {
+      setListStatus('', false);
+    }
+
+    await enrichBadgesFromRoblox(currentBadges, function(){
+      if (currentBadger !== badger) return; // user navigated away before this resolved
+      renderList();
+      updateStats();
+    });
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', function(){
+    if (!currentBadger) return;
+    setListStatus('Refreshing from sheet…', false);
+    refreshBadger(currentBadger);
+  });
+
+  function setListStatus(msg, isErr){
+    var el = document.getElementById('listStatus');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = isErr ? 'list-status err' : 'list-status';
+  }
+
+  document.getElementById('backBtn').addEventListener('click', function(){
+    document.getElementById('detailView').style.display = 'none';
+    document.getElementById('homeView').style.display = 'block';
+    renderHome(document.getElementById('homeSearch').value);
+  });
+
+  function renderMilestones(){
+    var container = document.getElementById('milestones');
+    container.innerHTML = '';
+    var done = countDone(currentBadger.id, currentBadges, progressData);
+    (currentBadger.milestones || []).forEach(function(m){
+      var pct = m.target > 0 ? Math.min(100, Math.round((done / m.target) * 1000) / 10) : 0;
+      var pill = document.createElement('div');
+      pill.className = 'milestone';
+      pill.textContent = m.name + ': ' + pct + '%';
+      container.appendChild(pill);
+    });
+  }
+
+  function renderList(){
+    var listEl = document.getElementById('list');
+    var search = document.getElementById('badgeSearch').value.toLowerCase();
+    var hideDone = document.getElementById('hideDoneBox').checked;
+    listEl.innerHTML = '';
+
+    var visible = currentBadges.filter(function(b){
+      var done = !!progressData[badgeKey(currentBadger.id, b)];
+      if (hideDone && done) return false;
+      if (search && (b.name||'').toLowerCase().indexOf(search) === -1 &&
+          (b.game||'').toLowerCase().indexOf(search) === -1) return false;
+      return true;
+    });
+
+    visible.forEach(function(b){
+      var k = badgeKey(currentBadger.id, b);
+      var done = !!progressData[k];
+
+      var row = document.createElement('div');
+      row.className = 'row' + (done ? ' done' : '');
+      if (b.bgColor) row.style.backgroundColor = b.bgColor;
+
+      var seal = document.createElement('input');
+      seal.type = 'checkbox';
+      seal.className = 'seal';
+      seal.checked = done;
+      seal.setAttribute('aria-label', 'Mark ' + b.name + ' as collected');
+      seal.addEventListener('change', function(){
+        progressData[k] = seal.checked;
+        saveBadgerProgress();
+        if (document.getElementById('hideDoneBox').checked){
+          renderList();
+        } else {
+          row.classList.toggle('done', seal.checked);
+        }
+        updateStats();
+      });
+      row.appendChild(seal);
+
+      if (b.image){
+        var img = document.createElement('img');
+        img.className = 'row-image';
+        img.src = b.image;
+        img.alt = b.name;
+        img.loading = 'lazy';
+        img.addEventListener('error', function(){
+          var ph = document.createElement('div');
+          ph.className = 'row-image-placeholder';
+          ph.textContent = '🏅';
+          img.replaceWith(ph);
+        });
+        row.appendChild(img);
+      } else {
+        var placeholder = document.createElement('div');
+        placeholder.className = 'row-image-placeholder';
+        placeholder.textContent = '🏅';
+        row.appendChild(placeholder);
+      }
+
+      var main = document.createElement('div');
+      main.className = 'row-main';
+
+      var name = document.createElement('div');
+      name.className = 'row-name';
+      name.textContent = b.name || 'Loading badge name…';
+      name.style.color = b.nameColor ? b.nameColor : (!b.name ? 'var(--text-faint)' : '');
+      main.appendChild(name);
+
+      if (b.description){
+        var desc = document.createElement('div');
+        desc.className = 'row-desc';
+        desc.textContent = b.description;
+        if (b.descriptionColor) desc.style.color = b.descriptionColor;
+        main.appendChild(desc);
+      }
+
+      if (b.type && b.type.trim()){
+        var typeSpan = document.createElement('span');
+        typeSpan.className = 'row-type';
+        typeSpan.textContent = 'Type: ' + b.type;
+        typeSpan.style.color = b.typeColor ? b.typeColor : difficultyColor(b.type);
+        main.appendChild(typeSpan);
+      }
+
+      if (b.game || b.link){
+        var meta = document.createElement('div');
+        meta.className = 'row-meta';
+        if (b.game){
+          var gameSpan = document.createElement('span');
+          gameSpan.textContent = b.game;
+          if (b.gameColor) gameSpan.style.color = b.gameColor;
+          meta.appendChild(gameSpan);
+        }
+        if (b.link){
+          var a = document.createElement('a');
+          a.href = b.link; a.target = '_blank'; a.rel = 'noopener';
+          a.textContent = 'View badge ↗';
+          meta.appendChild(a);
+        }
+        main.appendChild(meta);
+      }
+
+      row.appendChild(main);
+      listEl.appendChild(row);
+    });
+  }
+
+  function updateStats(){
+    var total = currentBadges.length;
+    var done = countDone(currentBadger.id, currentBadges, progressData);
+    var pct = total ? Math.round((done/total)*100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('statCount').textContent = done + ' / ' + total;
+    document.getElementById('statPct').textContent = pct + '%';
+    renderMilestones();
+  }
+
+  document.getElementById('badgeSearch').addEventListener('input', renderList);
+  document.getElementById('hideDoneBox').addEventListener('change', renderList);
+
+  document.getElementById('checkAllBtn').addEventListener('click', function(){
+    currentBadges.forEach(function(b){ progressData[badgeKey(currentBadger.id, b)] = true; });
+    saveBadgerProgress();
+    renderList();
+    updateStats();
+  });
+  document.getElementById('uncheckAllBtn').addEventListener('click', function(){
+    currentBadges.forEach(function(b){ progressData[badgeKey(currentBadger.id, b)] = false; });
+    saveBadgerProgress();
+    renderList();
+    updateStats();
+  });
+
+  storageMode = detectStorage();
+  renderHome('');
+})();
+</script>
+</body>
+</html>
