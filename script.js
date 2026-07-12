@@ -1112,6 +1112,44 @@ var BADGERS = [
       { link: "https://www.roblox.com/badges/2124914803/You-walked-50K-studs" },
     ]
   },
+  {
+    id: "tbobhb-restored",
+    name: "Trials Badge of Badger Horror Badger: Restored",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/82123279561370/Trials-Badger-of-Badger-Horror-Badger-Restored",
+    milestones: [
+      { name: "You Completed Trials of Horror:", target: 26 }
+    ],
+    sheetUrl: "",
+    badges: [
+      { link: "https://www.roblox.com/badges/2151355201/Ballin" },
+      { link: "https://www.roblox.com/badges/2151949735/THE-TRUTH" },
+      { link: "https://www.roblox.com/badges/2124757163/Confront-the-Darkness" },
+      { link: "https://www.roblox.com/badges/2124528518/Bad-Ending" },
+      { link: "https://www.roblox.com/badges/2124494521/unnamed" },
+      { link: "https://www.roblox.com/badges/4007979342442503/Skilled" },
+      { link: "https://www.roblox.com/badges/2127330742/The-Tomb" },
+      { link: "https://www.roblox.com/badges/2124483156/The-Facility" },
+      { link: "https://www.roblox.com/badges/1654438302233960/Survived-Chapter-2" },
+      { link: "https://www.roblox.com/badges/2127132068/Night-One-Basement" },
+      { link: "https://www.roblox.com/badges/1611231737376993/A-Way-Out" },
+      { link: "https://www.roblox.com/badges/3537297858124124/Trooper" },
+      { link: "https://www.roblox.com/badges/2126332555/Completed-Chapter-1-Phase-3" },
+      { link: "https://www.roblox.com/badges/2143773292/COMPLETED-MURDER-MINE-BAD-ENDING" },
+      { link: "https://www.roblox.com/badges/2124818370/II-SATISFACTORY" },
+      { link: "https://www.roblox.com/badges/2141161639/FNaF-2-The-End" },
+      { link: "https://www.roblox.com/badges/1915091265483052/True-Ending" },
+      { link: "https://www.roblox.com/badges/3408011745835066/Completed-Sister-Location-Night-4" },
+      { link: "https://www.roblox.com/badges/2142925693/Just-Doing-My-Job" },
+      { link: "https://www.roblox.com/badges/2150667282/Infinite-Survival" },
+      { link: "https://www.roblox.com/badges/2153833115/Complete-The-Underground" },
+      { link: "https://www.roblox.com/badges/2124452758/Lets-Not-Get-Shot-Tonight" },
+      { link: "https://www.roblox.com/badges/3164525666810964/Tormented-Avarice" },
+      { link: "https://www.roblox.com/badges/2130863472/ESCAPE" },
+      { link: "https://www.roblox.com/badges/2124747085/Elude-the-Corn" },
+      { link: "https://www.roblox.com/badges/1040782410253215/UNASSIMILATED" },
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ==================================================================================
