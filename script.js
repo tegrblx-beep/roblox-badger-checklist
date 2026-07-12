@@ -1160,32 +1160,84 @@ var BADGERS = [
     ],
     sheetUrl: "",
     badges: [
-      { link: "https://www.roblox.com/badges/2900919640600010/Speed-Running" },
-      { link: "https://www.roblox.com/badges/2152864192/Friend" },
-      { link: "https://www.roblox.com/badges/1941710159773078/SALVATION" },
-      { link: "https://www.roblox.com/badges/2124803716/Center-of-the-Universe" },
-      { link: "https://www.roblox.com/badges/2148587829/unnamed" },
-      { link: "https://www.roblox.com/badges/2126438257/Savior-of-the-Waking-World" },
-      { link: "https://www.roblox.com/badges/2127816588/Island-Conqueror" },
-      { link: "https://www.roblox.com/badges/2125047873/FC-15-Songs" },
-      { link: "https://www.roblox.com/badges/2125920081/worthy" },
-      { link: "https://www.roblox.com/badges/2582890951280192/Full-Combo-GET-BACK-HERE" },
-      { link: "https://www.roblox.com/badges/2124880144/Too-Much-Attempts-Hat" },
-      { link: "https://www.roblox.com/badges/2145568258/FEED-ME" },
-      { link: "https://www.roblox.com/badges/2124511924/The-Lab" },
-      { link: "https://www.roblox.com/badges/2148332672/secret" },
-      { link: "https://www.roblox.com/badges/2146115588/Leap-of-faith" },
-      { link: "https://www.roblox.com/badges/1258433330394917/GEC-TREE" },
-      { link: "https://www.roblox.com/badges/2147746418/Finished-Obby" },
-      { link: "https://www.roblox.com/badges/2128728493/EVEN-BRIGHTER" },
-      { link: "https://www.roblox.com/badges/2124843372/Escape-To-The-Vents" },
-      { link: "https://www.roblox.com/badges/2142659217/BRUTAL" },
-      { link: "https://www.roblox.com/badges/2124934403/100-WINS" },
-      { link: "https://www.roblox.com/badges/2130463322/Intruder-Plushie" },
-      { link: "https://www.roblox.com/badges/2124445497/Reset" },
-      { link: "https://www.roblox.com/badges/2125443148/Victory-Classic" },
-      { link: "https://www.roblox.com/badges/2124464341/unnamed" },
-      { link: "https://www.roblox.com/badges/2124697083/Nightmare" },
+      { link: "https://www.roblox.com/badges/2900919640600010/Speed-Running" ,
+        type: "Hunt"
+      },
+      { link: "https://www.roblox.com/badges/2152864192/Friend",
+        type: "Hunt"
+      },
+      { link: "https://www.roblox.com/badges/1941710159773078/SALVATION",
+        type: "idk"
+      },
+      { link: "https://www.roblox.com/badges/2124803716/Center-of-the-Universe",
+        type: "Wait (Legacy)"
+      },
+      { link: "https://www.roblox.com/badges/2148587829/unnamed",
+        type: "Skill"
+      },
+      { link: "https://www.roblox.com/badges/2126438257/Savior-of-the-Waking-World",
+        type: "Skill"
+      },
+      { link: "https://www.roblox.com/badges/2127816588/Island-Conqueror",
+        type: "Skill"
+      },
+      { link: "https://www.roblox.com/badges/2125047873/FC-15-Songs",
+        type: "Skill/Grind (Valuable)"
+      },
+      { link: "https://www.roblox.com/badges/2125920081/worthy",
+        type: "Skill"
+      },
+      { link: "https://www.roblox.com/badges/2582890951280192/Full-Combo-GET-BACK-HERE",
+        type: "Skill"
+      },
+      { link: "https://www.roblox.com/badges/2124880144/Too-Much-Attempts-Hat" ,
+        type: "Grind (Legacy)"
+      },
+      { link: "https://www.roblox.com/badges/2145568258/FEED-ME",
+        type: "Hunt"
+      },
+      { link: "https://www.roblox.com/badges/2124511924/The-Lab", 
+        type: "Hunt"
+      },
+      { link: "https://www.roblox.com/badges/2148332672/secret", 
+        type: "Hunt"
+      },
+      { link: "https://www.roblox.com/badges/2146115588/Leap-of-faith", 
+        type: "Grind/Hunt"
+      },
+      { link: "https://www.roblox.com/badges/1258433330394917/GEC-TREE", 
+        type: "Skill/Hunt (lEGaCy)"
+      },
+      { link: "https://www.roblox.com/badges/2147746418/Finished-Obby", 
+        type: "Skill/Teamwork"
+      },
+      { link: "https://www.roblox.com/badges/2128728493/EVEN-BRIGHTER", 
+        type: "Skill/Grind (Valuable)"
+      },
+      { link: "https://www.roblox.com/badges/2124843372/Escape-To-The-Vents", 
+        type: "Hunt (Legacy)"
+      },
+      { link: "https://www.roblox.com/badges/2142659217/BRUTAL", 
+        type: "Skill (Legacy)"
+      },
+      { link: "https://www.roblox.com/badges/2124934403/100-WINS", 
+        type: "Grind (Legacy)"
+      },
+      { link: "https://www.roblox.com/badges/2130463322/Intruder-Plushie", 
+        type: "Hunt (Legacy)"
+      },
+      { link: "https://www.roblox.com/badges/2124445497/Reset", 
+        type: "Skill/Grind (Legacy)"
+      },
+      { link: "https://www.roblox.com/badges/2125443148/Victory-Classic", 
+        type: "Teamwork/Grind or Skill"
+      },
+      { link: "https://www.roblox.com/badges/2124464341/unnamed", 
+        type: "Skill (Legacy)"
+      },
+      { link: "https://www.roblox.com/badges/2124697083/Nightmare", 
+        type: "Skill (Legacy)"
+      },
       { link: "https://www.roblox.com/badges/4424033740102763/GLEE-png" },
       { link: "https://www.roblox.com/badges/2129269324/Get-your-dad-back" },
       { link: "https://www.roblox.com/badges/543704354124514/Kill-Streak" },
