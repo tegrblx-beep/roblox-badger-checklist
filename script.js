@@ -1238,24 +1238,60 @@ var BADGERS = [
       { link: "https://www.roblox.com/badges/2124697083/Nightmare", 
         type: "Skill (Legacy)"
       },
-      { link: "https://www.roblox.com/badges/4424033740102763/GLEE-png" },
-      { link: "https://www.roblox.com/badges/2129269324/Get-your-dad-back" },
-      { link: "https://www.roblox.com/badges/543704354124514/Kill-Streak" },
-      { link: "https://www.roblox.com/badges/398792112899965/unnamed" },
-      { link: "https://www.roblox.com/badges/491385187959992/The-Exit-Ending" },
-      { link: "https://www.roblox.com/badges/2153149595/watch-v-0SdP-pecXmk" },
-      { link: "https://www.roblox.com/badges/2124519535/Defeat-Guest-666" },
-      { link: "https://www.roblox.com/badges/3789351804790107/Tower-Clear" },
-      { link: "https://www.roblox.com/badges/2124873711/Scorionik-3-Why" },
-      { link: "https://www.roblox.com/badges/777704203481915/Wallhopper" },
-      { link: "https://www.roblox.com/badges/3339603314201812/Huge-Mistake" },
-      { link: "https://www.roblox.com/badges/967319593419218/Golden-Apple" },
-      { link: "https://www.roblox.com/badges/2126293797/amogus-event" },
-      { link: "https://www.roblox.com/badges/2141411693/Medium" },
-      { link: "https://www.roblox.com/badges/2536833201489928/Beat-Intelligent-Brick-Tower" },
-      { link: "https://www.roblox.com/badges/636009941927352/HARD-Escaped-MrBeast-Deadliest-Lasers" },
-      { link: "https://www.roblox.com/badges/2129623915/Skilled-Cook" },
-      { link: "https://www.roblox.com/badges/455412109575072/Minesweeper-Final-Boss" },
+      { link: "https://www.roblox.com/badges/4424033740102763/GLEE-png", 
+        type: "Skill"
+      },
+      { link: "https://www.roblox.com/badges/2129269324/Get-your-dad-back", 
+        type: "Grind"
+      },
+      { link: "https://www.roblox.com/badges/543704354124514/Kill-Streak", 
+        type: "Skill/Grindd"
+      },
+      { link: "https://www.roblox.com/badges/398792112899965/unnamed", 
+        type: "Hunt"
+      },
+      { link: "https://www.roblox.com/badges/491385187959992/The-Exit-Ending", 
+        type: "Skill"
+      },
+      { link: "https://www.roblox.com/badges/2153149595/watch-v-0SdP-pecXmk", 
+        type: "Wait/Skill"
+      },
+      { link: "https://www.roblox.com/badges/2124519535/Defeat-Guest-666", 
+        type: "Skill/Teamwork (Legacy)"
+      },
+      { link: "https://www.roblox.com/badges/3789351804790107/Tower-Clear", 
+        type: "Skill"
+      },
+      { link: "https://www.roblox.com/badges/2124873711/Scorionik-3-Why", 
+        type: "Hunt/Skill"
+      },
+      { link: "https://www.roblox.com/badges/777704203481915/Wallhopper", 
+        type: "Skill (yet again)"
+      },
+      { link: "https://www.roblox.com/badges/3339603314201812/Huge-Mistake", 
+        type: "Grind"
+      },
+      { link: "https://www.roblox.com/badges/967319593419218/Golden-Apple", 
+        type: "Hunt (Valuable)"
+      },
+      { link: "https://www.roblox.com/badges/2126293797/amogus-event", 
+        type: "Skill"
+      },
+      { link: "https://www.roblox.com/badges/2141411693/Medium", 
+        type: "Knowledge"
+      },
+      { link: "https://www.roblox.com/badges/2536833201489928/Beat-Intelligent-Brick-Tower", 
+        type: "Knowledge/Skill"
+      },
+      { link: "https://www.roblox.com/badges/636009941927352/HARD-Escaped-MrBeast-Deadliest-Lasers", 
+        type: "Skill or Wait (Valuable)"
+      },
+      { link: "https://www.roblox.com/badges/2129623915/Skilled-Cook", 
+        type: "Misc"
+      },
+      { link: "https://www.roblox.com/badges/455412109575072/Minesweeper-Final-Boss", 
+        type: "Teamwork"
+      },
     ]
   },
   // Add more badger objects here, separated by commas.
