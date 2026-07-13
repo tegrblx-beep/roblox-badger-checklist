@@ -1395,7 +1395,7 @@ var BADGERS = [
       { link: "https://www.roblox.com/badges/781819748332116/The-Glitch" },
       { name: "MVP",
         game: "Statues Defenders GO!",
-        description: "badge not found"
+        description: "badge disabled i think?"
       },
       { link: "https://www.roblox.com/badges/2143562855/Toy-Time" },
       { link: "https://www.roblox.com/badges/2143559037/Level-10" },
@@ -1405,8 +1405,11 @@ var BADGERS = [
       { link: "https://www.roblox.com/badges/2152662630/Rattled" },
       { link: "https://www.roblox.com/badges/2127672531/A-Truly-Special-Squad" },
       { link: "https://www.roblox.com/badges/2127531654/Terminated" },
-      { link: "https://www.roblox.com/badges/2127531654/Terminated",
-        description: "theres supposed to be 2 terminated badge cuz idk"
+      { 
+        name: "Terminated",
+        image: "https://tr.rbxcdn.com/180DAY-c2416252f1e41acb5a0ba5b0d2a061eb/420/420/Image/Png/noFilter",
+        game: "Visionary Squad",
+        description: "theres supposed to be 2 terminated badge cuz idk link above btw"
       },
       { link: "https://www.roblox.com/badges/2125198276/It-isnt-that-easy" },
       { link: "https://www.roblox.com/badges/2125198158/Malfunction" },
