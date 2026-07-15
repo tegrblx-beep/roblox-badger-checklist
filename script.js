@@ -98,58 +98,8 @@ var BADGERS = [
       { name: "Pro Grinder", target: 40 },
       { name: "BEST GRINDER", target: 50 },
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=800030922#gid=800030922",
     badges: [
-      {link: "https://www.roblox.com/badges/2130294312/Restored-Order"},
-      {link: "https://www.roblox.com/badges/2130294274/Welcome"},
-      {link: "https://www.roblox.com/badges/2124540781/Completed-Plant-True-Ending"},
-      {link: "https://www.roblox.com/badges/2124505885/Pro"},
-      {link: "https://www.roblox.com/badges/2124457881/Rocket-Escape"},
-      {link: "https://www.roblox.com/badges/2127966083/Sshh"},
-      {link: "https://www.roblox.com/badges/196198776/Level-30"},
-      {link: "https://www.roblox.com/badges/2124534699/Kitty-Win"},
-      {link: "https://www.roblox.com/badges/2130631553/All-Bosses"},
-      {link: "https://www.roblox.com/badges/2126616760/1K-KILLS"},
-      {link: "https://www.roblox.com/badges/2125806448/Billion"},
-      {link: "https://www.roblox.com/badges/2126960809/Tycoon-Completed"},
-      {link: "https://www.roblox.com/badges/2131107811/Wealthy"},
-      {link: "https://www.roblox.com/badges/189373500/Billionaire-10K"},
-      {link: "https://www.roblox.com/badges/2130359664/Beat-the-Awkward-Excursion"},
-      {link: "https://www.roblox.com/badges/2125922217/Friends-Till-the-End"},
-      {link: "https://www.roblox.com/badges/2153710265/ENTER-png"},
-      {link: "https://www.roblox.com/badges/2130187106/Fused-Your-First-Shiny"},
-      {link: "https://www.roblox.com/badges/2130070274/Tree-Climber"},
-      {link: "https://www.roblox.com/badges/2130093187/10-Tickets-Checked"},
-      {link: "https://www.roblox.com/badges/2129741405/Winner-badge"},
-      {link: "https://www.roblox.com/badges/2124574157/Balloon-Popper"},
-      {link: "https://www.roblox.com/badges/2124918557/Welcome"},
-      {link: "https://www.roblox.com/badges/2124692233/You-beat-the-tycoon"},
-      {link: "https://www.roblox.com/badges/1749118820747593/ENDING-B"},
-      {link: "https://www.roblox.com/badges/2124583868/Winners"},
-      {link: "https://www.roblox.com/badges/2151307490/GHOST-OF-THE-PAST"},
-      {link: "https://www.roblox.com/badges/2145445160/SO-LONG-MY-FRIEND"},
-      {link: "https://www.roblox.com/badges/2124451982/Gamemode-Expert"},
-      {link: "https://www.roblox.com/badges/3388064527990298/Welcome"},
-      {link: "https://www.roblox.com/badges/2142627973/Impossible"},
-      {link: "https://www.roblox.com/badges/2147899102/Famous"},
-      {link: "https://www.roblox.com/badges/2129717814/Demo"},
-      {link: "https://www.roblox.com/badges/2128502915/Welcome"},
-      {link: "https://www.roblox.com/badges/2124985220/Intense"},
-      {link: "https://www.roblox.com/badges/2143377464/1-Trillion-Cookies"},
-      {link: "https://www.roblox.com/badges/2904819966736756/Welcome"},
-      {link: "https://www.roblox.com/badges/2147116564/Defeat-AI-Champion"},
-      {link: "https://www.roblox.com/badges/2146014788/Stage-170-World-3"},
-      {link: "https://www.roblox.com/badges/2124454554/Hard-Mode"},
-      {link: "https://www.roblox.com/badges/2128825212/Obtain-the-Secret-Orb"},
-      {link: "https://www.roblox.com/badges/2146471376/End-2000-stage"},
-      {link: "https://www.roblox.com/badges/2128931585/Spiky-That-hurts"},
-      {link: "https://www.roblox.com/badges/2149933736/Bronze-Partier"},
-      {link: "https://www.roblox.com/badges/2127494557/Upgrade-5-times-Sheep-Factory"},
-      {link: "https://www.roblox.com/badges/2125766078/100-Draws-Completed"},
-      {link: "https://www.roblox.com/badges/4160850305692544/First-Rebirth"},
-      {link: "https://www.roblox.com/badges/2124848395/You-presented"},
-      {link: "https://www.roblox.com/badges/2150276720/Advanced"},
-      {link: "https://www.roblox.com/badges/2124935409/Welcome"},
     ]
   },
   {
@@ -162,114 +112,8 @@ var BADGERS = [
       { name: "1/2", target: 50 },
       { name: "3/4", target: 75 },
       { name: "Done!", target: 100 },    ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=715273659#gid=715273659",
     badges: [
-      { link: "https://www.roblox.com/badges/2124979505/Warmonger"},
-      { link: "https://www.roblox.com/badges/2124818370/II-SATISFACTORY"},
-      { link: "https://www.roblox.com/badges/2127610756/More-of-This-Desolate-World"},
-      { link: "https://www.roblox.com/badges/2124701089/Cautionary-Tale"},
-      { link: "https://www.roblox.com/badges/2124845516/Fortnite-Amogus"},
-      { link: "https://www.roblox.com/badges/2151726675/Family-Feud"},
-      { link: "https://www.roblox.com/badges/2124643707/Bejeweled"},
-      { link: "https://www.roblox.com/badges/2124425442/Token-Maniac-A"},
-      { link: "https://www.roblox.com/badges/2124525343/Completed-Silhouette"},
-      { link: "https://www.roblox.com/badges/2124450213/The-Edge"},
-      { link: "https://www.roblox.com/badges/2146030775/Sub-60-Seconds"},
-      { link: "https://www.roblox.com/badges/2128542420/2-Challenges" },
-      { link: "https://www.roblox.com/badges/2150721969/Secret-43" },
-      { link: "https://www.roblox.com/badges/4198878575463170/It-was-all-just-a-bad-dream" },
-      { link: "https://www.roblox.com/badges/3470534424164839/Pardoned" },
-      { link: "https://www.roblox.com/badges/2267240436731981/Wings-of-Valor" },
-      { link: "https://www.roblox.com/badges/2124779938/airplane" },
-      { link: "https://www.roblox.com/badges/2145521968/unusual-authority" },
-      { link: "https://www.roblox.com/badges/2129745220/Mirror-Madness" },
-      { link: "https://www.roblox.com/badges/2128256477/6-20" },
-      { link: "https://www.roblox.com/badges/2128256476/Overtime" },
-      { link: "https://www.roblox.com/badges/2125132951/Cursed-Blessed-Life" },
-      { link: "https://www.roblox.com/badges/2127570934/CHALLENGING" },
-      { link: "https://www.roblox.com/badges/2151397610/Finished-Phase-4" },
-      { link: "https://www.roblox.com/badges/2127561122/The-Orbit" },
-      { link: "https://www.roblox.com/badges/2124669676/Obtained-All-Weapons-In-One-Life" },
-      { link: "https://www.roblox.com/badges/1441855899/Speed-Run" },
-      { link: "https://www.roblox.com/badges/1440936785/No-Witnesses" },
-      { link: "https://www.roblox.com/badges/2152864244/Professional-Refiller" },
-      { link: "https://www.roblox.com/badges/2144689453/Fearless" },
-      { link: "https://www.roblox.com/badges/2645515839565592/Sequence-3-Full-Stars" },
-      { link: "https://www.roblox.com/badges/2128388625/Intentional-Exit" },
-      { link: "https://www.roblox.com/badges/2124906971/Teamwork" },
-      { link: "https://www.roblox.com/badges/2149842826/World-Tour" },
-      { link: "https://www.roblox.com/badges/2152150502/Secret-of-the-Mansion" },
-      { link: "https://www.roblox.com/badges/2125831062/The-Halfway-Point" },
-      { link: "https://www.roblox.com/badges/2143265636/Peripeteia" },
-      { link: "https://www.roblox.com/badges/2126113040/Broken-Promises-Thrown-in-the-Wind-Like-Paper-Bags" },
-      { link: "https://www.roblox.com/badges/2125205311/Starglass" },
-      { link: "https://www.roblox.com/badges/2124913685/lamp" },
-      { link: "https://www.roblox.com/badges/2125127863/2-7-Offsuit" },
-      { link: "https://www.roblox.com/badges/2152448885/APPRENTICE" },
-      { link: "https://www.roblox.com/badges/2124472865/You-Made-It" },
-      { link: "https://www.roblox.com/badges/2128756567/Uber-Secret-Chomik" },
-      { link: "https://www.roblox.com/badges/2141039757/Vector-Space-Solved" },
-      { link: "https://www.roblox.com/badges/2127793826/1000-deaths" },
-      { link: "https://www.roblox.com/badges/2129719638/the-gift-of-giving" },
-      { link: "https://www.roblox.com/badges/2128140926/unnamed" },
-      { link: "https://www.roblox.com/badges/2124839334/First-Solo-ISS-Docking" },
-      { link: "https://www.roblox.com/badges/14417332/John-Loved-of-Muses" },
-      { link: "https://www.roblox.com/badges/14469303/Blademaster" },
-      { link: "https://www.roblox.com/badges/2148917078/Me-Myself-and-I" },
-      { link: "https://www.roblox.com/badges/2127570330/High-Precision" },
-      { link: "https://www.roblox.com/badges/2144785434/TRUE-CAPITALISM" },
-      { link: "https://www.roblox.com/badges/4242977845091255/Method-One" },
-      { link: "https://www.roblox.com/badges/2127776978/meow" },
-      { link: "https://www.roblox.com/badges/2148048392/Right-Back-At-Ya" },
-      { link: "https://www.roblox.com/badges/2146154975/You-did-this-to-Yourself" },
-      { link: "https://www.roblox.com/badges/2124523663/attempt10000" },
-      { link: "https://www.roblox.com/badges/2152978856/reach-catastrophic" },
-      { link: "https://www.roblox.com/badges/2129137514/intense-secret-level-DISCONTINUED" },
-      { link: "https://www.roblox.com/badges/2124672279/when-it-came-to-you" },
-      { link: "https://www.roblox.com/badges/2124446322/50-rounds" },
-      { link: "https://www.roblox.com/badges/2124897375/Untouchable" },
-      { link: "https://www.roblox.com/badges/2142167749/You-can-run" },
-      { link: "https://www.roblox.com/badges/2128253679/Survive-the-Third-Impact" },
-      { link: "https://www.roblox.com/badges/2124752043/Woodworm" },
-      { link: "https://www.roblox.com/badges/2129986343/Hellzone-Champion" },
-      { link: "https://www.roblox.com/badges/2141365298/Harold" },
-      { link: "https://www.roblox.com/badges/2129986534/Sword-Master" },
-      { link: "https://www.roblox.com/badges/2124780471/Purple-coin-master" },
-      { link: "https://www.roblox.com/badges/2124694495/Round-50" },
-      { link: "https://www.roblox.com/badges/2153335580/Ascended" },
-      { link: "https://www.roblox.com/badges/958186367/Most-Valuable-Player-MVP" },
-      { link: "https://www.roblox.com/badges/2125416865/Beat-The-Tower-of-Thinning-Layers" },
-      { link: "https://www.roblox.com/badges/2124707877/false-eudaemonia" },
-      { link: "https://www.roblox.com/badges/2130333692/3" },
-      { link: "https://www.roblox.com/badges/2124539612/Leave" },
-      { link: "https://www.roblox.com/badges/2125416324/Token-of-Victory" },
-      { link: "https://www.roblox.com/badges/2124535141/Phoenix-Rising" },
-      { link: "https://www.roblox.com/badges/2124541845/All-Artifacts" },
-      { link: "https://www.roblox.com/badges/2307283420500836/Pearl-Towers" },
-      { link: "https://www.roblox.com/badges/2128807836/Realization" },
-      { link: "https://www.roblox.com/badges/403413110381615/Nyctophobia" },
-      { link: "https://www.roblox.com/badges/2148731159/Its-Not-Over" },
-      { link: "https://www.roblox.com/badges/2129769259/Hard-Endless-1000" },
-      { link: "https://www.roblox.com/badges/2142582950/SA5-Room-27-Completed" },
-      { link: "https://www.roblox.com/badges/2143619653/Campless-Craze" },
-      { link: "https://www.roblox.com/badges/2152453128/Secret-27" },
-      { link: "https://www.roblox.com/badges/1887998554/LAMENTABLE-WOE" },
-      { link: "https://www.roblox.com/badges/2124832361/crystalline-guy" },
-      { link: "https://www.roblox.com/badges/2124859110/Normal-Marathon" },
-      { link: "https://www.roblox.com/badges/2124645455/winner" },
-      { link: "https://www.roblox.com/badges/2124444970/Golden-Scoobis" },
-      { link: "https://www.roblox.com/badges/2124855991/Completed-Lab-Hidden-Ending" },
-      { link: "https://www.roblox.com/badges/2151697967/Snicks-Happy" },
-      { link: "https://www.roblox.com/badges/2151571979/Hat-Trick" },
-      { link: "https://www.roblox.com/badges/2124784110/fate" },
-      { link: "https://www.roblox.com/badges/2124779975/judgement" },
-      { link: "https://www.roblox.com/badges/2124723463/Ascension-15" },
-      { link: "https://www.roblox.com/badges/2124778121/ethers-edge" },
-      { link: "https://www.roblox.com/badges/2153451227/You-Win-Origin-Ending" },
-      { link: "https://www.roblox.com/badges/114541972/Escaped-Extreme" },
-      { link: "https://www.roblox.com/badges/2125766083/200-Draws-Completed" },
-      { link: "https://www.roblox.com/badges/931445681/Item-Hoarder" },
-      { link: "https://www.roblox.com/badges/385984122372643/Level-35-Completed" },
     ]
   },
   {
@@ -281,133 +125,8 @@ var BADGERS = [
       { name: "The Best Astronaut", target: 100 },
       { name: "You collected them all...", target: 125 },
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1289847676#gid=1289847676",
     badges: [
-      { link: "https://www.roblox.com/badges/2153631877/Greg" },
-      { link: "https://www.roblox.com/badges/4059130178533796/Completed-Hard" },
-      { link: "https://www.roblox.com/badges/2149278686/10-000-Cash" },
-      { link: "https://www.roblox.com/badges/2140712091/Shipwreck-Shore" },
-      { link: "https://www.roblox.com/badges/2124765934/Level-30" },
-      { link: "https://www.roblox.com/badges/2130109085/You-played" },
-      { link: "https://www.roblox.com/badges/2129373428/50-Jellybeans" },
-      { link: "https://www.roblox.com/badges/2129555791/Prove-mom-wrong" },
-      { link: "https://www.roblox.com/badges/3256577880140855/Research" },
-      { link: "https://www.roblox.com/badges/2124935409/Welcome" },
-      { link: "https://www.roblox.com/badges/2142668773/Found-the-Snowy-Red-Ice-Nine-Drone-Helm" },
-      { link: "https://www.roblox.com/badges/2142924249/Completed-FNAF-2-Night-5" },
-      { link: "https://www.roblox.com/badges/2128499067/Rebirth" },
-      { link: "https://www.roblox.com/badges/2125827701/WINNERS-BADGE-HARD" },
-      { link: "https://www.roblox.com/badges/2142493801/Snowy-Peaks-Hard" },
-      { link: "https://www.roblox.com/badges/2128615119/rode-a-cart-around-nothing-10-times" },
-      { link: "https://www.roblox.com/badges/2148373849/10K-WalkSpeed" },
-      { link: "https://www.roblox.com/badges/2153636343/Sub-3-Minutes" },
-      { link: "https://www.roblox.com/badges/2124913145/Gettin-Dizzy" },
-      { link: "https://www.roblox.com/badges/2150653366/You-won" },
-      { link: "https://www.roblox.com/badges/2124507026/100-Catches" },
-      { link: "https://www.roblox.com/badges/2124480171/Patrons-Pride" },
-      { link: "https://www.roblox.com/badges/2129894177/Impossible-Obby" },
-      { link: "https://www.roblox.com/badges/2124727833/OOF-Cola" },
-      { link: "https://www.roblox.com/badges/2124859108/Challengers-Path" },
-      { link: "https://www.roblox.com/badges/2151534891/Roblox-HQ-100" },
-      { link: "https://www.roblox.com/badges/2151142449/A-way-out" },
-      { link: "https://www.roblox.com/badges/2145465758/Crystal" },
-      { link: "https://www.roblox.com/badges/2148044026/100-meters" },
-      { link: "https://www.roblox.com/badges/2124476323/Perfectly-Balanced" },
-      { link: "https://www.roblox.com/badges/2124679626/Chromatic-Corridors" },
-      { link: "https://www.roblox.com/badges/2127355241/You-Beat-Games" },
-      { link: "https://www.roblox.com/badges/2130635321/100-Accuracy" },
-      { link: "https://www.roblox.com/badges/2124472865/You-Made-It" },
-      { link: "https://www.roblox.com/badges/2144932890/Wild-Pears" },
-      { link: "https://www.roblox.com/badges/2125134619/50-KNOCKOUTS" },
-      { link: "https://www.roblox.com/badges/2124532164/Battle-Hardened" },
-      { link: "https://www.roblox.com/badges/2129717984/Thanks-for-playing" },
-      { link: "https://www.roblox.com/badges/2124545368/MINI-BOSS-A-Programmers-Delusion" },
-      { link: "https://www.roblox.com/badges/2124842576/Sandboy" },
-      { link: "https://www.roblox.com/badges/2124923884/Deeper" },
-      { link: "https://www.roblox.com/badges/2140869510/DEATH-COLLECTOR" },
-      { link: "https://www.roblox.com/badges/2124915019/2048-Block" },
-      { link: "https://www.roblox.com/badges/2148179894/10-Round-Wins" },
-      { link: "https://www.roblox.com/badges/64574845/Secret-badge" },
-      { link: "https://www.roblox.com/badges/2148540112/Defeated-the-Big-Guy" },
-      { link: "https://www.roblox.com/badges/2124563567/100-Kills" },
-      { link: "https://www.roblox.com/badges/2124622325/Extermonist" },
-      { link: "https://www.roblox.com/badges/2146585422/Finished-the-game-under-15-00" },
-      { link: "https://www.roblox.com/badges/4170830584899040/FINISH" },
-      { link: "https://www.roblox.com/badges/2124611183/Power-n-Chill-Millionaire" },
-      { link: "https://www.roblox.com/badges/2127776978/meow" },
-      { link: "https://www.roblox.com/badges/721557757/No-More-Mondays" },
-      { link: "https://www.roblox.com/badges/2149364995/Crumble" },
-      { link: "https://www.roblox.com/badges/2152788770/Completed-basement" },
-      { link: "https://www.roblox.com/badges/2147136828/Village" },
-      { link: "https://www.roblox.com/badges/2151449710/Music-Master" },
-      { link: "https://www.roblox.com/badges/2145699315/First-Rebirth" },
-      { link: "https://www.roblox.com/badges/2152695998/Roll" },
-      { link: "https://www.roblox.com/badges/1803073296/Uncrushable" },
-      { link: "https://www.roblox.com/badges/2124571901/Zone-9-Cleared" },
-      { link: "https://www.roblox.com/badges/2127793826/1000-deaths" },
-      { link: "https://www.roblox.com/badges/2124525343/Completed-Silhouette" },
-      { link: "https://www.roblox.com/badges/2144689453/Fearless" },
-      { link: "https://www.roblox.com/badges/2125703568/Sleeping-Giant" },
-      { link: "https://www.roblox.com/badges/2152197371/Logos" },
-      { link: "https://www.roblox.com/badges/2124626060/Light-Beneath-Closed-Eyes" },
-      { link: "https://www.roblox.com/badges/2128258930/Experienced" },
-      { link: "https://www.roblox.com/badges/2693978053512285/Skull-Emoji" },
-      { link: "https://www.roblox.com/badges/2128698988/1-000-Lockers" },
-      { link: "https://www.roblox.com/badges/2148064235/Harvest" },
-      { link: "https://www.roblox.com/badges/2147482731/bread-ending" },
-      { link: "https://www.roblox.com/badges/2124785788/Novice-Puzzler" },
-      { link: "https://www.roblox.com/badges/1390509276670848/Big-Fish-Wheel-Bonus-Story-Mode" },
-      { link: "https://www.roblox.com/badges/335175009/HARDCORE-PARKOUR" },
-      { link: "https://www.roblox.com/badges/2149149259/50-Arts-Completed" },
-      { link: "https://www.roblox.com/badges/2124540006/Element-Master" },
-      { link: "https://www.roblox.com/badges/4392743239592992/1k-Badge-Points" },
-      { link: "https://www.roblox.com/badges/2124943230/YOU-BEAT-CHAPTER-TWO" },
-      { link: "https://www.roblox.com/badges/2124810354/The-Enchiridion" },
-      { link: "https://www.roblox.com/badges/2124872675/Midnight-Giant" },
-      { link: "https://www.roblox.com/badges/2124784522/Catgirl" },
-      { link: "https://www.roblox.com/badges/2127232907/It-Evaporates" },
-      { link: "https://www.roblox.com/badges/2150530896/Performed-an-Unfailability-Reset" },
-      { link: "https://www.roblox.com/badges/2129766479/STAGE-30" },
-      { link: "https://www.roblox.com/badges/2151944735/200-Meters" },
-      { link: "https://www.roblox.com/badges/2124770247/Beaten-Hard" },
-      { link: "https://www.roblox.com/badges/2144869695/Good-Ending" },
-      { link: "https://www.roblox.com/badges/2126035651/Caught" },
-      { link: "https://www.roblox.com/badges/2124855376/Ghost-Marker" },
-      { link: "https://www.roblox.com/badges/2126458770/you-reached-intense" },
-      { link: "https://www.roblox.com/badges/3198508553429339/You-escaped" },
-      { link: "https://www.roblox.com/badges/2150360414/only-3000" },
-      { link: "https://www.roblox.com/badges/2145807740/1-Rebirth" },
-      { link: "https://www.roblox.com/badges/2148132793/Grade-9" },
-      { link: "https://www.roblox.com/badges/2125527546/Ybgir-Ybgir-Ybgir" },
-      { link: "https://www.roblox.com/badges/2140920501/Ludomania" },
-      { link: "https://www.roblox.com/badges/2144785839/Prestige-Player" },
-      { link: "https://www.roblox.com/badges/2124510988/Whats-the-tea-sis" },
-      { link: "https://www.roblox.com/badges/2124579620/Three" },
-      { link: "https://www.roblox.com/badges/2126474489/NIGHT-1-Finished" },
-      { link: "https://www.roblox.com/badges/2153959315/Proved-Dad-Wrong" },
-      { link: "https://www.roblox.com/badges/4007979342442503/Skilled" },
-      { link: "https://www.roblox.com/badges/2124450441/Reach-Victory-Village" },
-      { link: "https://www.roblox.com/badges/2131229458/unnamed" },
-      { link: "https://www.roblox.com/badges/4089439441826797/Burn-10-items" },
-      { link: "https://www.roblox.com/badges/2141295037/Ace" },
-      { link: "https://www.roblox.com/badges/2127476334/DOPPELGANGER" },
-      { link: "https://www.roblox.com/badges/2152349949/Last-Dropper" },
-      { link: "https://www.roblox.com/badges/2129916112/Level-10" },
-      { link: "https://www.roblox.com/badges/2147041429/A-feast-fit-for-a-king" },
-      { link: "https://www.roblox.com/badges/2124676170/You-reached-Level-10" },
-      { link: "https://www.roblox.com/badges/4234519734404846/Badge-53" },
-      { link: "https://www.roblox.com/badges/2124584239/1000-Mega-Fun-Obby-Rookies" },
-      { link: "https://www.roblox.com/badges/2152494475/100k-Money" },
-      { link: "https://www.roblox.com/badges/140889503/Level-50" },
-      { link: "https://www.roblox.com/badges/2270763083474749/Stage-30" },
-      { link: "https://www.roblox.com/badges/2127905526/PASSED-RYAN-GOSLING-OBBY-PARKOUR" },
-      { link: "https://www.roblox.com/badges/2129336355/Werner-Power-Station" },
-      { link: "https://www.roblox.com/badges/2124783779/On-Top-of-the-World" },
-      { link: "https://www.roblox.com/badges/2028634204/Winners-Badge" },
-      { link: "https://www.roblox.com/badges/2125057382/Winners-Badge-HARD" },
-      { link: "https://www.roblox.com/badges/2147305599/Back-Again" },
-      { link: "https://www.roblox.com/badges/2125253106/Second-Sea" },
-      { link: "https://www.roblox.com/badges/2127589956/Friendship" },
     ]
   },
   {
@@ -418,32 +137,8 @@ var BADGERS = [
     milestones: [
       { name: "Advent Calendar Complete!", target: 24 }
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1267867716#gid=1267867716",
     badges: [
-      { link: "https://www.roblox.com/badges/93370700/You-Are-The-Doctor" },
-      { link: "https://www.roblox.com/badges/2124483428/Find-Snowy" },
-      { link: "https://www.roblox.com/badges/309556153524231/Welcome-To-My-Game" },
-      { link: "https://www.roblox.com/badges/2124660715/Winner" },
-      { link: "https://www.roblox.com/badges/2124913142/Lucky-Hand" },
-      { link: "https://www.roblox.com/badges/26932452/Completion-of-Underground-1" },
-      { link: "https://www.roblox.com/badges/291590700/Unbeatable" },
-      { link: "https://www.roblox.com/badges/4401283933915088/Welcome" },
-      { link: "https://www.roblox.com/badges/14655863/Waterfall-Rafter" },
-      { link: "https://www.roblox.com/badges/162460666/Astrids-Shield" },
-      { link: "https://www.roblox.com/badges/2128614069/speedrun-around-nothing" },
-      { link: "https://www.roblox.com/badges/2124782965/Reach-512" },
-      { link: "https://www.roblox.com/badges/2153451669/Rebirthed" },
-      { link: "https://www.roblox.com/badges/2149200010/Beat-a-World" },
-      { link: "https://www.roblox.com/badges/2150333714/1st-Prestige-Reached" },
-      { link: "https://www.roblox.com/badges/2125141127/Kawaii-Cat" },
-      { link: "https://www.roblox.com/badges/2147158020/Complete-the-glass-bridge" },
-      { link: "https://www.roblox.com/badges/784325559452852/10-Streak" },
-      { link: "https://www.roblox.com/badges/2127836042/Mountain-climber" },
-      { link: "https://www.roblox.com/badges/2152348915/Animals-Easy" },
-      { link: "https://www.roblox.com/badges/2128258911/Beat-the-Easy-Obby" },
-      { link: "https://www.roblox.com/badges/2126811849/Business-Owner" },
-      { link: "https://www.roblox.com/badges/2129465308/Won-Race" },
-      { link: "https://www.roblox.com/badges/2124643553/Its-time-to-help-Santa" },
     ]
   },
   {
@@ -457,108 +152,8 @@ var BADGERS = [
       { name: "75", target: 75 },
       { name: "100", target: 100 }
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1225049511#gid=1225049511",
     badges: [
-      { link: "https://www.roblox.com/badges/2124426874/Cherree" },
-      { link: "https://www.roblox.com/badges/2127961961/ENDING-1" },
-      { link: "https://www.roblox.com/badges/245257427728683/WHY-png" },
-      { link: "https://www.roblox.com/badges/4363298310742130/Town-Hero" },
-      { link: "https://www.roblox.com/badges/2142661456/Mount-Inconsistent" },
-      { link: "https://www.roblox.com/badges/1518066373290311/End-Of-Chapter-1" },
-      { link: "https://www.roblox.com/badges/140889503/Level-50" },
-      { link: "https://www.roblox.com/badges/2152274273/You-beat-Dark-Skyler" },
-      { link: "https://www.roblox.com/badges/2125729688/resonance-cascade" },
-      { link: "https://www.roblox.com/badges/4321128004776313/Spare-Parts-And-Scrapped-Dreams" },
-      { link: "https://www.roblox.com/badges/1218861306695890/Homebound" },
-      { link: "https://www.roblox.com/badges/3496793484103682/Chapter-4-Completed" },
-      { link: "https://www.roblox.com/badges/2124846514/Speed-Victor" },
-      { link: "https://www.roblox.com/badges/657110580532538/Chapter-1-Part-1-Complete" },
-      { link: "https://www.roblox.com/badges/2141554874/Colored-Bloxburg" },
-      { link: "https://www.roblox.com/badges/2150864340/Cleared-Floor-3" },
-      { link: "https://www.roblox.com/badges/22201415/Mountain-King" },
-      { link: "https://www.roblox.com/badges/2124636789/100-Completed-Game-Easy-Mode" },
-      { link: "https://www.roblox.com/badges/2124665820/in-review" },
-      { link: "https://www.roblox.com/badges/1771016645443603/Classic-Heights-Intermediate" },
-      { link: "https://www.roblox.com/badges/1016732488/THE-ASYLUM" },
-      { link: "https://www.roblox.com/badges/1441837610/Aymegg" },
-      { link: "https://www.roblox.com/badges/272350605/You-won-at-Speed-Run" },
-      { link: "https://www.roblox.com/badges/2148511615/The-Void" },
-      { link: "https://www.roblox.com/badges/797387927812046/Sequence-2" },
-      { link: "https://www.roblox.com/badges/2128668324/Thats-weird" },
-      { link: "https://www.roblox.com/badges/1508629729092094/1-Win" },
-      { link: "https://www.roblox.com/badges/1359093427965720/COLD" },
-      { link: "https://www.roblox.com/badges/2145172272/Fork-in-the-road" },
-      { link: "https://www.roblox.com/badges/645251903377444/Completion" },
-      { link: "https://www.roblox.com/badges/2124968048/Completion" },
-      { link: "https://www.roblox.com/badges/2124807574/unnamed" },
-      { link: "https://www.roblox.com/badges/2129286073/Solo-Victory" },
-      { link: "https://www.roblox.com/badges/2652873727927163/heres-the-kicker" },
-      { link: "https://www.roblox.com/badges/1376601777379015/Really-Useful-Engine" },
-      { link: "https://www.roblox.com/badges/2124734407/uwu-whats-this" },
-      { link: "https://www.roblox.com/badges/2124670450/You-won" },
-      { link: "https://www.roblox.com/badges/2124900285/CHAPTER-ONE" },
-      { link: "https://www.roblox.com/badges/2124508401/Dont-Look-Down" },
-      { link: "https://www.roblox.com/badges/1642752631260575/Maxed-Ship" },
-      { link: "https://www.roblox.com/badges/3793267978693479/Broken-Hardhat" },
-      { link: "https://www.roblox.com/badges/2140720720/Chefs-Helper" },
-      { link: "https://www.roblox.com/badges/4456446753341581/S-T-A-Y" },
-      { link: "https://www.roblox.com/badges/1218430579743537/Open-Your-Heart" },
-      { link: "https://www.roblox.com/badges/1102569122987937/100-World-2" },
-      { link: "https://www.roblox.com/badges/1690380961722005/Orbital-Trial" },
-      { link: "https://www.roblox.com/badges/2124606262/Tower-of-Oddly-Orange" },
-      { link: "https://www.roblox.com/badges/2124537205/Reach-the-Sun" },
-      { link: "https://www.roblox.com/badges/888936476/Welcome-to-BRIBBLECO" },
-      { link: "https://www.roblox.com/badges/926404078156809/GAME-OVER" },
-      { link: "https://www.roblox.com/badges/3933771771916239/Night-3" },
-      { link: "https://www.roblox.com/badges/2129135739/low-proximity-magnetic-distortion" },
-      { link: "https://www.roblox.com/badges/2149199162/Underpass" },
-      { link: "https://www.roblox.com/badges/206456533/Slain" },
-      { link: "https://www.roblox.com/badges/857507063/Ending-Peace" },
-      { link: "https://www.roblox.com/badges/1906736154/Video-Gamer" },
-      { link: "https://www.roblox.com/badges/2124662704/An-Unfinished-Story" },
-      { link: "https://www.roblox.com/badges/1157700497603738/Fabulous-Beasts-Obby-CHAMPION" },
-      { link: "https://www.roblox.com/badges/405215718/Evil-Box" },
-      { link: "https://www.roblox.com/badges/3744201561114135/Summon" },
-      { link: "https://www.roblox.com/badges/2124425217/Obby-Pro" },
-      { link: "https://www.roblox.com/badges/345634711159621/Glitched-out" },
-      { link: "https://www.roblox.com/badges/17713304/Red-Plumber-Obby-Winners" },
-      { link: "https://www.roblox.com/badges/2124428038/Power-Stone" },
-      { link: "https://www.roblox.com/badges/632910554/Reach-The-Summit" },
-      { link: "https://www.roblox.com/badges/1413171644/Reach-The-Summit" },
-      { link: "https://www.roblox.com/badges/2124732313/Reach-the-Summit" },
-      { link: "https://www.roblox.com/badges/2061533361/All-Cubes-Collected" },
-      { link: "https://www.roblox.com/badges/2124725774/bedtime" },
-      { link: "https://www.roblox.com/badges/2124471104/Guinea-Pig" },
-      { link: "https://www.roblox.com/badges/2124794212/Completed-Construction-Site" },
-      { link: "https://www.roblox.com/badges/3851802487507726/Glacial-Canyon" },
-      { link: "https://www.roblox.com/badges/1581974685/Beneath-The-Ruins-Insane" },
-      { link: "https://www.roblox.com/badges/2124584239/1000-Mega-Fun-Obby-Rookies" },
-      { link: "https://www.roblox.com/badges/2124781949/Badge" },
-      { link: "https://www.roblox.com/badges/2153335580/Ascended" },
-      { link: "https://www.roblox.com/badges/2641051844781207/Mrs-Congeniality" },
-      { link: "https://www.roblox.com/badges/2148882740/Ending" },
-      { link: "https://www.roblox.com/badges/2126733824/3-Rebirths" },
-      { link: "https://www.roblox.com/badges/4124802520602108/unnamed" },
-      { link: "https://www.roblox.com/badges/2124529980/Easy-Way-Out" },
-      { link: "https://www.roblox.com/badges/2127756147/Do-the-Brew" },
-      { link: "https://www.roblox.com/badges/2152592786/1-Win" },
-      { link: "https://www.roblox.com/badges/2151091976/Complete-Solo-Part-1" },
-      { link: "https://www.roblox.com/badges/2124700762/unnamed" },
-      { link: "https://www.roblox.com/badges/3859208746971267/A-Fate-Worse-Than-Death" },
-      { link: "https://www.roblox.com/badges/26932452/Completion-of-Underground-1" },
-      { link: "https://www.roblox.com/badges/26931820/Completion-of-Underground-2" },
-      { link: "https://www.roblox.com/badges/2124525343/Completed-Silhouette" },
-      { link: "https://www.roblox.com/badges/2127776978/meow" },
-      { link: "https://www.roblox.com/badges/2145107243/pilow-acquisition" },
-      { link: "https://www.roblox.com/badges/1181461817087556/Mr-Watson" },
-      { link: "https://www.roblox.com/badges/53484450065768/Auxiliary" },
-      { link: "https://www.roblox.com/badges/2152150502/Secret-of-the-Mansion" },
-      { link: "https://www.roblox.com/badges/2124467057/riddle" },
-      { link: "https://www.roblox.com/badges/1554861163915615/Phase-II-Another-Memory" },
-      { link: "https://www.roblox.com/badges/3161638311754390/Eye-of-the-Storm-COMPLETE" },
-      { link: "https://www.roblox.com/badges/1821347990731704/truest-end" },
-      { link: "https://www.roblox.com/badges/2151085005/The-summit" },
-      { link: "https://www.roblox.com/badges/2124610837/Checkpoint-6-Exit" },
     ]
   },
   {
@@ -572,20 +167,8 @@ var BADGERS = [
       { name: "3/4ths done!", target: 9 },
       { name: "You beat the badger!", target: 12 }
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=182001533#gid=182001533",
     badges: [
-      { link: "https://www.roblox.com/badges/2127776978/meow" },
-      { link: "https://www.roblox.com/badges/2124498196/The-Key" },
-      { link: "https://www.roblox.com/badges/2124780139/Unending" },
-      { link: "https://www.roblox.com/badges/2124472865/You-Made-It" },
-      { link: "https://www.roblox.com/badges/2125365543/Beat-The-Citadel-of-Heights-and-Depths" },
-      { link: "https://www.roblox.com/badges/2124859128/106-2-Adventure" },
-      { link: "https://www.roblox.com/badges/2133310831/Finished" },
-      { link: "https://www.roblox.com/badges/2313865288194464/WINNER" },
-      { link: "https://www.roblox.com/badges/2149971690/Atrium-Temporis" },
-      { link: "https://www.roblox.com/badges/2124757555/Nightmare" },
-      { link: "https://www.roblox.com/badges/2141981045/Level-7" },
-      { link: "https://www.roblox.com/badges/2129793326/Final-Blow" },
     ]
   },
   {
@@ -596,117 +179,8 @@ var BADGERS = [
     milestones: [
       { name: "95 Challenges Completed!", target: 95 },
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1967760918#gid=1967760918",
     badges: [
-      { link: "https://www.roblox.com/badges/2124528631/Stage-100" },
-      { link: "https://www.roblox.com/badges/163301850/You-won" },
-      { link: "https://www.roblox.com/badges/176685798/Delivery" },
-      { link: "https://www.roblox.com/badges/2124444711/Golden-Touch" },
-      { link: "https://www.roblox.com/badges/66918685/Survived-100-Disasters" },
-      { link: "https://www.roblox.com/badges/911303772/Sharkinator" },
-      { link: "https://www.roblox.com/badges/282551802/Expert" },
-      { link: "https://www.roblox.com/badges/258260444/Reborn" },
-      { link: "https://www.roblox.com/badges/2124443934/Winner" },
-      { link: "https://www.roblox.com/badges/2124497900/Stage-100" },
-      { link: "https://www.roblox.com/badges/2124913139/Official" },
-      { link: "https://www.roblox.com/badges/407230771/Ultimate-Designer" },
-      { link: "https://www.roblox.com/badges/2124574897/Stage-100" },
-      { link: "https://www.roblox.com/badges/2124464786/Grown-up-Level-3" },
-      { link: "https://www.roblox.com/badges/2124457701/Over-The-Wall" },
-      { link: "https://www.roblox.com/badges/1559274983/Tag-Youre-It" },
-      { link: "https://www.roblox.com/badges/1777660772/Streakin" },
-      { link: "https://www.roblox.com/badges/321287470/250-Goals" },
-      { link: "https://www.roblox.com/badges/149637116/Seeker-Victory" },
-      { link: "https://www.roblox.com/badges/273622985/You-won-the-Chicken-eat-off" },
-      { link: "https://www.roblox.com/badges/273859139/10-000-Exp" },
-      { link: "https://www.roblox.com/badges/2124621573/Win-a-race" },
-      { link: "https://www.roblox.com/badges/253927093/You-Found-Joe" },
-      { link: "https://www.roblox.com/badges/721549309/Escapists" },
-      { link: "https://www.roblox.com/badges/2124679260/100-Washes" },
-      { link: "https://www.roblox.com/badges/2126861843/Mining-Intermediate" },
-      { link: "https://www.roblox.com/badges/3143171309336883/You-Won" },
-      { link: "https://www.roblox.com/badges/2124689085/10-000-Merges" },
-      { link: "https://www.roblox.com/badges/2124667645/First-Win" },
-      { link: "https://www.roblox.com/badges/2124653440/10-Wins" },
-      { link: "https://www.roblox.com/badges/1319774652/Lab-Victory" },
-      { link: "https://www.roblox.com/badges/2124496334/Do-Not-Disturb" },
-      { link: "https://www.roblox.com/badges/2124538341/Achievement-Hunter" },
-      { link: "https://www.roblox.com/badges/714059563/5-000-Errors" },
-      { link: "https://www.roblox.com/badges/2124630888/Maze-Professional" },
-      { link: "https://www.roblox.com/badges/2124487910/Breaking-and-entering" },
-      { link: "https://www.roblox.com/badges/2124450213/The-Edge" },
-      { link: "https://www.roblox.com/badges/345838773/SPAAAAACE" },
-      { link: "https://www.roblox.com/badges/2124477701/Certified-Sleeper" },
-      { link: "https://www.roblox.com/badges/335171431/Bakers-Dozen" },
-      { link: "https://www.roblox.com/badges/2059840064/Cake" },
-      { link: "https://www.roblox.com/badges/2124421298/Squad-Victory" },
-      { link: "https://www.roblox.com/badges/1803073296/Uncrushable" },
-      { link: "https://www.roblox.com/badges/14417332/John-Loved-of-Muses" },
-      { link: "https://www.roblox.com/badges/189799502/Winner" },
-      { link: "https://www.roblox.com/badges/2124584061/Secret" },
-      { link: "https://www.roblox.com/badges/2124480228/New-User-Machine" },
-      { link: "https://www.roblox.com/badges/958187470/Smooth-Criminal" },
-      { link: "https://www.roblox.com/badges/17713304/Red-Plumber-Obby-Winners" },
-      { link: "https://www.roblox.com/badges/2124609489/1st-Place" },
-      { link: "https://www.roblox.com/badges/2124422937/Medium-Escape" },
-      { link: "https://www.roblox.com/badges/2128865385/Speedrunner" },
-      { link: "https://www.roblox.com/badges/2124546957/Deal-100-000-Damage" },
-      { link: "https://www.roblox.com/badges/2124624741/1-Rebirth" },
-      { link: "https://www.roblox.com/badges/2124618864/Pick-up-something-at-a-rainbow" },
-      { link: "https://www.roblox.com/badges/2124536635/1st-Reboot" },
-      { link: "https://www.roblox.com/badges/2127773978/First-Rebirth" },
-      { link: "https://www.roblox.com/badges/2124529118/Victory" },
-      { link: "https://www.roblox.com/badges/2124565917/Reach-Wave-10" },
-      { link: "https://www.roblox.com/badges/2124493937/10-Wins" },
-      { link: "https://www.roblox.com/badges/2124652615/Blazed" },
-      { link: "https://www.roblox.com/badges/1749468648/1-Million-Honey" },
-      { link: "https://www.roblox.com/badges/2124911879/Welcome" },
-      { link: "https://www.roblox.com/badges/175195799/Greatness" },
-      { link: "https://www.roblox.com/badges/851853565/Master-Boater" },
-      { link: "https://www.roblox.com/badges/2124439922/Tiny-Isles" },
-      { link: "https://www.roblox.com/badges/1849668525/Lava-Lair" },
-      { link: "https://www.roblox.com/badges/2124559548/Achievement-Hunter-Classic-Kingdom" },
-      { link: "https://www.roblox.com/badges/142316638/500" },
-      { link: "https://www.roblox.com/badges/2124453670/Full-Combo-Easy" },
-      { link: "https://www.roblox.com/badges/688840481/Impossiwall-Completed" },
-      { link: "https://www.roblox.com/badges/1836407956/My-Home-is-Perfect" },
-      { link: "https://www.roblox.com/badges/2124562812/100-Kills" },
-      { link: "https://www.roblox.com/badges/608018867/Winner" },
-      { link: "https://www.roblox.com/badges/2124511245/100k-Cash" },
-      { link: "https://www.roblox.com/badges/2124425325/Complete-Tycoon" },
-      { link: "https://www.roblox.com/badges/2124461953/First-Rebirth" },
-      { link: "https://www.roblox.com/badges/2124457309/Math-Pro-1" },
-      { link: "https://www.roblox.com/badges/2124482772/1-Rebirth" },
-      { link: "https://www.roblox.com/badges/2124693013/zzzzzzzz-png" },
-      { link: "https://www.roblox.com/badges/2124607868/Vagabond" },
-      { link: "https://www.roblox.com/badges/2124545513/Oops" },
-      { link: "https://www.roblox.com/badges/2124425352/Something-seems-off" },
-      { link: "https://www.roblox.com/badges/2124540865/Purple-Wall" },
-      { link: "https://www.roblox.com/badges/2124493188/Meet-the-train" },
-      { link: "https://www.roblox.com/badges/449764589/Strike" },
-      { link: "https://www.roblox.com/badges/382255398775177/Ending" },
-      { link: "https://www.roblox.com/badges/2124464294/History-recorded" },
-      { link: "https://www.roblox.com/badges/2124637070/Fire-Alarm" },
-      { link: "https://www.roblox.com/badges/2124744067/15" },
-      { link: "https://www.roblox.com/badges/2124488694/Player-VS-Player" },
-      { link: "https://www.roblox.com/badges/3928523886139998/Completed-Stage-180" },
-      { link: "https://www.roblox.com/badges/2124709773/The-Lost-Eye" },
-      { link: "https://www.roblox.com/badges/2124601440/Mystery-Badge-1" },
-      { link: "https://www.roblox.com/badges/2124702903/Hard-Mode-Unlocked" },
-      { link: "https://www.roblox.com/badges/2124837292/100-Wins" },
-      { link: "https://www.roblox.com/badges/2124767054/25-Wins" },
-      { link: "https://www.roblox.com/badges/2124642336/1st" },
-      { link: "https://www.roblox.com/badges/2124849960/Just-Getting-Started" },
-      { link: "https://www.roblox.com/badges/2127031377/First-Rebirth" },
-      { link: "https://www.roblox.com/badges/2128553061/You-what" },
-      { link: "https://www.roblox.com/badges/2124818410/You-have-100000-badges" },
-      { link: "https://www.roblox.com/badges/2129708570/You-visited-the-Obbies" },
-      { link: "https://www.roblox.com/badges/2124477835/Lvl-20" },
-      { link: "https://www.roblox.com/badges/1202037751758963/You-climbed-the-numberblocks" },
-      { link: "https://www.roblox.com/badges/2124694494/Round-40" },
-      { link: "https://www.roblox.com/badges/545796851/21-Streak-Hardcore" },
-      { link: "https://www.roblox.com/badges/2145180495/Survived-25-Rounds" },
-      { link: "https://www.roblox.com/badges/138109176/Milestone-120-Total" },
     ]
   },
   {
@@ -755,58 +229,8 @@ var BADGERS = [
     milestones: [
       { name: "ANOMALIES EXPUNGED", target: 50 },
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=753062007#gid=753062007",
     badges: [
-      { link: "https://www.roblox.com/badges/2128462289/Hard-to-the-Core" },
-      { link: "https://www.roblox.com/badges/91243232/Mayor-Award" },
-      { link: "https://www.roblox.com/badges/2124736604/Nightmare" },
-      { link: "https://www.roblox.com/badges/4259651627337301/Style-of-Shame" },
-      { link: "https://www.roblox.com/badges/2124505504/Ghost-Hunter-Captain-Finsley" },
-      { link: "https://www.roblox.com/badges/2135722176/Serious-Dedication" },
-      { link: "https://www.roblox.com/badges/2124538341/Achievement-Hunter" },
-      { link: "https://www.roblox.com/badges/2144405000/Cruel-Heat" },
-      { link: "https://www.roblox.com/badges/2145180441/Super-Winning-Streak" },
-      { link: "https://www.roblox.com/badges/688840481/Impossiwall-Completed" },
-      { link: "https://www.roblox.com/badges/2127287065/Control-Killed" },
-      { link: "https://www.roblox.com/badges/1555921841/Perfect-Winter" },
-      { link: "https://www.roblox.com/badges/2149233683/500-Combo" },
-      { link: "https://www.roblox.com/badges/840060501/The-Ultimate-Dunk" },
-      { link: "https://www.roblox.com/badges/2124451345/Hugman" },
-      { link: "https://www.roblox.com/badges/683109575566124/10-Peepers" },
-      { link: "https://www.roblox.com/badges/2124688903/Atlantis-Win" },
-      { link: "https://www.roblox.com/badges/2124443943/Ruler" },
-      { link: "https://www.roblox.com/badges/2128542429/MVP" },
-      { link: "https://www.roblox.com/badges/960167805966299/Unlock-Embers-Edge" },
-      { link: "https://www.roblox.com/badges/2124615098/Surfer" },
-      { link: "https://www.roblox.com/badges/39120785/Pro-Part-Collector" },
-      { link: "https://www.roblox.com/badges/2063079696/Mission-5-Cosminus-Chaos" },
-      { link: "https://www.roblox.com/badges/558378320/Level-25" },
-      { link: "https://www.roblox.com/badges/2124820865/100-WPM" },
-      { link: "https://www.roblox.com/badges/2124817245/Complete-the-Goblin-Village-Quest" },
-      { link: "https://www.roblox.com/badges/1476833889/Collector" },
-      { link: "https://www.roblox.com/badges/18241028/So-You-saw-it" },
-      { link: "https://www.roblox.com/badges/114541972/Escaped-Extreme" },
-      { link: "https://www.roblox.com/badges/2124708706/Trickshot" },
-      { link: "https://www.roblox.com/badges/2129036266/Break-The-Core" },
-      { link: "https://www.roblox.com/badges/2124502845/Breach-and-Clear" },
-      { link: "https://www.roblox.com/badges/2124898941/crackedsweeper" },
-      { link: "https://www.roblox.com/badges/2124636790/100-Completed-Game-HARD-Mode" },
-      { link: "https://www.roblox.com/badges/2124694493/Round-30" },
-      { link: "https://www.roblox.com/badges/2124528489/Defeat-the-Chaos-Sentry" },
-      { link: "https://www.roblox.com/badges/176685910/Pizza-Boxer" },
-      { link: "https://www.roblox.com/badges/2124638038/Time-Well-Spent" },
-      { link: "https://www.roblox.com/badges/446694572/50-Streak" },
-      { link: "https://www.roblox.com/badges/2124501768/Melee-Menace" },
-      { link: "https://www.roblox.com/badges/1338151805/Dark-Sci-Facility-Insane" },
-      { link: "https://www.roblox.com/badges/2125404304/Runner-Up" },
-      { link: "https://www.roblox.com/badges/2124718725/Winner" },
-      { link: "https://www.roblox.com/badges/2848328069766941/HAVEFAITHINTHELIGHT" },
-      { link: "https://www.roblox.com/badges/3715522917692253/snowflake" },
-      { link: "https://www.roblox.com/badges/4151616111182706/Pyramid" },
-      { link: "https://www.roblox.com/badges/2133601772/Herb-Of-Viridis" },
-      { link: "https://www.roblox.com/badges/2148967266/Beat-Hard-Difficulty" },
-      { link: "https://www.roblox.com/badges/1157272419760872/Subspace" },
-      { link: "https://www.roblox.com/badges/958186367/Most-Valuable-Player-MVP" },
     ]
   },
   {
@@ -906,27 +330,8 @@ var BADGERS = [
     milestones: [
       { name: "Volume 2 Completionist", target: 19 }
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=432088625#gid=432088625",
     badges: [
-      { link: "https://www.roblox.com/badges/313408286/There-Goes-Dinner" },
-      { link: "https://www.roblox.com/badges/2147116564/Defeat-AI-Champion" },
-      { link: "https://www.roblox.com/badges/2141630120/The-Announcers-Secret" },
-      { link: "https://www.roblox.com/badges/161222636/100-credits" },
-      { link: "https://www.roblox.com/badges/2142921319/Rebirth-2" },
-      { link: "https://www.roblox.com/badges/2147911293/Defeat-Dr-Octopus" },
-      { link: "https://www.roblox.com/badges/2146687565/Ending-3" },
-      { link: "https://www.roblox.com/badges/4277975644619017/Obby-Master" },
-      { link: "https://www.roblox.com/badges/3063087271030637/Star" },
-      { link: "https://www.roblox.com/badges/2133601126/Interconnected" },
-      { link: "https://www.roblox.com/badges/2152015917/Challenging" },
-      { link: "https://www.roblox.com/badges/2124844140/Win-Marbles" },
-      { link: "https://www.roblox.com/badges/2124496335/Ok-Maybe-Youre-a-Bit-Obsessed" },
-      { link: "https://www.roblox.com/badges/2353512895577600/The-Best-There-Is" },
-      { link: "https://www.roblox.com/badges/2125365444/Find-the-Room-of-Absolute-Garbage" },
-      { link: "https://www.roblox.com/badges/2147786626/Spring-Cleaning" },
-      { link: "https://www.roblox.com/badges/2127255485/Found-the-El-Gato-Gun" },
-      { link: "https://www.roblox.com/badges/2502850431939051/Extreme-Corruption" },
-      { link: "https://www.roblox.com/badges/2126621652/Heart-Monster" },
     ]
   },
   {
@@ -940,108 +345,8 @@ var BADGERS = [
       { name: "75", target: 75 },
       { name: "You Finished The Badger", target: 100 },
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=2107104639#gid=2107104639",
     badges: [
-      { link: "https://www.roblox.com/badges/2124532165/Experienced" },
-      { link: "https://www.roblox.com/badges/2144085646/Win-The-Game" },
-      { link: "https://www.roblox.com/badges/2129096066/MVP" },
-      { link: "https://www.roblox.com/badges/1885565858186336/Steady-Hands" },
-      { link: "https://www.roblox.com/badges/3262867750256588/Pyramid" },
-      { link: "https://www.roblox.com/badges/2124597920/Deep-Delving-For-Hearts" },
-      { link: "https://www.roblox.com/badges/1740391523408084/50-Rebirths" },
-      { link: "https://www.roblox.com/badges/2153849630/5-Rebirths" },
-      { link: "https://www.roblox.com/badges/2588178371255460/CHAOS-CANYON" },
-      { link: "https://www.roblox.com/badges/1338152217/Abandoned-Facility-Insane" },
-      { link: "https://www.roblox.com/badges/2124484520/Day-30" },
-      { link: "https://www.roblox.com/badges/2152592816/Survived-Chapter-1" },
-      { link: "https://www.roblox.com/badges/2127391313/Harvest-1-plant" },
-      { link: "https://www.roblox.com/badges/2148967266/Beat-Hard-Difficulty" },
-      { link: "https://www.roblox.com/badges/1080999374854006/Beat-Standard-Mode" },
-      { link: "https://www.roblox.com/badges/2125824637/Blinding-Gaze" },
-      { link: "https://www.roblox.com/badges/2143226663/Running-and-Repairing" },
-      { link: "https://www.roblox.com/badges/4025711424157603/Beat-World-5" },
-      { link: "https://www.roblox.com/badges/2983028689582015/Experienced-Fighter" },
-      { link: "https://www.roblox.com/badges/2124694490/Ray-Gun" },
-      { link: "https://www.roblox.com/badges/2124615655/Defeat-the-Fallen-King" },
-      { link: "https://www.roblox.com/badges/2124459973/Secret-Lab" },
-      { link: "https://www.roblox.com/badges/2124541479/Treasure-Master" },
-      { link: "https://www.roblox.com/badges/2150658301/Unlocked-Iron-Tower" },
-      { link: "https://www.roblox.com/badges/2124479076/1-000-000-In-Driving-Empire" },
-      { link: "https://www.roblox.com/badges/1263810844/25-000-Parts" },
-      { link: "https://www.roblox.com/badges/2124465996/Box-Specialist" },
-      { link: "https://www.roblox.com/badges/958186367/Most-Valuable-Player-MVP" },
-      { link: "https://www.roblox.com/badges/657142659/Home-Sweet-Home" },
-      { link: "https://www.roblox.com/badges/3731940198503774/Savior" },
-      { link: "https://www.roblox.com/badges/2153897112/Defeat-ERADICATOR" },
-      { link: "https://www.roblox.com/badges/2145211075/Suitcase-Security-Savant" },
-      { link: "https://www.roblox.com/badges/1814570216718025/Time-to-go-prehistoric" },
-      { link: "https://www.roblox.com/badges/2125849638/Reached-Skylands" },
-      { link: "https://www.roblox.com/badges/176685667/Supplier" },
-      { link: "https://www.roblox.com/badges/986051218/Classic-Lucky-Guesses" },
-      { link: "https://www.roblox.com/badges/2124535266/Destroyer" },
-      { link: "https://www.roblox.com/badges/3856678549661678/Tower-of-Naive-Facades" },
-      { link: "https://www.roblox.com/badges/2128555791/Wasteful" },
-      { link: "https://www.roblox.com/badges/2932289401009045/Watermelon" },
-      { link: "https://www.roblox.com/badges/2145639907/Chapter-1" },
-      { link: "https://www.roblox.com/badges/79261822/100-Kills-in-Base-Wars" },
-      { link: "https://www.roblox.com/badges/2124839699/Product-Peddler" },
-      { link: "https://www.roblox.com/badges/4091345276277977/Completed" },
-      { link: "https://www.roblox.com/badges/1255686087719522/Stage-120" },
-      { link: "https://www.roblox.com/badges/2124450213/The-Edge" },
-      { link: "https://www.roblox.com/badges/2124662807/Boomball-Kill" },
-      { link: "https://www.roblox.com/badges/2124782967/You-Win" },
-      { link: "https://www.roblox.com/badges/2495304197806218/Super-Rotator" },
-      { link: "https://www.roblox.com/badges/2126317054/25-words" },
-      { link: "https://www.roblox.com/badges/2124921265/Hole-In-None" },
-      { link: "https://www.roblox.com/badges/2124577033/Outlaster" },
-      { link: "https://www.roblox.com/badges/2130232177/Win-a-Game" },
-      { link: "https://www.roblox.com/badges/2124464799/Resilient-Runner-Level-4" },
-      { link: "https://www.roblox.com/badges/2124898941/crackedsweeper" },
-      { link: "https://www.roblox.com/badges/2124859108/Challengers-Path" },
-      { link: "https://www.roblox.com/badges/1491870514/Beat-Speed-Run-4-Three-Times" },
-      { link: "https://www.roblox.com/badges/2127839123/Flawless-Survival" },
-      { link: "https://www.roblox.com/badges/2124638038/Time-Well-Spent" },
-      { link: "https://www.roblox.com/badges/2124855991/Completed-Lab-Hidden-Ending" },
-      { link: "https://www.roblox.com/badges/2130672343/Gone-Missing" },
-      { link: "https://www.roblox.com/badges/2125883882/Unlock-Understudy" },
-      { link: "https://www.roblox.com/badges/2124643795/HARD-COMPLETION" },
-      { link: "https://www.roblox.com/badges/2127390151/Zone-3" },
-      { link: "https://www.roblox.com/badges/438394123/Great-Guy" },
-      { link: "https://www.roblox.com/badges/2124780869/First-Place" },
-      { link: "https://www.roblox.com/badges/2127218650/Get-to-Top-10" },
-      { link: "https://www.roblox.com/badges/2149302917/Achievement-Hunter-Fortress-Falls" },
-      { link: "https://www.roblox.com/badges/2124621562/Beat-a-dev-time" },
-      { link: "https://www.roblox.com/badges/2124679262/1000-Washes" },
-      { link: "https://www.roblox.com/badges/2124505885/Pro" },
-      { link: "https://www.roblox.com/badges/2124451945/Go-for-Gold" },
-      { link: "https://www.roblox.com/badges/2147786343/You-Win" },
-      { link: "https://www.roblox.com/badges/66919023/Close-Call" },
-      { link: "https://www.roblox.com/badges/2776499692023027/Level-50" },
-      { link: "https://www.roblox.com/badges/3456907105915549/Reach-5000-Studs" },
-      { link: "https://www.roblox.com/badges/2152567999/Unlocked-Zone-7" },
-      { link: "https://www.roblox.com/badges/2153362409/Dynastick-Bomb" },
-      { link: "https://www.roblox.com/badges/1470979037/1-Rebirth" },
-      { link: "https://www.roblox.com/badges/258260444/Reborn" },
-      { link: "https://www.roblox.com/badges/2126337498/Exotic-Found" },
-      { link: "https://www.roblox.com/badges/2124848317/Hardystonite" },
-      { link: "https://www.roblox.com/badges/2124823481/Tier-5-Harvester" },
-      { link: "https://www.roblox.com/badges/2127965910/Hundred-Of-Many" },
-      { link: "https://www.roblox.com/badges/2126527218/Sky-High-Explorer" },
-      { link: "https://www.roblox.com/badges/2214986153745250/5-000-Collects" },
-      { link: "https://www.roblox.com/badges/3470103731906976/DEDICATION" },
-      { link: "https://www.roblox.com/badges/2129938812/Instability" },
-      { link: "https://www.roblox.com/badges/2150530896/Performed-an-Unfailability-Reset" },
-      { link: "https://www.roblox.com/badges/2124611457/The-Jumper-Badge" },
-      { link: "https://www.roblox.com/badges/2124676171/You-reached-Level-15" },
-      { link: "https://www.roblox.com/badges/291597053/Hit-the-Jackpot" },
-      { link: "https://www.roblox.com/badges/261565689/Level-100" },
-      { link: "https://www.roblox.com/badges/2603701654594117/Soul-Seeker" },
-      { link: "https://www.roblox.com/badges/2126311328/Generator" },
-      { link: "https://www.roblox.com/badges/2130236425/Witness-a-Mythical-Occurrence" },
-      { link: "https://www.roblox.com/badges/587994360/50-Activations" },
-      { link: "https://www.roblox.com/badges/2124693452/Insane" },
-      { link: "https://www.roblox.com/badges/2127173087/reach-1000-deaths" },
-      { link: "https://www.roblox.com/badges/2124910870/Beaten-Challenging" },
     ]
   },
   {
@@ -1052,41 +357,9 @@ var BADGERS = [
     milestones: [
       { name: "Noob Ascension Completed", target: 33 }
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1323941283#gid=1323941283",
     badges: [
-      { link: "https://www.roblox.com/badges/2124450085/Glitch-Master" },
-      { link: "https://www.roblox.com/badges/968392659/12-Secret-Trials" },
-      { link: "https://www.roblox.com/badges/66918948/Surfs-Up" },
-      { link: "https://www.roblox.com/badges/2124485632/Elephants-Cant-Fly" },
-      { link: "https://www.roblox.com/badges/2124486439/One-HP-Wonder" },
-      { link: "https://www.roblox.com/badges/1879570125883748/Beat-World-3" },
-      { link: "https://www.roblox.com/badges/2127966083/Sshh" },
-      { link: "https://www.roblox.com/badges/2124637036/The-Secret-Badge" },
-      { link: "https://www.roblox.com/badges/2128618422/got-exploded-100-times" },
-      { link: "https://www.roblox.com/badges/2129212145/Plate-Master" },
-      { link: "https://www.roblox.com/badges/851853565/Master-Boater" },
-      { link: "https://www.roblox.com/badges/176685508/Manager" },
-      { link: "https://www.roblox.com/badges/2130236466/Stage-2740" },
-      { link: "https://www.roblox.com/badges/682460336484221/100-Streak" },
-      { link: "https://www.roblox.com/badges/2125985611/vehicular-manslaughter" },
-      { link: "https://www.roblox.com/badges/1182327518010206/He-smells-you" },
-      { link: "https://www.roblox.com/badges/2149971690/Atrium-Temporis" },
-      { link: "https://www.roblox.com/badges/2127570327/Most-Valuable-Player" },
-      { link: "https://www.roblox.com/badges/2151335389/Shatterproof" },
-      { link: "https://www.roblox.com/badges/2124732728/All-Alone" },
-      { link: "https://www.roblox.com/badges/189799502/Winner" },
-      { link: "https://www.roblox.com/badges/2124830765/Time-Flies-By" },
-      { link: "https://www.roblox.com/badges/1218609350208126/Hidden" },
-      { link: "https://www.roblox.com/badges/2152592792/5-Wins" },
-      { link: "https://www.roblox.com/badges/2147389053/The-End" },
-      { link: "https://www.roblox.com/badges/2151997834/You-Pushed-the-Button" },
-      { link: "https://www.roblox.com/badges/2129096087/Potty-Shot" },
-      { link: "https://www.roblox.com/badges/249079321/Intensity-Intensifies" },
-      { link: "https://www.roblox.com/badges/2124949570/Sharpshooter" },
-      { link: "https://www.roblox.com/badges/2124871530/Pack-Mule" },
-      { link: "https://www.roblox.com/badges/2152790954/Nightmare-Mode" },
-      { link: "https://www.roblox.com/badges/2164034205040063/You-Touched-The-Strong-Noob" },
-      { link: "https://www.roblox.com/badges/2124855991/Completed-Lab-Hidden-Ending" },
+
     ]
   },
   {
@@ -1097,19 +370,8 @@ var BADGERS = [
     milestones: [
       { name: "Winner!", target: 11 }
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=534955597#gid=534955597",
     badges: [
-      { link: "https://www.roblox.com/badges/2124843436/Scared-Of-The-Dark" },
-      { link: "https://www.roblox.com/badges/4034435236286271/Apprentice-of-the-Horse" },
-      { link: "https://www.roblox.com/badges/2139674870/aqua" },
-      { link: "https://www.roblox.com/badges/2148138325/Secret-7" },
-      { link: "https://www.roblox.com/badges/2140855244/TNT-Storehouse-Complete" },
-      { link: "https://www.roblox.com/badges/2132179395/Hard-To-Destroy" },
-      { link: "https://www.roblox.com/badges/2141365298/Harold" },
-      { link: "https://www.roblox.com/badges/2125896013/Locked-In-and-Praying" },
-      { link: "https://www.roblox.com/badges/2125909825/Split-Second-Thinking" },
-      { link: "https://www.roblox.com/badges/2127250002/Secret-Ending-Farewell-In-Veil" },
-      { link: "https://www.roblox.com/badges/2124914803/You-walked-50K-studs" },
     ]
   },
   {
@@ -1120,34 +382,8 @@ var BADGERS = [
     milestones: [
       { name: "Completed Badger the Badger Horror Badger", target: 26 }
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1528502579#gid=1528502579",
     badges: [
-      { link: "https://www.roblox.com/badges/2151355201/Ballin" },
-      { link: "https://www.roblox.com/badges/2151949735/THE-TRUTH" },
-      { link: "https://www.roblox.com/badges/2124757163/Confront-the-Darkness" },
-      { link: "https://www.roblox.com/badges/2124528518/Bad-Ending" },
-      { link: "https://www.roblox.com/badges/2124494521/unnamed" },
-      { link: "https://www.roblox.com/badges/4007979342442503/Skilled" },
-      { link: "https://www.roblox.com/badges/2127330742/The-Tomb" },
-      { link: "https://www.roblox.com/badges/2124483156/The-Facility" },
-      { link: "https://www.roblox.com/badges/1654438302233960/Survived-Chapter-2" },
-      { link: "https://www.roblox.com/badges/2127132068/Night-One-Basement" },
-      { link: "https://www.roblox.com/badges/1611231737376993/A-Way-Out" },
-      { link: "https://www.roblox.com/badges/3537297858124124/Trooper" },
-      { link: "https://www.roblox.com/badges/2126332555/Completed-Chapter-1-Phase-3" },
-      { link: "https://www.roblox.com/badges/2143773292/COMPLETED-MURDER-MINE-BAD-ENDING" },
-      { link: "https://www.roblox.com/badges/2124818370/II-SATISFACTORY" },
-      { link: "https://www.roblox.com/badges/2141161639/FNaF-2-The-End" },
-      { link: "https://www.roblox.com/badges/1915091265483052/True-Ending" },
-      { link: "https://www.roblox.com/badges/3408011745835066/Completed-Sister-Location-Night-4" },
-      { link: "https://www.roblox.com/badges/2142925693/Just-Doing-My-Job" },
-      { link: "https://www.roblox.com/badges/2150667282/Infinite-Survival" },
-      { link: "https://www.roblox.com/badges/2153833115/Complete-The-Underground" },
-      { link: "https://www.roblox.com/badges/2124452758/Lets-Not-Get-Shot-Tonight" },
-      { link: "https://www.roblox.com/badges/3164525666810964/Tormented-Avarice" },
-      { link: "https://www.roblox.com/badges/2130863472/ESCAPE" },
-      { link: "https://www.roblox.com/badges/2124747085/Elude-the-Corn" },
-      { link: "https://www.roblox.com/badges/1040782410253215/UNASSIMILATED" },
     ]
   },
   {
@@ -1298,7 +534,7 @@ var BADGERS = [
     id: "badgers-quest-saving-the-village",
     name: "Badgers Quest: Saving The Village",
     difficulty: "Difficult",
-    gameLink: "https://www.roblox.com/games/16250248248/Hypers-random-badger",
+    gameLink: "https://www.roblox.com/games/16207149085/Badgers-Quest-Saving-The-Village",
     milestones: [
       { name: "Saved the village", target: 50 },
       { name: "Ultra saved the village", target: 100}
@@ -1423,18 +659,8 @@ var BADGERS = [
     milestones: [
       { name: "badged", target: 10 },
     ],
-    sheetUrl: "",
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=2110063465#gid=2110063465",
     badges: [
-      { link: "https://www.roblox.com/badges/2124772807/unnamed" },
-      { link: "https://www.roblox.com/badges/4424033740102763/GLEE-png" },
-      { link: "https://www.roblox.com/badges/804760675520331/Chaos-End" },
-      { link: "https://www.roblox.com/badges/2151307484/EXPERIMENTATION" },
-      { link: "https://www.roblox.com/badges/2128201276/secret" },
-      { link: "https://www.roblox.com/badges/2124784440/Halcyon" },
-      { link: "https://www.roblox.com/badges/1414411336451656/Other-Way-Around" },
-      { link: "https://www.roblox.com/badges/2124700514/answers" },
-      { link: "https://www.roblox.com/badges/968392659/12-Secret-Trials" },
-      { link: "https://www.roblox.com/badges/2124783780/Remnants-of-the-Past" },
     ]
   },
   // Add more badger objects here, separated by commas.
@@ -1453,7 +679,7 @@ var BADGERS = [
   }
   async function storageGet(key){
     if (storageMode === 'artifact') { try { var r = await window.storage.get(key); return r ? r.value : null; } catch(e){ return null; } }
-    if (storageMode === 'local') return localStorage.getItem(key);
+    if (storageMode === 'local') { try { return localStorage.getItem(key); } catch(e){ return null; } }
     return null;
   }
   async function storageSet(key, value){
@@ -1567,19 +793,70 @@ var BADGERS = [
     return order.map(function(k){ return map[k]; });
   }
 
+  // In-flight fetch per badger this session - so if the home card and the
+  // detail page both ask for the same sheet-backed badger, they share one
+  // network request instead of firing two.
+  var sheetFetchPromises = {};
+
+  function fetchSheetFresh(badger){
+    if (!sheetFetchPromises[badger.id]){
+      sheetFetchPromises[badger.id] = (async function(){
+        try {
+          var sheetBadges = await fetchSheetBadges(badger.sheetUrl);
+          await storageSet('sheetcache-' + badger.id, JSON.stringify({ badges: sheetBadges, ts: Date.now() }));
+          return { badges: sheetBadges, isErr: false };
+        } catch(e){
+          return { badges: null, isErr: true, message: e.message };
+        } finally {
+          // Let a future call try again (e.g. after the user hits Refresh).
+          delete sheetFetchPromises[badger.id];
+        }
+      })();
+    }
+    return sheetFetchPromises[badger.id];
+  }
+
+  // Cache-first: if we've loaded this sheet before, return that instantly
+  // and kick off a background refresh alongside it (exposed as `.pending`,
+  // a promise the caller can await later to pick up anything that changed).
+  // Only on the very first-ever load for a badger, with nothing cached yet,
+  // do we actually make the caller wait on the network.
   async function getEffectiveBadges(badger){
     var manual = badger.badges || [];
     if (!badger.sheetUrl) return { badges: manual, status: '', isErr: false };
-    try {
-      var sheetBadges = await fetchSheetBadges(badger.sheetUrl);
+
+    var cachedRaw = await storageGet('sheetcache-' + badger.id);
+    var cached = null;
+    try { cached = cachedRaw ? JSON.parse(cachedRaw) : null; } catch(e){ cached = null; }
+
+    var freshPromise = fetchSheetFresh(badger);
+
+    if (cached){
       return {
-        badges: mergeBadges(sheetBadges, manual),
-        status: sheetBadges.length + ' badge(s) loaded from sheet' + (manual.length ? (' + ' + manual.length + ' manual') : '') + '.',
-        isErr: false
+        badges: mergeBadges(cached.badges, manual),
+        status: cached.badges.length + ' badge(s) loaded from sheet (cached)' + (manual.length ? (' + ' + manual.length + ' manual') : '') + '.',
+        isErr: false,
+        pending: freshPromise.then(function(result){
+          if (result.isErr) return null; // keep showing cached data if the refresh failed
+          return {
+            badges: mergeBadges(result.badges, manual),
+            status: result.badges.length + ' badge(s) loaded from sheet' + (manual.length ? (' + ' + manual.length + ' manual') : '') + '.',
+            isErr: false
+          };
+        })
       };
-    } catch(e){
-      return { badges: manual, status: 'Could not load the sheet (' + e.message + '). Showing manual badges only.', isErr: true };
     }
+
+    // Nothing cached yet - this is the one time we have to actually wait.
+    var result = await freshPromise;
+    if (result.isErr){
+      return { badges: manual, status: 'Could not load the sheet (' + result.message + '). Showing manual badges only.', isErr: true };
+    }
+    return {
+      badges: mergeBadges(result.badges, manual),
+      status: result.badges.length + ' badge(s) loaded from sheet' + (manual.length ? (' + ' + manual.length + ' manual') : '') + '.',
+      isErr: false
+    };
   }
 
   // Caches each badge's Roblox lookup result (name/game/image/description) by
@@ -1760,10 +1037,13 @@ var BADGERS = [
 
   async function updateBadgerCounter(){
     var total = BADGERS.length;
-    var results = await Promise.all(BADGERS.map(function(b){
-      return storageGet('badgerdone-' + b.id);
-    }));
-    var done = results.filter(function(v){ return v === '1'; }).length;
+    var done = 0;
+    try {
+      var results = await Promise.all(BADGERS.map(function(b){
+        return storageGet('badgerdone-' + b.id);
+      }));
+      done = results.filter(function(v){ return v === '1'; }).length;
+    } catch(e){ console.error('updateBadgerCounter failed:', e); }
     document.getElementById('badgerCounterCount').textContent = done + ' / ' + total;
   }
 
@@ -1839,13 +1119,30 @@ var BADGERS = [
         });
         listEl.appendChild(card);
 
-        var effectiveBadges = badger.badges || [];
-        loadBadgerProgress(badger.id).then(function(p){
-          var done = countDone(badger.id, effectiveBadges, p);
-          var total = effectiveBadges.length;
-          var pct = total ? Math.round((done/total)*100) : 0;
-          countDiv.textContent = done + ' / ' + total;
-          barFill.style.width = pct + '%';
+        Promise.all([getEffectiveBadges(badger), loadBadgerProgress(badger.id)]).then(function(results){
+          var effResult = results[0];
+          var p = results[1];
+
+          function paint(badges){
+            var done = countDone(badger.id, badges, p);
+            var total = badges.length;
+            var pct = total ? Math.round((done/total)*100) : 0;
+            countDiv.textContent = done + ' / ' + total;
+            barFill.style.width = pct + '%';
+          }
+
+          paint(effResult.badges);
+          if (effResult.pending){
+            effResult.pending.then(function(fresh){
+              if (fresh) paint(fresh.badges);
+            });
+          }
+        }).catch(function(){
+          // Sheet fetch totally failed and somehow wasn't caught internally -
+          // fall back to whatever manual badges exist rather than leaving
+          // the card stuck on its loading placeholder forever.
+          var fallback = badger.badges || [];
+          countDiv.textContent = countDone(badger.id, fallback, {}) + ' / ' + fallback.length;
         });
       })(matches[i], i);
     }
@@ -1911,6 +1208,19 @@ var BADGERS = [
   // slow for genuinely new ones. Called automatically on open, and manually
   // via the Refresh button to pick up new sheet rows.
   async function refreshBadger(badger){
+    var renderPending = false;
+    var renderTimer = null;
+    function scheduleRender(){
+      if (currentBadger !== badger) return; // user navigated away before this resolved
+      if (renderTimer){ renderPending = true; return; }
+      renderList();
+      updateStats();
+      renderTimer = setTimeout(function(){
+        renderTimer = null;
+        if (renderPending){ renderPending = false; scheduleRender(); }
+      }, 400);
+    }
+
     if (badger.sheetUrl){
       var result = await getEffectiveBadges(badger);
       if (currentBadger !== badger) return; // user navigated away before this resolved
@@ -1919,15 +1229,36 @@ var BADGERS = [
       renderMilestones();
       renderList();
       updateStats();
+
+      if (result.pending){
+        result.pending.then(async function(fresh){
+          if (!fresh) return; // background refresh failed - keep showing cached data
+          if (currentBadger !== badger) return; // user navigated away before this resolved
+          currentBadges = fresh.badges;
+          setListStatus(fresh.status, false);
+          renderMilestones();
+          renderList();
+          updateStats();
+          // These are brand new badge objects straight from the sheet - they
+          // haven't been through Roblox enrichment yet, so re-apply it now
+          // (instant for anything already in the shared cache) instead of
+          // leaving images/names blank until the badger is reopened.
+          await enrichBadgesFromRoblox(currentBadges, scheduleRender);
+          if (currentBadger === badger){ renderList(); updateStats(); }
+        });
+      }
     } else {
       setListStatus('', false);
     }
 
-    await enrichBadgesFromRoblox(currentBadges, function(){
-      if (currentBadger !== badger) return; // user navigated away before this resolved
+    await enrichBadgesFromRoblox(currentBadges, scheduleRender);
+
+    // Make sure the very last batch of changes always lands, even if it
+    // arrived during the trailing 400ms cooldown window above.
+    if (currentBadger === badger){
       renderList();
       updateStats();
-    });
+    }
   }
 
   document.getElementById('refreshBtn').addEventListener('click', function(){
