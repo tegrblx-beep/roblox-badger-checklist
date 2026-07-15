@@ -1415,6 +1415,28 @@ var BADGERS = [
       { link: "https://www.roblox.com/badges/2125198158/Malfunction" },
     ]
   },
+  {
+    id: "indepth",
+    name: "INDEPTH",
+    difficulty: "Medium",
+    gameLink: "https://www.roblox.com/games/16250967888/INDEPTH",
+    milestones: [
+      { name: "badged", target: 10 },
+    ],
+    sheetUrl: "",
+    badges: [
+      { link: "https://www.roblox.com/badges/2124772807/unnamed" },
+      { link: "https://www.roblox.com/badges/4424033740102763/GLEE-png" },
+      { link: "https://www.roblox.com/badges/804760675520331/Chaos-End" },
+      { link: "https://www.roblox.com/badges/2151307484/EXPERIMENTATION" },
+      { link: "https://www.roblox.com/badges/2128201276/secret" },
+      { link: "https://www.roblox.com/badges/2124784440/Halcyon" },
+      { link: "https://www.roblox.com/badges/1414411336451656/Other-Way-Around" },
+      { link: "https://www.roblox.com/badges/2124700514/answers" },
+      { link: "https://www.roblox.com/badges/968392659/12-Secret-Trials" },
+      { link: "https://www.roblox.com/badges/2124783780/Remnants-of-the-Past" },
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ==================================================================================
