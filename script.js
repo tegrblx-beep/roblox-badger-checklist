@@ -669,9 +669,24 @@ var BADGERS = [
     difficulty: "Hard",
     gameLink: "https://www.roblox.com/games/13666913701/Badge-Island-Challenges",
     milestones: [
-      { name: "Ascended Collector:", target: 10 },
+      { name: "Ascended Collector", target: 10 },
     ],
     sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=845663609#gid=845663609",
+    badges: [
+    ]
+  },
+  {
+    id: "the-epic-badger-2",
+    name: "The Epic Badger 2",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/13666913701/Badge-Island-Challenges",
+    milestones: [
+      { name: "25 Badges", target: 25 },
+      { name: "50 Badges", target: 50 },
+      { name: "75 Badges", target: 75 },
+      { name: "100 Badges", target: 100 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=391262152#gid=391262152",
     badges: [
     ]
   },
