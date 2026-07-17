@@ -703,6 +703,18 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "skull-kids-final-resting-place",
+    name: "Skull Kids Final Resting Place",
+    difficulty: "Medium",
+    gameLink: "https://www.roblox.com/games/145010024/Skull-Kids-Final-Resting-Place",
+    milestones: [
+      { name: "Skull Kids Final Resting Place", target: 18 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=913253006#gid=913253006",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ==================================================================================
