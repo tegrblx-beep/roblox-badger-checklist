@@ -18,7 +18,7 @@ var BADGERS = [
     difficulty: "Hard",
     gameLink: "https://www.roblox.com/games/15484862973/Hidden-Badge-Hub",
     milestones: [
-    { name: "Hidden Badge 61", target: 55 },
+    { name: "Hidden Badge 61", target: 50 },
     ],
     sheetUrl: "",
     badges: [
@@ -177,7 +177,7 @@ var BADGERS = [
     difficulty: "Hard",
     gameLink: "https://www.roblox.com/games/131064432158124/Badge-Challenge-Leaderboard-Remastered",
     milestones: [
-      { name: "95 Challenges Completed!", target: 95 },
+      { name: "95 Challenges Completed!", target: 90 },
     ],
     sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1967760918#gid=1967760918",
     badges: [
@@ -815,7 +815,7 @@ var BADGERS = [
         typeColor: "#8178ff" },
     ]
   },
-   {
+  {
     id: "beach-badger",
     name: "Beach Badger",
     difficulty: "Hard",
