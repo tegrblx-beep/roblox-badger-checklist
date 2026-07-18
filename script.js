@@ -18,7 +18,7 @@ var BADGERS = [
     difficulty: "Hard",
     gameLink: "https://www.roblox.com/games/15484862973/Hidden-Badge-Hub",
     milestones: [
-    { name: "Hidden Badge 61", target: 50 },
+    { name: "Hidden Badge 61", target: 55 },
     ],
     sheetUrl: "",
     badges: [
@@ -177,7 +177,7 @@ var BADGERS = [
     difficulty: "Hard",
     gameLink: "https://www.roblox.com/games/131064432158124/Badge-Challenge-Leaderboard-Remastered",
     milestones: [
-      { name: "95 Challenges Completed!", target: 90 },
+      { name: "95 Challenges Completed!", target: 95 },
     ],
     sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1967760918#gid=1967760918",
     badges: [
@@ -194,44 +194,31 @@ var BADGERS = [
     sheetUrl: "",
     badges: [
       { link: "https://www.roblox.com/badges/649647907/Two-of-A-Kind",
-        type: "Easy",
-        typeColor: "#78ffb5"},
+        type: "Easy"},
       { link: "https://www.roblox.com/badges/132919329/Rookie-Survivor-5",
-        type: "Easy",
-        typeColor: "#78ffb5"},
+        type: "Easy"},
       { link: "https://www.roblox.com/badges/2149200010/Beat-a-World",
-        type: "Easy",
-        typeColor: "#78ffb5" },
+        type: "Easy" },
       { link: "https://www.roblox.com/badges/2124459197/Good-Boy",
-        type: "Easy",
-        typeColor: "#78ffb5" },
+        type: "Easy" },
       { link: "https://www.roblox.com/badges/18268422/Pyramid",
-        type: "Easy",
-        typeColor: "#78ffb5" },
+        type: "Easy" },
       { link: "https://www.roblox.com/badges/2124708337/Control-Chapter-III-Completed",
-        type: "Medium",
-        typeColor: "#fff178" },
+        type: "Medium" },
       { link: "https://www.roblox.com/badges/2124758364/20-Streak",
-        type: "Medium",
-        typeColor: "#fff178" },
+        type: "Medium" },
       { link: "https://www.roblox.com/badges/2124782965/Reach-512",
-        type: "Medium",
-        typeColor: "#fff178" },
+        type: "Medium" },
       { link: "https://www.roblox.com/badges/968392659/12-Secret-Trials",
-        type: "Medium",
-        typeColor: "#fff178" },
+        type: "Medium" },
       { link: "https://www.roblox.com/badges/2124540781/Completed-Plant-True-Ending",
-        type: "Hard",
-        typeColor: "#ff8c78" },
+        type: "Hard" },
       { link: "https://www.roblox.com/badges/2124859107/Adventurers-Path",
-        type: "Hard",
-        typeColor: "#ff8c78" },
+        type: "Hard" },
       { link: "https://www.roblox.com/badges/2124530689/Deviled-Eggs",
-        type: "Hard",
-        typeColor: "#ff8c78" },
+        type: "Hard" },
       { link: "https://www.roblox.com/badges/2151600779/You-Survived-DAY-20",
-        type: "Hard",
-        typeColor: "#ff8c78" },
+        type: "Hard" },
     ]
   },
   {
@@ -828,6 +815,19 @@ var BADGERS = [
         typeColor: "#8178ff" },
     ]
   },
+   {
+    id: "beach-badger",
+    name: "Beach Badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/15902252385/Beach-Badger",
+    milestones: [
+      { name: "You win!", target: 50 },
+
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=2085801816#gid=2085801816",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ==================================================================================
@@ -1331,10 +1331,25 @@ var BADGERS = [
     else if (e.key === 'ArrowUp'){ e.preventDefault(); if (currentIdx===0){ searchInput.focus(); } else if (currentIdx>0){ cards[currentIdx-1].focus(); } }
   });
 
+  // ---------------- Deep-linking (for Discord bot links etc.) ----------------
+  // Matches a URL like #badger=some-id (or a name/partial name) to a badger,
+  // so external links can jump straight to one badger's checklist.
+  function findBadgerBySlug(q){
+    if (!q) return null;
+    var exactId = BADGERS.find(function(b){ return b.id === q; });
+    if (exactId) return exactId;
+    var lower = q.toLowerCase();
+    var exactName = BADGERS.find(function(b){ return (b.name || '').toLowerCase() === lower; });
+    if (exactName) return exactName;
+    return BADGERS.find(function(b){ return (b.name || '').toLowerCase().indexOf(lower) !== -1; }) || null;
+  }
+
   // ---------------- Detail view ----------------
   async function openBadger(badger){
     currentBadger = badger;
     progressData = await loadBadgerProgress(badger.id);
+
+    try { history.replaceState(null, '', '#badger=' + encodeURIComponent(badger.id)); } catch(e){}
 
     document.getElementById('homeView').style.display = 'none';
     document.getElementById('detailView').style.display = 'block';
@@ -1440,6 +1455,7 @@ var BADGERS = [
   }
 
   document.getElementById('backBtn').addEventListener('click', function(){
+    try { history.replaceState(null, '', location.pathname + location.search); } catch(e){}
     document.getElementById('detailView').style.display = 'none';
     document.getElementById('homeView').style.display = 'block';
     renderHome(document.getElementById('homeSearch').value);
@@ -1620,5 +1636,11 @@ var BADGERS = [
   });
 
   storageMode = detectStorage();
-  renderHome('');
+  var initialSlug = (location.hash || '').replace(/^#badger=/, '');
+  var initialBadger = initialSlug ? findBadgerBySlug(decodeURIComponent(initialSlug)) : null;
+  if (initialBadger){
+    openBadger(initialBadger);
+  } else {
+    renderHome('');
+  }
 })();
