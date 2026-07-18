@@ -717,9 +717,9 @@ var BADGERS = [
   },
   {
     id: "badger-of-true-skill",
-    name: "Skull Kids Final Resting Place",
+    name: "Badger of True Skill",
     difficulty: "Intense",
-    gameLink: "https://www.roblox.com/games/id/gameName",
+    gameLink: "https://www.roblox.com/games/16072593451/Badger-of-True-Skill",
     milestones: [
       { name: "COMPLETED EASY", type: "Easy", target: 12 },
       { name: "COMPLETED MEDIUM", type: "Medium", target: 8 },
@@ -730,8 +730,7 @@ var BADGERS = [
     sheetUrl: "",
     badges: [
       { link: "https://www.roblox.com/badges/2124476827/Blue-Moon-Crazy",
-        type: "Easy"
-      },
+        type: "Easy" },
       { link: "https://www.roblox.com/badges/2142542882/100-Buttons",
         type: "Easy" },
       { link: "https://www.roblox.com/badges/2150333486/Cleared-Floor-1-on-Challenge-Mode",
