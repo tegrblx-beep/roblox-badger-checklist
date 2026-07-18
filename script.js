@@ -828,6 +828,20 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "heavenly-badger",
+    name: "Heavenly Badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/16528432132/Heavenly-Badger",
+    milestones: [
+      { name: "Angel 👼", target: 55 },
+      { name: "TRUE Angel 😇", target: 111 },
+
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1034632202#gid=1034632202",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ==================================================================================
