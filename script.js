@@ -842,6 +842,20 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "oranges-badge-hunt",
+    name: "Orange's Badge Hunt",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/7040175571/Oranges-Badge-Hunt",
+    milestones: [
+      { name: "Completed 21 badges!", target: 21 },
+      { name: "Completed 42 badges!", target: 42 },
+
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1431939068#gid=1431939068",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ==================================================================================
