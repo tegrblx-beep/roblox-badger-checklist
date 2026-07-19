@@ -856,6 +856,21 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "badge-hunt-classic",
+    name: "Badge Hunt: Classic",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/17498322333/Badge-Hunt-Classic",
+    milestones: [
+      { name: "You have obtained 22 badges!", target: 22 },
+      { name: "You have obtained 44 badges!", target: 44 },
+      { name: "You have obtained 66 badges!", target: 66 },
+      { name: "You have obtained 83 badges!", target: 83 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1596603740#gid=1596603740",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ==================================================================================
