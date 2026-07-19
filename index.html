@@ -26,12 +26,27 @@
       <span class="stat-label">badgers complete</span>
       </div>
     </header>
+    <div class="id-search-toggle-row">
+      <button type="button" class="bulk-btn" id="idSearchToggleBtn">🔍 Search by badge or game ID instead (this will take a while...)</button>
+    </div>
+    <div class="id-search-panel" id="idSearchPanel" style="display:none;">
+      <div class="search-wrap">
+        <input type="text" id="idSearchInput" class="id-search-input" placeholder="Paste a badge ID or game ID" autocomplete="off" />
+      </div>
+      <div class="id-search-actions">
+        <button type="button" class="bulk-btn" id="idSearchBtn">Search</button>
+        <button type="button" class="bulk-btn" id="idSearchCancelBtn" style="display:none;">Cancel</button>
+      </div>
+      <div class="list-status" id="idSearchStatus"></div>
+      <div id="idSearchResults" class="id-search-results"></div>
+    </div>
+
     <div class="search-wrap">
       <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
         <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
-      <input type="text" id="homeSearch" placeholder="Search for a badger" autocomplete="off" />
+      <input type="text" id="homeSearch" placeholder="Search by badger name or game ID" autocomplete="off" />
       <button type="button" class="search-clear" id="searchClearBtn" aria-label="Clear search">✕</button>
     </div>
     <div id="badgerList"></div>

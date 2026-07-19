@@ -55,6 +55,19 @@
   .badger-card-bar-fill{ height:100%; background: var(--gold); }
   .empty{ color: var(--text-faint); font-size: 14px; padding: 40px 0; text-align:center; }
 
+  .id-search-toggle-row{ margin-bottom: 12px; }
+  .id-search-panel{ margin-bottom: 20px; display:flex; flex-direction:column; gap: 10px; }
+  .id-search-panel .search-wrap{ margin-bottom: 0; }
+  .id-search-input{
+    width:100%; background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    border-radius: 10px; padding: 13px 16px; font-size: 15px; font-family: inherit;
+  }
+  .id-search-input::placeholder{ color: var(--text-faint); }
+  .id-search-input:focus{ outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,178,61,0.15); }
+  .id-search-actions{ display:flex; gap: 10px; }
+  .id-search-results{ display:flex; flex-direction:column; gap: 8px; }
+  .id-search-results .badger-card{ text-align:left; }
+
   /* ---------- Detail view ---------- */
   #detailView{ display:none; }
   .back-btn{

@@ -1118,7 +1118,7 @@ var BADGERS = [
   }
   async function fetchSheetBadges(sheetUrl){
     var csvUrl = sheetUrlToCsvUrl(sheetUrl);
-    var resp = await fetch(csvUrl);
+    var resp = await fetchWithTimeout(csvUrl, 8000);
     if (!resp.ok) throw new Error('Sheet request failed (HTTP ' + resp.status + ').');
     var text = await resp.text();
     return parseSheetBadges(text);
@@ -1233,6 +1233,72 @@ var BADGERS = [
     return m ? m[1] : null;
   }
 
+  // Resolves one badge's game (rootPlaceId), cache-first - used by the
+  // check-as-you-go loop below so a badger with many badges can stop the
+  // instant a match is found, instead of resolving everything up front.
+  async function resolveBadgeGameId(b, cache){
+    if (b.gameId) return b.gameId;
+    var id = extractBadgeIdFromLink(b.link);
+    if (!id) return null;
+    if (cache[id] && cache[id].gameId){ b.gameId = cache[id].gameId; return b.gameId; }
+
+    try {
+      var resp = await corsFetch('https://badges.roblox.com/v1/badges/' + id);
+      if (resp.ok){
+        var data = await resp.json();
+        var fetchedGameId = (data.awardingUniverse && data.awardingUniverse.rootPlaceId)
+          ? String(data.awardingUniverse.rootPlaceId) : '';
+        if (fetchedGameId){
+          b.gameId = fetchedGameId;
+          cache[id] = cache[id] || {};
+          cache[id].gameId = fetchedGameId;
+          saveEnrichmentCache();
+          return fetchedGameId;
+        }
+      }
+    } catch(e){
+      console.error('Game ID lookup for badge ' + id + ' failed:', e);
+    }
+    return null;
+  }
+
+  // Checks every badger's badge list (sheet + manual) for a badge matching
+  // the given badge ID or game ID. Badge ID matching is free (already in
+  // the data). Game ID matching resolves one badge at a time and stops as
+  // soon as a match is found in that badger, so a match is usually fast
+  // even for badgers with a large badge list; a non-matching badger with
+  // many uncached badges is still the slow case, but can no longer hang.
+  async function findBadgersByBadgeOrGameId(query, onProgress, shouldCancel){
+    var q = (query || '').trim();
+    if (!q) return [];
+    var matches = [];
+    var cache = await getEnrichmentCache();
+
+    for (var i = 0; i < BADGERS.length; i++){
+      if (shouldCancel && shouldCancel()) break;
+      var badger = BADGERS[i];
+      if (onProgress) onProgress(i + 1, BADGERS.length, badger.name, '');
+
+      var effective = await getEffectiveBadges(badger);
+      var badgeList = effective.badges || [];
+
+      var badgeIdHit = badgeList.some(function(b){ return extractBadgeIdFromLink(b.link) === q; });
+      if (badgeIdHit){ matches.push(badger); continue; }
+
+      var gameIdHit = false;
+      for (var j = 0; j < badgeList.length; j++){
+        if (shouldCancel && shouldCancel()) break;
+        if (onProgress) onProgress(i + 1, BADGERS.length, badger.name, ' (badge ' + (j + 1) + '/' + badgeList.length + ')');
+        var gid = await resolveBadgeGameId(badgeList[j], cache);
+        if (gid === q){ gameIdHit = true; break; }
+        await new Promise(function(r){ setTimeout(r, 60); });
+      }
+      if (gameIdHit) matches.push(badger);
+    }
+
+    return matches;
+  }
+
   // Fills in `image` and `description` for any badge that's missing them,
   // by looking up its Roblox badge ID (from `link`) against Roblox's public
   // badge API. Runs quietly in the background after the list first renders,
@@ -1245,25 +1311,33 @@ var BADGERS = [
   // mirror built specifically for Roblox's APIs with CORS enabled - it's
   // not run by us or Roblox, but is widely used for exactly this purpose.
   // A generic proxy is tried as a last-resort backup if RoProxy is down.
+  function fetchWithTimeout(url, ms){
+    var controller = new AbortController();
+    var timer = setTimeout(function(){ controller.abort(); }, ms);
+    return fetch(url, { signal: controller.signal }).finally(function(){ clearTimeout(timer); });
+  }
+
   async function corsFetch(robloxUrl){
     try {
-      var direct = await fetch(robloxUrl);
+      var direct = await fetchWithTimeout(robloxUrl, 6000);
       if (direct.ok) return direct;
       console.warn('Direct fetch to ' + robloxUrl + ' returned HTTP ' + direct.status);
-    } catch(e){ console.warn('Direct fetch to ' + robloxUrl + ' blocked (likely CORS):', e.message); }
+    } catch(e){ console.warn('Direct fetch to ' + robloxUrl + ' blocked/timed out:', e.message); }
 
     try {
       var roproxyUrl = robloxUrl.replace(
         /^https:\/\/([a-z]+)\.roblox\.com/,
         'https://$1.roproxy.com'
       );
-      var viaRoproxy = await fetch(roproxyUrl);
+      var viaRoproxy = await fetchWithTimeout(roproxyUrl, 8000);
       if (viaRoproxy.ok) return viaRoproxy;
       console.warn('RoProxy fetch to ' + roproxyUrl + ' returned HTTP ' + viaRoproxy.status);
-    } catch(e){ console.warn('RoProxy fetch failed:', e.message); }
+    } catch(e){ console.warn('RoProxy fetch failed/timed out:', e.message); }
 
     console.warn('Falling back to generic proxy for ' + robloxUrl);
-    return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(robloxUrl));
+    var viaGeneric = await fetchWithTimeout('https://api.allorigins.win/raw?url=' + encodeURIComponent(robloxUrl), 10000);
+    if (!viaGeneric.ok) throw new Error('All lookup routes failed (last HTTP ' + viaGeneric.status + ')');
+    return viaGeneric;
   }
 
   async function enrichBadgesFromRoblox(badges, onProgress){
@@ -1398,12 +1472,24 @@ var BADGERS = [
     document.getElementById('badgerCounterCount').textContent = done + ' / ' + total;
   }
 
+  // Pulls the numeric game/place ID out of a Roblox game link, e.g.
+  // "https://www.roblox.com/games/15742018443/A-Timeless-Adventure" -> "15742018443"
+  function extractGameId(gameLink){
+    if (!gameLink) return '';
+    var match = gameLink.match(/\/games\/(\d+)/);
+    return match ? match[1] : '';
+  }
+
   async function renderHome(filter){
     var listEl = document.getElementById('badgerList');
     var emptyEl = document.getElementById('homeEmpty');
     listEl.innerHTML = '';
-    var f = (filter||'').toLowerCase();
-    var matches = BADGERS.filter(function(b){ return !f || b.name.toLowerCase().indexOf(f) !== -1; });
+    var f = (filter||'').toLowerCase().trim();
+    var matches = BADGERS.filter(function(b){
+      if (!f) return true;
+      if (b.name.toLowerCase().indexOf(f) !== -1) return true;
+      return extractGameId(b.gameLink).indexOf(f) !== -1;
+    });
 
     document.getElementById('searchClearBtn').classList.toggle('visible', !!filter);
 
@@ -1509,6 +1595,79 @@ var BADGERS = [
     if (e.key === 'Escape'){ searchInput.value=''; renderHome(''); return; }
     if (e.key === 'Enter'){ var first = document.querySelector('.badger-card[data-index="0"]'); if (first) first.click(); return; }
     if (e.key === 'ArrowDown'){ e.preventDefault(); var fc = document.querySelector('.badger-card'); if (fc) fc.focus(); }
+  });
+
+  function renderIdSearchResults(matches){
+    var el = document.getElementById('idSearchResults');
+    el.innerHTML = '';
+    if (matches.length === 0){
+      el.textContent = 'No badgers found with a badge matching that ID.';
+      return;
+    }
+    matches.forEach(function(badger){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'badger-card';
+      btn.textContent = badger.name;
+      btn.addEventListener('click', function(){ openBadger(badger); });
+      el.appendChild(btn);
+    });
+  }
+
+  document.getElementById('idSearchToggleBtn').addEventListener('click', function(){
+    var panel = document.getElementById('idSearchPanel');
+    var isHidden = panel.style.display === 'none';
+    panel.style.display = isHidden ? 'block' : 'none';
+    if (isHidden) document.getElementById('idSearchInput').focus();
+  });
+
+  var idSearchCancelled = false;
+
+  function runIdSearch(){
+    var btn = document.getElementById('idSearchBtn');
+    var cancelBtn = document.getElementById('idSearchCancelBtn');
+    var input = document.getElementById('idSearchInput');
+    var statusEl = document.getElementById('idSearchStatus');
+    var resultsEl = document.getElementById('idSearchResults');
+    var query = input.value.trim();
+
+    if (!query){
+      statusEl.textContent = 'Enter a badge ID or game ID first.';
+      statusEl.className = 'list-status err';
+      return;
+    }
+
+    idSearchCancelled = false;
+    btn.disabled = true;
+    cancelBtn.style.display = 'inline-flex';
+    resultsEl.innerHTML = '';
+    statusEl.className = 'list-status';
+    statusEl.textContent = 'Starting search\u2026';
+
+    findBadgersByBadgeOrGameId(
+      query,
+      function(i, total, name, detail){
+        statusEl.textContent = 'Checking badger ' + i + ' of ' + total + ' (' + name + ')' + (detail || '') + '\u2026';
+      },
+      function(){ return idSearchCancelled; }
+    ).then(function(matches){
+      statusEl.textContent = (idSearchCancelled ? 'Search stopped early. ' : '') + matches.length + ' badger(s) found.';
+      renderIdSearchResults(matches);
+    }).catch(function(e){
+      statusEl.textContent = 'Search failed: ' + e.message;
+      statusEl.className = 'list-status err';
+    }).finally(function(){
+      btn.disabled = false;
+      cancelBtn.style.display = 'none';
+    });
+  }
+
+  document.getElementById('idSearchBtn').addEventListener('click', runIdSearch);
+  document.getElementById('idSearchCancelBtn').addEventListener('click', function(){
+    idSearchCancelled = true;
+  });
+  document.getElementById('idSearchInput').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') runIdSearch();
   });
   document.getElementById('badgerList').addEventListener('keydown', function(e){
     var cards = Array.prototype.slice.call(document.querySelectorAll('.badger-card'));
