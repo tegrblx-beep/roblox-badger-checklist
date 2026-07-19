@@ -886,7 +886,7 @@ var BADGERS = [
       { name: "YOU COMPLETED THE COLLAB BADGER!!!!", target: 100 },
       { name: "TRULY 100% THE COLLAB BADGER!!", target: 104 },
     ],
-    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1596603740#gid=1596603740",
+    sheetUrl: "",
     badges: [
         { link: "https://www.roblox.com/badges/2124723458/Ascension-10", type: "RETRO", typeColor: "#90EE90" },
         { link: "https://www.roblox.com/badges/2153035365124734/winnar", type: "RETRO", typeColor: "#90EE90" },
