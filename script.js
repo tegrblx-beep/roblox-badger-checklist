@@ -1014,9 +1014,33 @@ var BADGERS = [
         { link: "https://www.roblox.com/badges/1416813022769341/Angrys-Challenge", type: "ANGRY", typeColor: "#F4A7A7" },
     ]
   },
+  {
+    id: "find-the-badger",
+    name: "Find The Badger",
+    difficulty: "Difficult",
+    gameLink: "https://www.roblox.com/games/17498322333/Badge-Hunt-Classic",
+    milestones: [
+      { name: 'Completed The "Find The" Badger', target: 190 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1728350576#gid=1728350576",
+    badges: [
+    ]
+  },
+  {
+    id: "find-the-badger-(2)",
+    name: "Find The Badger (2)",
+    difficulty: "Difficult",
+    gameLink: "https://www.roblox.com/games/17498322333/Badge-Hunt-Classic",
+    milestones: [
+      { name: 'Completed The "Find The" Badger', target: 190 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=271652511#gid=271652511",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
-// ==================================================================================
+// ================================================================================== 
 
 (function(){
   var storageMode = 'memory';
