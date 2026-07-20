@@ -1018,7 +1018,7 @@ var BADGERS = [
     id: "find-the-badger",
     name: "Find The Badger",
     difficulty: "Difficult",
-    gameLink: "https://www.roblox.com/games/17498322333/Badge-Hunt-Classic",
+    gameLink: "https://www.roblox.com/games/89401091600143/Find-The-Badger",
     milestones: [
       { name: 'Completed The "Find The" Badger', target: 190 },
     ],
@@ -1030,7 +1030,7 @@ var BADGERS = [
     id: "find-the-badger-(2)",
     name: "Find The Badger (2)",
     difficulty: "Difficult",
-    gameLink: "https://www.roblox.com/games/17498322333/Badge-Hunt-Classic",
+    gameLink: "https://www.roblox.com/games/86125671335897/Find-The-Badger",
     milestones: [
       { name: 'Completed The "Find The" Badger', target: 190 },
     ],
@@ -1042,11 +1042,23 @@ var BADGERS = [
     id: "trustys-badger-2",
     name: "Trusty's Badger 2",
     difficulty: "Hard",
-    gameLink: "https://www.roblox.com/games/17498322333/Badge-Hunt-Classic",
+    gameLink: "https://www.roblox.com/games/18192596353/Trustys-Badger-2-woah",
     milestones: [
       { name: 'You did it!! Yay', target: 25 },
     ],
     sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1332940165#gid=1332940165",
+    badges: [
+    ]
+  },
+  {
+    id: "epic-badger-num-ed",
+    name: "Epic Badger: Number Edition",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/18192668355/The-Epic-Badger-Number-Edition",
+    milestones: [
+      { name: 'Number God', target: 50 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=662792189#gid=662792189",
     badges: [
     ]
   },
