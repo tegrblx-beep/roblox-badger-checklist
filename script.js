@@ -1134,6 +1134,18 @@ var BADGERS = [
       },
     ]
   },
+  {
+    id: "my-beloved-15",
+    name: "My Beloved 15.",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/15953420798/My-Beloved-15",
+    milestones: [
+      { name: 'Reached For the Skies!', target: 15 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=167075227#gid=167075227",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
