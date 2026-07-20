@@ -159,7 +159,7 @@ var BADGERS = [
   {
     id: "trustys-badger",
     name: "Trusty's Badger",
-    difficulty: "Difficult",
+    difficulty: "Hard",
     gameLink: "https://www.roblox.com/games/79757130917226/Dystopian-Badger",
     milestones: [
       { name: "One Quarter of the way!", target: 3 },
@@ -1035,6 +1035,18 @@ var BADGERS = [
       { name: 'Completed The "Find The" Badger', target: 190 },
     ],
     sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=271652511#gid=271652511",
+    badges: [
+    ]
+  },
+  {
+    id: "trustys-badger-2",
+    name: "Trusty's Badger 2",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/17498322333/Badge-Hunt-Classic",
+    milestones: [
+      { name: 'You did it!! Yay', target: 25 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1332940165#gid=1332940165",
     badges: [
     ]
   },
