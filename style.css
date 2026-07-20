@@ -17,6 +17,22 @@
   #homeView .sub{ color: var(--text-dim); font-size: 15px; margin: 0 0 1.5rem; max-width: 520px; line-height: 1.5; }
 
   .search-wrap{ position: relative; margin-bottom: 20px; }
+
+  .sort-row{ display:flex; align-items:center; gap: 10px; margin-bottom: 16px; }
+  .sort-label{ font-size: 13px; color: var(--text-dim); white-space: nowrap; }
+  .sort-select{
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    border-radius: 8px; padding: 8px 12px; font-size: 13px; font-family: inherit; cursor: pointer;
+  }
+  .sort-select:focus{ outline: none; border-color: var(--gold); }
+
+  .difficulty-filter-row{ display:flex; align-items:center; gap: 10px; margin-bottom: 16px; }
+  .difficulty-filter-input{
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    border-radius: 8px; padding: 8px 12px; font-size: 13px; font-family: inherit; width: 160px;
+  }
+  .difficulty-filter-input::placeholder{ color: var(--text-faint); }
+  .difficulty-filter-input:focus{ outline: none; border-color: var(--gold); }
   .search-icon{ position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-faint); pointer-events: none; }
   #homeSearch{
     width:100%; background: var(--panel); border: 1px solid var(--border); color: var(--text);

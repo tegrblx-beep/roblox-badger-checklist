@@ -1177,9 +1177,18 @@ var BADGERS = [
     if (/impossible|nil/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--darkgray');
     if (/intense/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--gray');
     if (/difficult|challenging/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--red');
-    if (/med|moderate|normal/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--amber');
+    if (/medium|moderate|normal/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--amber');
     if (/easy|simple|beginner/.test(t)) return getComputedStyle(document.documentElement).getPropertyValue('--green');
     return getComputedStyle(document.documentElement).getPropertyValue('--neutral-diff');
+  }
+
+  var DIFFICULTY_ORDER = ['beginner','simple','easy','medium','normal','moderate','hard','tough','difficult','challenging','intense','insane','extreme','impossible','nil'];
+  function difficultyRank(text){
+    var t = (text || '').toLowerCase();
+    for (var i = 0; i < DIFFICULTY_ORDER.length; i++){
+      if (t.indexOf(DIFFICULTY_ORDER[i]) !== -1) return i;
+    }
+    return DIFFICULTY_ORDER.length; // anything unrecognized sorts after "nil"
   }
 
   function badgeKey(badgerId, badge){
@@ -1623,6 +1632,36 @@ var BADGERS = [
       return extractGameId(b.gameLink).indexOf(f) !== -1;
     });
 
+    var difficultyFilterEl = document.getElementById('difficultyFilterInput');
+    var df = difficultyFilterEl ? difficultyFilterEl.value.toLowerCase().trim() : '';
+    if (df){
+      matches = matches.filter(function(b){ return (b.difficulty || '').toLowerCase().indexOf(df) !== -1; });
+    }
+
+    var sortSelectEl = document.getElementById('homeSortSelect');
+    var sortMode = sortSelectEl ? sortSelectEl.value : '';
+    var sortStatusEl = document.getElementById('homeSortStatus');
+
+    if (sortMode === 'az'){
+      matches.sort(function(a,b){ return a.name.localeCompare(b.name); });
+    } else if (sortMode === 'za'){
+      matches.sort(function(a,b){ return b.name.localeCompare(a.name); });
+    } else if (sortMode === 'easiest'){
+      matches.sort(function(a,b){ return difficultyRank(a.difficulty) - difficultyRank(b.difficulty); });
+    } else if (sortMode === 'hardest'){
+      matches.sort(function(a,b){ return difficultyRank(b.difficulty) - difficultyRank(a.difficulty); });
+    } else if (sortMode === 'most' || sortMode === 'least'){
+      if (sortStatusEl) sortStatusEl.textContent = 'Counting badges\u2026';
+      var counts = await Promise.all(matches.map(async function(b){
+        var effective = await getEffectiveBadges(b);
+        return (effective.badges || []).length;
+      }));
+      var withCounts = matches.map(function(b, idx){ return { badger: b, count: counts[idx] }; });
+      withCounts.sort(function(a, b){ return sortMode === 'most' ? b.count - a.count : a.count - b.count; });
+      matches = withCounts.map(function(x){ return x.badger; });
+      if (sortStatusEl) sortStatusEl.textContent = '';
+    }
+
     document.getElementById('searchClearBtn').classList.toggle('visible', !!filter);
 
     if (matches.length === 0){
@@ -1720,6 +1759,14 @@ var BADGERS = [
 
   var searchInput = document.getElementById('homeSearch');
   var clearBtn = document.getElementById('searchClearBtn');
+
+  document.getElementById('homeSortSelect').addEventListener('change', function(){
+    renderHome(searchInput.value);
+  });
+
+  document.getElementById('difficultyFilterInput').addEventListener('input', function(){
+    renderHome(searchInput.value);
+  });
 
   searchInput.addEventListener('input', function(){ renderHome(this.value); });
   clearBtn.addEventListener('click', function(){ searchInput.value=''; searchInput.focus(); renderHome(''); });

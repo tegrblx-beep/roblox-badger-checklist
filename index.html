@@ -41,6 +41,25 @@
       <div id="idSearchResults" class="id-search-results"></div>
     </div>
 
+    <div class="sort-row">
+      <label for="homeSortSelect" class="sort-label">Sort by</label>
+      <select id="homeSortSelect" class="sort-select">
+        <option value="">Default order</option>
+        <option value="az">A to Z</option>
+        <option value="za">Z to A</option>
+        <option value="easiest">Easiest to Hardest</option>
+        <option value="hardest">Hardest to Easiest</option>
+        <option value="most">Most badges to Least badges</option>
+        <option value="least">Least badges to Most badges</option>
+      </select>
+      <span class="list-status" id="homeSortStatus"></span>
+    </div>
+
+    <div class="difficulty-filter-row">
+      <label for="difficultyFilterInput" class="sort-label">Difficulty</label>
+      <input type="text" id="difficultyFilterInput" class="difficulty-filter-input" placeholder="e.g. hard" autocomplete="off" />
+    </div>
+
     <div class="search-wrap">
       <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
