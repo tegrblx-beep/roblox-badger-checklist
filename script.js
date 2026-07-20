@@ -1062,6 +1062,78 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "badger-of-friends-and-family",
+    name: "Badger of Friends and Family",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/16956822212/15-Badger-of-Friends-And-Family",
+    milestones: [
+      { name: 'ya freaking did it', target: 15 },
+    ],
+    sheetUrl: "",
+    badges: [
+      { link: "https://www.roblox.com/badges/2973042218229609/Wheres-Waldo",
+        type: "Puzzle [REMOURSELESS]",
+        typeColor: "#ff6bf5"
+      },
+      { link: "https://www.roblox.com/badges/2128532378/Disco-King" ,
+        type: "Obby/Rythmn [HARD]",
+        typeColor: "#f98842"
+      },
+      { link: "https://www.roblox.com/badges/4295587185930411/Hard-Mode-Iclyn", 
+        type: "Bullet Hell [DIFFICULT]",
+        typeColor: "#f94242"
+      },
+      { link: "https://www.roblox.com/badges/2144508030/Beat-The-Citadel-of-Keyboard-Yeeting", 
+        type: "Obby [DIFFICULT]",
+        typeColor: "#f94242"
+      },
+      { link: "https://www.roblox.com/badges/2149970622/ballpitiful", 
+        type: "Obby [CHALLENGING]",
+        typeColor: "#ae1a00"
+      },
+      { link: "https://www.roblox.com/badges/2124638554/Repercussions-of-Fissure", 
+        type: "Walking Simulator [HARD]",
+        typeColor: "#f98842"
+      },
+      { link: "https://www.roblox.com/badges/3506781323173692/Keypad-Octagon", 
+        type: "Puzzle/Obby [CHALLENGING]",
+        typeColor: "#ae1a00"
+      },
+      { link: "https://www.roblox.com/badges/3961715209392758/Beat-the-Mega-Killbot", 
+        type: "Boss Fight [DIFFICULT]",
+        typeColor: "#f94242"
+      },
+      { link: "https://www.roblox.com/badges/786203648/Flawless-Run-Chapter-Six", 
+        type: "Story [HARD]",
+        typeColor: "#f98842"
+      },
+      { link: "https://www.roblox.com/badges/2147585282/You-found-the-Shiny-Capybara", 
+        type: "Scavenger Hunt [MEDIUM]",
+        typeColor: "#ffd000"
+      },
+      { link: "https://www.roblox.com/badges/1512748112/Defeat-Gonaku", 
+        type: "RPG [DIFFICULT]",
+        typeColor: "#f94242"
+      },
+      { link: "https://www.roblox.com/badges/2124647572/Poisonous-Chasm-Crazy", 
+        type: "Obby [CHALLENGING]",
+        typeColor: "#ae1a00"
+      },
+      { link: "https://www.roblox.com/badges/4164152478817339/Classic-Honor", 
+        type: "Tower Defense [HARD]",
+        typeColor: "#f98842"
+      },
+      { link: "https://www.roblox.com/badges/2125364213/Beat-The-Tower-of-Rage", 
+        type: "Obby [DIFFICULT]",
+        typeColor: "#f94242"
+      },
+      { link: "https://www.roblox.com/badges/2127393684/1-2-Primer-Mundo", 
+        type: "Platformer [DIFFICULT]",
+        typeColor: "#f94242"
+      },
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
