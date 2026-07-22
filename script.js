@@ -1191,9 +1191,28 @@ var BADGERS = [
     return DIFFICULTY_ORDER.length; // anything unrecognized sorts after "nil"
   }
 
+  function baseBadgeStableId(badge){
+    return extractBadgeIdFromLink(badge.link) || badge.link || badge.name || '';
+  }
+
+  // Two badges can end up with the same base id if the data has a typo -
+  // a duplicated or missing link, say. Without disambiguation that would
+  // make them share one progress/favorite key, so checking or favoriting
+  // one would silently affect the other(s) too. Give any duplicates past
+  // the first a distinguishing suffix based on their position.
+  function disambiguatedBadgeId(badge){
+    var base = baseBadgeStableId(badge);
+    var idx = currentBadges.indexOf(badge);
+    if (idx === -1) return base;
+    var dupIdx = 0;
+    for (var i = 0; i < idx; i++){
+      if (baseBadgeStableId(currentBadges[i]) === base) dupIdx++;
+    }
+    return dupIdx > 0 ? (base + '#' + dupIdx) : base;
+  }
+
   function badgeKey(badgerId, badge){
-    var stableId = extractBadgeIdFromLink(badge.link) || badge.link || badge.name || '';
-    return badgerId + '||' + stableId;
+    return badgerId + '||' + disambiguatedBadgeId(badge);
   }
 
   // ---- Sheet loading (optional, per-badger) ----
@@ -1579,12 +1598,838 @@ var BADGERS = [
     return raw ? JSON.parse(raw) : {};
   }
   var saveTimer = null;
+  var pendingProgressSave = null; // { badgerId, data } - survives navigating away before the debounce fires
   function saveBadgerProgress(){
+    pendingProgressSave = { badgerId: currentBadger.id, data: progressData };
     clearTimeout(saveTimer);
     saveTimer = setTimeout(function(){
-      storageSet('progress-' + currentBadger.id, JSON.stringify(progressData));
+      saveTimer = null;
+      if (pendingProgressSave){
+        storageSet('progress-' + pendingProgressSave.badgerId, JSON.stringify(pendingProgressSave.data));
+        pendingProgressSave = null;
+      }
     }, 250);
   }
+  // Immediately writes any pending (debounced) progress save to storage.
+  // Used before export so a just-checked badge isn't missed, even if the
+  // user already navigated back to the home page since checking it.
+  async function flushBadgerProgress(){
+    clearTimeout(saveTimer);
+    saveTimer = null;
+    if (pendingProgressSave){
+      await storageSet('progress-' + pendingProgressSave.badgerId, JSON.stringify(pendingProgressSave.data));
+      pendingProgressSave = null;
+    }
+  }
+
+  // ---- Favorites (local only) ----
+  var badgerFavorites = new Set();
+  var gameFavoritesByBadger = {}; // badgerId -> Set of game keys
+
+  async function loadBadgerFavorites(){
+    try {
+      var raw = await storageGet('fav-badgers');
+      badgerFavorites = new Set(raw ? JSON.parse(raw) : []);
+    } catch(e){ badgerFavorites = new Set(); }
+  }
+
+  function saveBadgerFavorites(){
+    storageSet('fav-badgers', JSON.stringify(Array.from(badgerFavorites)));
+  }
+
+  function isBadgerFavorite(badgerId){
+    return badgerFavorites.has(badgerId);
+  }
+
+  function toggleBadgerFavorite(badgerId){
+    if (badgerFavorites.has(badgerId)) badgerFavorites.delete(badgerId);
+    else badgerFavorites.add(badgerId);
+    saveBadgerFavorites();
+  }
+
+  async function loadGameFavorites(badgerId){
+    if (gameFavoritesByBadger[badgerId]) return gameFavoritesByBadger[badgerId];
+    try {
+      var raw = await storageGet('fav-games-' + badgerId);
+      gameFavoritesByBadger[badgerId] = new Set(raw ? JSON.parse(raw) : []);
+    } catch(e){ gameFavoritesByBadger[badgerId] = new Set(); }
+    return gameFavoritesByBadger[badgerId];
+  }
+
+  function saveGameFavorites(badgerId){
+    var set = gameFavoritesByBadger[badgerId];
+    if (!set) return;
+    storageSet('fav-games-' + badgerId, JSON.stringify(Array.from(set)));
+  }
+
+  // ---- Badge favorites (per badger, local only) ----
+  var badgeFavoritesByBadger = {};
+
+  function badgeStableKey(badge){
+    return disambiguatedBadgeId(badge);
+  }
+
+  async function loadBadgeFavorites(badgerId){
+    if (badgeFavoritesByBadger[badgerId]) return badgeFavoritesByBadger[badgerId];
+    try {
+      var raw = await storageGet('fav-badges-' + badgerId);
+      badgeFavoritesByBadger[badgerId] = new Set(raw ? JSON.parse(raw) : []);
+    } catch(e){ badgeFavoritesByBadger[badgerId] = new Set(); }
+    return badgeFavoritesByBadger[badgerId];
+  }
+
+  function saveBadgeFavorites(badgerId){
+    var set = badgeFavoritesByBadger[badgerId];
+    if (!set) return;
+    storageSet('fav-badges-' + badgerId, JSON.stringify(Array.from(set)));
+  }
+
+  function isBadgeFavorite(badgerId, badge){
+    var set = badgeFavoritesByBadger[badgerId];
+    return set ? set.has(badgeStableKey(badge)) : false;
+  }
+
+  function toggleBadgeFavorite(badgerId, badge){
+    if (!badgeFavoritesByBadger[badgerId]) badgeFavoritesByBadger[badgerId] = new Set();
+    var set = badgeFavoritesByBadger[badgerId];
+    var key = badgeStableKey(badge);
+    if (set.has(key)) set.delete(key);
+    else set.add(key);
+    saveBadgeFavorites(badgerId);
+    return set.has(key);
+  }
+
+  function badgeTypesMatch(badge, typeFilter){
+    if (!typeFilter) return true;
+    var types = Array.isArray(badge.type) ? badge.type : [badge.type];
+    return types.some(function(t){ return (t || '').toLowerCase().indexOf(typeFilter) !== -1; });
+  }
+
+  // ---- Recently opened badgers ----
+  var recentBadgerIds = [];
+  var RECENT_MAX = 6;
+
+  async function loadRecentBadgers(){
+    try {
+      var raw = await storageGet('recent-badgers');
+      recentBadgerIds = raw ? JSON.parse(raw) : [];
+    } catch(e){ recentBadgerIds = []; }
+  }
+
+  function saveRecentBadgers(){
+    storageSet('recent-badgers', JSON.stringify(recentBadgerIds));
+  }
+
+  function recordRecentBadger(badgerId){
+    recentBadgerIds = recentBadgerIds.filter(function(id){ return id !== badgerId; });
+    recentBadgerIds.unshift(badgerId);
+    if (recentBadgerIds.length > RECENT_MAX) recentBadgerIds.length = RECENT_MAX;
+    saveRecentBadgers();
+  }
+
+  function renderRecentBadgers(filter){
+    var section = document.getElementById('recentBadgersSection');
+    var listEl = document.getElementById('recentBadgersList');
+    if (!section || !listEl) return;
+    listEl.innerHTML = '';
+
+    if ((filter || '').trim()){
+      section.style.display = 'none';
+      return;
+    }
+
+    var items = recentBadgerIds.map(function(id){
+      return BADGERS.find(function(b){ return b.id === id; });
+    }).filter(Boolean);
+
+    if (items.length === 0){
+      section.style.display = 'none';
+      return;
+    }
+
+    section.style.display = 'block';
+    items.forEach(function(badger){
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'recent-chip';
+      chip.textContent = badger.name;
+      chip.addEventListener('click', function(){ openBadger(badger); });
+      listEl.appendChild(chip);
+    });
+  }
+
+  // ---- Settings (theme, accent color, keyboard shortcuts) ----
+  var DEFAULT_ACCENT = '#E8B23D';
+  var VALID_THEMES = ['dark', 'light', 'midnight', 'forest', 'sunset', 'ocean', 'rose', 'slate', 'amber', 'custom'];
+  var DEFAULT_GRADIENT_FROM = '#12141A';
+  var DEFAULT_GRADIENT_TO = '#2A1E3A';
+  var DEFAULT_GRADIENT_ANGLE = '135deg';
+  var currentSettings = {
+    theme: 'dark', accent: DEFAULT_ACCENT, shortcuts: true,
+    gradientFrom: DEFAULT_GRADIENT_FROM, gradientTo: DEFAULT_GRADIENT_TO, gradientAngle: DEFAULT_GRADIENT_ANGLE,
+    titleColor: '', badgerTitleColor: ''
+  };
+
+  function hexToRgb(hex){
+    var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '');
+    if (!m) return null;
+    return { r: parseInt(m[1],16), g: parseInt(m[2],16), b: parseInt(m[3],16) };
+  }
+  function rgbToHex(r,g,b){
+    function h(x){ return Math.max(0,Math.min(255,Math.round(x))).toString(16).padStart(2,'0'); }
+    return '#' + h(r) + h(g) + h(b);
+  }
+  // Darkened version of the accent color, used for --gold-dim (borders, subtle fills)
+  function dimColor(hex, factor){
+    var c = hexToRgb(hex);
+    if (!c) return hex;
+    factor = factor == null ? 0.32 : factor;
+    return rgbToHex(c.r*factor, c.g*factor, c.b*factor);
+  }
+
+  function applySettings(){
+    document.documentElement.setAttribute('data-theme', currentSettings.theme);
+    var accent = currentSettings.accent || DEFAULT_ACCENT;
+    document.documentElement.style.setProperty('--gold', accent);
+    document.documentElement.style.setProperty('--gold-dim', dimColor(accent));
+
+    // Custom theme overrides --bg with a gradient right on the root element;
+    // every other theme relies purely on the [data-theme] CSS blocks, so
+    // clear any leftover override when switching away from custom.
+    if (currentSettings.theme === 'custom'){
+      var from = currentSettings.gradientFrom || DEFAULT_GRADIENT_FROM;
+      var to = currentSettings.gradientTo || DEFAULT_GRADIENT_TO;
+      var angle = currentSettings.gradientAngle || DEFAULT_GRADIENT_ANGLE;
+      document.documentElement.style.setProperty('--bg', 'linear-gradient(' + angle + ', ' + from + ', ' + to + ')');
+    } else {
+      document.documentElement.style.removeProperty('--bg');
+    }
+
+    var gradientRow = document.getElementById('customGradientRow');
+    if (gradientRow) gradientRow.style.display = currentSettings.theme === 'custom' ? 'flex' : 'none';
+
+    if (currentSettings.titleColor) document.documentElement.style.setProperty('--title-color', currentSettings.titleColor);
+    else document.documentElement.style.removeProperty('--title-color');
+    if (currentSettings.badgerTitleColor) document.documentElement.style.setProperty('--badger-title-color', currentSettings.badgerTitleColor);
+    else document.documentElement.style.removeProperty('--badger-title-color');
+  }
+
+  async function loadSettings(){
+    try {
+      var raw = await storageGet('settings');
+      var parsed = raw ? JSON.parse(raw) : {};
+      currentSettings = {
+        theme: VALID_THEMES.indexOf(parsed.theme) !== -1 ? parsed.theme : 'dark',
+        accent: parsed.accent || DEFAULT_ACCENT,
+        shortcuts: parsed.shortcuts !== false,
+        gradientFrom: parsed.gradientFrom || DEFAULT_GRADIENT_FROM,
+        gradientTo: parsed.gradientTo || DEFAULT_GRADIENT_TO,
+        gradientAngle: parsed.gradientAngle || DEFAULT_GRADIENT_ANGLE,
+        titleColor: parsed.titleColor || '',
+        badgerTitleColor: parsed.badgerTitleColor || ''
+      };
+    } catch(e){
+      currentSettings = {
+        theme: 'dark', accent: DEFAULT_ACCENT, shortcuts: true,
+        gradientFrom: DEFAULT_GRADIENT_FROM, gradientTo: DEFAULT_GRADIENT_TO, gradientAngle: DEFAULT_GRADIENT_ANGLE,
+        titleColor: '', badgerTitleColor: ''
+      };
+    }
+    applySettings();
+  }
+
+  function saveSettings(){
+    storageSet('settings', JSON.stringify(currentSettings));
+    applySettings();
+    renderStreak();
+  }
+
+  // ---- Tags (per-badger, local only) ----
+  var badgerTags = {}; // badgerId -> string[]
+
+  async function loadTags(){
+    try {
+      var raw = await storageGet('badger-tags');
+      badgerTags = raw ? JSON.parse(raw) : {};
+    } catch(e){ badgerTags = {}; }
+  }
+  function saveTags(){
+    storageSet('badger-tags', JSON.stringify(badgerTags));
+  }
+  function getTags(badgerId){
+    return badgerTags[badgerId] || [];
+  }
+  function addTag(badgerId, tag){
+    tag = (tag || '').trim();
+    if (!tag) return;
+    var list = badgerTags[badgerId] || (badgerTags[badgerId] = []);
+    var lower = tag.toLowerCase();
+    if (list.some(function(t){ return t.toLowerCase() === lower; })) return;
+    list.push(tag);
+    saveTags();
+  }
+  function removeTag(badgerId, tag){
+    var list = badgerTags[badgerId];
+    if (!list) return;
+    badgerTags[badgerId] = list.filter(function(t){ return t !== tag; });
+    saveTags();
+  }
+
+  // ---- Custom drag-to-reorder order (local only) ----
+  var customOrder = []; // array of badger ids
+
+  async function loadCustomOrder(){
+    try {
+      var raw = await storageGet('custom-order');
+      customOrder = raw ? JSON.parse(raw) : [];
+    } catch(e){ customOrder = []; }
+  }
+  function saveCustomOrder(){
+    storageSet('custom-order', JSON.stringify(customOrder));
+  }
+  // Applies the saved custom order to a badger list, appending any badgers
+  // not yet in the saved order (new ones added to BADGERS) at the end.
+  function applyCustomOrder(list){
+    var byId = {};
+    list.forEach(function(b){ byId[b.id] = b; });
+    var ordered = customOrder.map(function(id){ return byId[id]; }).filter(Boolean);
+    var seen = {};
+    ordered.forEach(function(b){ seen[b.id] = true; });
+    list.forEach(function(b){ if (!seen[b.id]) ordered.push(b); });
+    return ordered;
+  }
+
+  // ---- Collections / folders (local only) ----
+  var collections = []; // [{id, name, badgerIds: []}]
+
+  async function loadCollections(){
+    try {
+      var raw = await storageGet('collections');
+      collections = raw ? JSON.parse(raw) : [];
+    } catch(e){ collections = []; }
+  }
+  function saveCollections(){
+    storageSet('collections', JSON.stringify(collections));
+  }
+  function createCollection(name){
+    name = (name || '').trim();
+    if (!name) return null;
+    var col = { id: 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2,7), name: name, badgerIds: [] };
+    collections.push(col);
+    saveCollections();
+    return col;
+  }
+  function deleteCollection(id){
+    collections = collections.filter(function(c){ return c.id !== id; });
+    saveCollections();
+  }
+  function toggleBadgerInCollection(collectionId, badgerId){
+    var col = collections.find(function(c){ return c.id === collectionId; });
+    if (!col) return;
+    var idx = col.badgerIds.indexOf(badgerId);
+    if (idx === -1) col.badgerIds.push(badgerId); else col.badgerIds.splice(idx, 1);
+    saveCollections();
+  }
+
+  // ---- Activity log (drives streak and pace estimate) ----
+  var activityLog = {}; // 'YYYY-MM-DD' -> count
+
+  function todayKey(d){
+    d = d || new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  async function loadActivityLog(){
+    try {
+      var raw = await storageGet('activity-log');
+      activityLog = raw ? JSON.parse(raw) : {};
+    } catch(e){ activityLog = {}; }
+  }
+  var activitySaveTimer = null;
+  function saveActivityLog(){
+    clearTimeout(activitySaveTimer);
+    activitySaveTimer = setTimeout(function(){
+      activitySaveTimer = null;
+      storageSet('activity-log', JSON.stringify(activityLog));
+    }, 400);
+  }
+  async function flushActivityLog(){
+    clearTimeout(activitySaveTimer);
+    activitySaveTimer = null;
+    await storageSet('activity-log', JSON.stringify(activityLog));
+  }
+  // Call whenever the user checks off a badge or badger as collected.
+  function recordActivity(){
+    var k = todayKey();
+    activityLog[k] = (activityLog[k] || 0) + 1;
+    saveActivityLog();
+    renderStreak();
+  }
+  function computeStreaks(){
+    var current = 0, longest = 0, run = 0;
+    var d = new Date();
+    var todaysCount = activityLog[todayKey(d)] || 0;
+    if (!todaysCount) d.setDate(d.getDate() - 1); // grace period: today not yet acted on
+    while (true){
+      var count = activityLog[todayKey(d)] || 0;
+      if (count > 0){ current++; d.setDate(d.getDate() - 1); }
+      else break;
+      if (current > 3650) break; // sanity cap
+    }
+    var dates = Object.keys(activityLog).filter(function(k){ return activityLog[k] > 0; }).sort();
+    dates.forEach(function(dateStr, i){
+      if (i === 0){ run = 1; }
+      else {
+        var prev = new Date(dates[i-1] + 'T00:00:00');
+        prev.setDate(prev.getDate() + 1);
+        run = (todayKey(prev) === dateStr) ? run + 1 : 1;
+      }
+      if (run > longest) longest = run;
+    });
+    return { current: current, longest: longest };
+  }
+  function renderStreak(){
+    var streakEl = document.getElementById('streakLine');
+    if (!streakEl) return;
+    var streaks = computeStreaks();
+    var fire = streaks.current > 0 ? '🔥 ' : '';
+    streakEl.innerHTML =
+      '<span class="streak-num">' + fire + streaks.current + '</span>' +
+      '<span class="streak-label">day' + (streaks.current === 1 ? '' : 's') + ' streak</span>' +
+      (streaks.longest > 0 ? '<span class="streak-longest">longest: ' + streaks.longest + ' day' + (streaks.longest === 1 ? '' : 's') + '</span>' : '');
+  }
+
+  // Rough "days remaining" estimate for the currently open badger, based on
+  // the user's overall pace (badges checked per day) over the last 14 days.
+  function renderTimeEstimate(){
+    var el = document.getElementById('timeEstimate');
+    if (!el || !currentBadger) return;
+    var total = currentBadges.length;
+    var done = countDone(currentBadger.id, currentBadges, progressData);
+    var remaining = total - done;
+    if (remaining <= 0){ el.textContent = total ? 'All done! 🎉' : ''; return; }
+    var days = 14, sum = 0, activeDays = 0;
+    var d = new Date();
+    for (var i = 0; i < days; i++){
+      var c = activityLog[todayKey(d)] || 0;
+      if (c > 0){ sum += c; activeDays++; }
+      d.setDate(d.getDate() - 1);
+    }
+    if (activeDays === 0){ el.textContent = remaining + ' left · check off a few badges to see a pace estimate'; return; }
+    var perDay = sum / days;
+    if (perDay <= 0){ el.textContent = remaining + ' left'; return; }
+    var estDays = Math.ceil(remaining / perDay);
+    el.textContent = remaining + ' left · at your recent pace (~' + (Math.round(perDay*10)/10) + '/day), about ' +
+      estDays + ' day' + (estDays === 1 ? '' : 's') + ' to finish';
+  }
+
+  // ---- Confetti (fired on reaching 100% for a badger) ----
+  var CONFETTI_COLORS = ['#E8B23D', '#58D6A0', '#4a7fea', '#EE6F6F', '#F0B94A'];
+  function fireConfetti(){
+    var layer = document.getElementById('confettiLayer');
+    if (!layer) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var count = 80;
+    for (var i = 0; i < count; i++){
+      var piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      var size = 6 + Math.random() * 6;
+      piece.style.width = size + 'px';
+      piece.style.height = (size * 0.4) + 'px';
+      piece.style.left = (Math.random() * 100) + 'vw';
+      piece.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+      piece.style.animationDuration = (2.2 + Math.random() * 1.6) + 's';
+      piece.style.animationDelay = (Math.random() * 0.4) + 's';
+      layer.appendChild(piece);
+      (function(el){ setTimeout(function(){ el.remove(); }, 4500); })(piece);
+    }
+  }
+
+  // ---- Export / import (local data backup) ----
+  var EXPORT_VERSION = 1;
+
+  // Every key below is always included in the export, even when it's at
+  // its "empty" default. This is what makes import a true, exact restore
+  // instead of a one-way merge: a badger/badge that was unchecked at
+  // export time needs to come back unchecked on import too, even if it
+  // got checked again in the meantime - and that only works if "unchecked"
+  // was actually recorded in the backup rather than treated as "nothing to
+  // save here."
+  var STORAGE_DEFAULTS = {
+    'progress': '{}',
+    'badgerdone': '',
+    'fav-games': '[]',
+    'fav-badges': '[]'
+  };
+  var GLOBAL_STORAGE_DEFAULTS = {
+    'fav-badgers': '[]',
+    'sticky-notes': '{}',
+    'recent-badgers': '[]',
+    'settings': '{}',
+    'badger-tags': '{}',
+    'custom-order': '[]',
+    'collections': '[]',
+    'activity-log': '{}'
+  };
+
+  async function collectAllUserData(){
+    await flushBadgerProgress();
+    await flushStickyNotes();
+    await flushActivityLog();
+
+    var keys = {};
+    var i;
+
+    for (i = 0; i < BADGERS.length; i++){
+      var id = BADGERS[i].id;
+      for (var prefix in STORAGE_DEFAULTS){
+        var storageKey = prefix + '-' + id;
+        var val = await storageGet(storageKey);
+        keys[storageKey] = (val === null || val === undefined) ? STORAGE_DEFAULTS[prefix] : val;
+      }
+    }
+
+    for (var gk in GLOBAL_STORAGE_DEFAULTS){
+      var gval = await storageGet(gk);
+      keys[gk] = (gval === null || gval === undefined) ? GLOBAL_STORAGE_DEFAULTS[gk] : gval;
+    }
+
+    return {
+      app: 'badger-checklist',
+      version: EXPORT_VERSION,
+      exportedAt: new Date().toISOString(),
+      keys: keys
+    };
+  }
+
+  async function reloadUserDataFromStorage(){
+    badgerFavorites = new Set();
+    gameFavoritesByBadger = {};
+    badgeFavoritesByBadger = {};
+    stickyNotesByPage = {};
+    recentBadgerIds = [];
+    await loadBadgerFavorites();
+    await loadRecentBadgers();
+    await loadStickyNotes();
+    await loadSettings();
+    await loadTags();
+    await loadCustomOrder();
+    await loadCollections();
+    await loadActivityLog();
+    renderStreak();
+    var themeSelectEl = document.getElementById('themeSelect');
+    if (themeSelectEl){
+      themeSelectEl.value = currentSettings.theme;
+      document.getElementById('accentColorInput').value = currentSettings.accent;
+      document.getElementById('shortcutsToggle').checked = currentSettings.shortcuts;
+      document.getElementById('gradientFromInput').value = currentSettings.gradientFrom;
+      document.getElementById('gradientToInput').value = currentSettings.gradientTo;
+      document.getElementById('gradientAngleSelect').value = currentSettings.gradientAngle;
+      document.getElementById('customGradientRow').style.display = currentSettings.theme === 'custom' ? 'flex' : 'none';
+      var themeTextA = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#ECE9E2';
+      document.getElementById('titleColorInput').value = currentSettings.titleColor || themeTextA;
+      document.getElementById('badgerTitleColorInput').value = currentSettings.badgerTitleColor || themeTextA;
+    }
+    populateCollectionFilterOptions();
+    if (currentBadger){
+      progressData = await loadBadgerProgress(currentBadger.id);
+      await loadGameFavorites(currentBadger.id);
+      await loadBadgeFavorites(currentBadger.id);
+      renderDetailTags();
+      renderList();
+      updateStats();
+    } else {
+      await renderHome(document.getElementById('homeSearch').value);
+    }
+    await updateBadgerCounter();
+  }
+
+  async function importUserData(file){
+    var text = await file.text();
+    var parsed;
+    try { parsed = JSON.parse(text); } catch(e){ throw new Error('That file is not valid JSON.'); }
+    if (!parsed || parsed.app !== 'badger-checklist' || !parsed.keys) {
+      throw new Error('That does not look like a Badger Checklist backup file.');
+    }
+
+    // Cancel any pending debounced writes first - otherwise one can fire a
+    // moment after import finishes and silently overwrite the just-imported
+    // values with whatever was still sitting in memory beforehand.
+    await flushBadgerProgress();
+    await flushStickyNotes();
+    await flushActivityLog();
+
+    var keyNames = Object.keys(parsed.keys);
+    for (var i = 0; i < keyNames.length; i++){
+      await storageSet(keyNames[i], parsed.keys[keyNames[i]]);
+    }
+    await reloadUserDataFromStorage();
+    return keyNames.length;
+  }
+
+  function setDataToolsStatus(msg, isErr){
+    var el = document.getElementById('dataToolsStatus');
+    if (!el) return;
+    el.textContent = msg || '';
+    el.className = isErr ? 'list-status err' : 'list-status';
+  }
+
+  document.getElementById('exportDataBtn').addEventListener('click', function(){
+    collectAllUserData().then(function(data){
+      var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      var date = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = 'badger-checklist-backup-' + date + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      setDataToolsStatus('Backup exported - includes every badger, badge, favorite, and note, checked and unchecked alike.');
+    }).catch(function(e){
+      setDataToolsStatus('Export failed: ' + e.message, true);
+    });
+  });
+
+  var importInput = document.getElementById('importDataInput');
+  document.getElementById('importDataBtn').addEventListener('click', function(){
+    importInput.value = '';
+    importInput.click();
+  });
+  importInput.addEventListener('change', function(){
+    var file = importInput.files && importInput.files[0];
+    if (!file) return;
+    if (!confirm('Import will restore your progress to exactly match this backup - anything checked, favorited, or tagged since the backup was made (that isn\'t in the file) will be overwritten. Continue?')) return;
+    importUserData(file).then(function(count){
+      setDataToolsStatus('Restored from backup - your progress now matches the imported file exactly.');
+    }).catch(function(e){
+      setDataToolsStatus('Import failed: ' + e.message, true);
+    });
+  });
+
+  function gameKeyForBadge(badge){
+    return ((badge.game || '').trim().toLowerCase()) || '__unknown__';
+  }
+
+  function gameLabelForKey(key, sampleBadge){
+    if (key === '__unknown__') return 'Unknown game';
+    return (sampleBadge && sampleBadge.game) ? sampleBadge.game.trim() : key;
+  }
+
+  function createFavButton(isFav, label, onToggle){
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'fav-btn' + (isFav ? ' is-fav' : '');
+    btn.setAttribute('aria-label', (isFav ? 'Unfavorite ' : 'Favorite ') + label);
+    btn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
+    btn.textContent = isFav ? '★' : '☆';
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      var nowFav = onToggle();
+      btn.classList.toggle('is-fav', nowFav);
+      btn.setAttribute('aria-pressed', nowFav ? 'true' : 'false');
+      btn.setAttribute('aria-label', (nowFav ? 'Unfavorite ' : 'Favorite ') + label);
+      btn.textContent = nowFav ? '★' : '☆';
+    });
+    return btn;
+  }
+
+  function partitionFavorites(items, isFavFn){
+    var favs = [];
+    var rest = [];
+    items.forEach(function(item){
+      if (isFavFn(item)) favs.push(item);
+      else rest.push(item);
+    });
+    return favs.concat(rest);
+  }
+
+  // ---- Sticky notes (local only, per page) ----
+  var stickyNotesByPage = {}; // pageKey -> note[]
+  var notesSaveTimer = null;
+  var noteDragState = null;
+  var noteResizeState = null;
+
+  function getNotesPageKey(){
+    if (currentBadger) return 'badger:' + currentBadger.id;
+    return 'home';
+  }
+
+  function getPageNotes(pageKey){
+    if (!stickyNotesByPage[pageKey]) stickyNotesByPage[pageKey] = [];
+    return stickyNotesByPage[pageKey];
+  }
+
+  async function loadStickyNotes(){
+    try {
+      var raw = await storageGet('sticky-notes');
+      var parsed = raw ? JSON.parse(raw) : {};
+      if (Array.isArray(parsed)){
+        stickyNotesByPage = { home: parsed };
+      } else {
+        stickyNotesByPage = parsed || {};
+      }
+    } catch(e){ stickyNotesByPage = {}; }
+    renderStickyNotes();
+  }
+
+  function saveStickyNotes(){
+    clearTimeout(notesSaveTimer);
+    notesSaveTimer = setTimeout(function(){
+      notesSaveTimer = null;
+      storageSet('sticky-notes', JSON.stringify(stickyNotesByPage));
+    }, 200);
+  }
+  // Immediately writes any pending (debounced) notes save to storage.
+  // Used before export so a note typed seconds ago isn't missed.
+  async function flushStickyNotes(){
+    clearTimeout(notesSaveTimer);
+    notesSaveTimer = null;
+    await storageSet('sticky-notes', JSON.stringify(stickyNotesByPage));
+  }
+
+  function renderStickyNotes(){
+    var layer = document.getElementById('notesLayer');
+    if (!layer) return;
+    layer.innerHTML = '';
+    var pageKey = getNotesPageKey();
+    getPageNotes(pageKey).forEach(function(note){
+      layer.appendChild(buildStickyNoteEl(note, pageKey));
+    });
+  }
+
+  function buildStickyNoteEl(note, pageKey){
+    var el = document.createElement('div');
+    el.className = 'sticky-note';
+    el.dataset.noteId = note.id;
+    el.style.left = (note.x || 40) + 'px';
+    el.style.top = (note.y || 40) + 'px';
+    el.style.width = (note.width || 200) + 'px';
+    el.style.height = (note.height || 140) + 'px';
+
+    var header = document.createElement('div');
+    header.className = 'sticky-note-header';
+    var title = document.createElement('span');
+    title.className = 'sticky-note-title';
+    title.textContent = 'Note';
+    var del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'sticky-note-delete';
+    del.setAttribute('aria-label', 'Delete note');
+    del.textContent = '✕';
+    del.addEventListener('click', function(e){
+      e.stopPropagation();
+      stickyNotesByPage[pageKey] = getPageNotes(pageKey).filter(function(n){ return n.id !== note.id; });
+      saveStickyNotes();
+      el.remove();
+    });
+    header.appendChild(title);
+    header.appendChild(del);
+
+    var body = document.createElement('div');
+    body.className = 'sticky-note-body';
+    body.contentEditable = 'true';
+    body.spellcheck = true;
+    body.textContent = note.text || '';
+    body.addEventListener('input', function(){
+      note.text = body.textContent;
+      saveStickyNotes();
+    });
+
+    var resize = document.createElement('div');
+    resize.className = 'sticky-note-resize';
+    resize.setAttribute('aria-hidden', 'true');
+
+    header.addEventListener('pointerdown', function(e){
+      if (e.target === del) return;
+      noteDragState = {
+        id: note.id,
+        startX: e.clientX,
+        startY: e.clientY,
+        origX: note.x || 40,
+        origY: note.y || 40,
+        el: el
+      };
+      header.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    header.addEventListener('pointermove', function(e){
+      if (!noteDragState || noteDragState.id !== note.id) return;
+      note.x = Math.max(0, noteDragState.origX + (e.clientX - noteDragState.startX));
+      note.y = Math.max(0, noteDragState.origY + (e.clientY - noteDragState.startY));
+      el.style.left = note.x + 'px';
+      el.style.top = note.y + 'px';
+    });
+    header.addEventListener('pointerup', function(e){
+      if (!noteDragState || noteDragState.id !== note.id) return;
+      noteDragState = null;
+      try { header.releasePointerCapture(e.pointerId); } catch(err){}
+      saveStickyNotes();
+    });
+    header.addEventListener('pointercancel', function(){
+      if (noteDragState && noteDragState.id === note.id) noteDragState = null;
+    });
+
+    resize.addEventListener('pointerdown', function(e){
+      noteResizeState = {
+        id: note.id,
+        startX: e.clientX,
+        startY: e.clientY,
+        origW: note.width || 200,
+        origH: note.height || 140,
+        el: el
+      };
+      resize.setPointerCapture(e.pointerId);
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    resize.addEventListener('pointermove', function(e){
+      if (!noteResizeState || noteResizeState.id !== note.id) return;
+      note.width = Math.max(120, noteResizeState.origW + (e.clientX - noteResizeState.startX));
+      note.height = Math.max(80, noteResizeState.origH + (e.clientY - noteResizeState.startY));
+      el.style.width = note.width + 'px';
+      el.style.height = note.height + 'px';
+    });
+    resize.addEventListener('pointerup', function(e){
+      if (!noteResizeState || noteResizeState.id !== note.id) return;
+      noteResizeState = null;
+      try { resize.releasePointerCapture(e.pointerId); } catch(err){}
+      saveStickyNotes();
+    });
+    resize.addEventListener('pointercancel', function(){
+      if (noteResizeState && noteResizeState.id === note.id) noteResizeState = null;
+    });
+
+    el.appendChild(header);
+    el.appendChild(body);
+    el.appendChild(resize);
+    return el;
+  }
+
+  function addStickyNote(x, y){
+    var pageKey = getNotesPageKey();
+    var notes = getPageNotes(pageKey);
+    var note = {
+      id: 'n-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+      x: typeof x === 'number' ? x : Math.max(20, (window.innerWidth / 2) - 100),
+      y: typeof y === 'number' ? y : Math.max(20, (window.innerHeight / 2) - 70),
+      width: 220,
+      height: 150,
+      text: ''
+    };
+    notes.push(note);
+    saveStickyNotes();
+    var layer = document.getElementById('notesLayer');
+    if (layer){
+      var el = buildStickyNoteEl(note, pageKey);
+      layer.appendChild(el);
+      var body = el.querySelector('.sticky-note-body');
+      if (body) body.focus();
+    }
+  }
+
+  document.getElementById('addNoteBtn').addEventListener('click', function(){
+    addStickyNote();
+  });
 
   function highlightMatch(name, filter){
     if (!filter) return document.createTextNode(name);
@@ -1629,6 +2474,7 @@ var BADGERS = [
     var matches = BADGERS.filter(function(b){
       if (!f) return true;
       if (b.name.toLowerCase().indexOf(f) !== -1) return true;
+      if (getTags(b.id).some(function(t){ return t.toLowerCase().indexOf(f) !== -1; })) return true;
       return extractGameId(b.gameLink).indexOf(f) !== -1;
     });
 
@@ -1636,6 +2482,14 @@ var BADGERS = [
     var df = difficultyFilterEl ? difficultyFilterEl.value.toLowerCase().trim() : '';
     if (df){
       matches = matches.filter(function(b){ return (b.difficulty || '').toLowerCase().indexOf(df) !== -1; });
+    }
+
+    var collectionFilterEl = document.getElementById('collectionFilterSelect');
+    var collectionId = collectionFilterEl ? collectionFilterEl.value : '';
+    if (collectionId){
+      var col = collections.find(function(c){ return c.id === collectionId; });
+      var idSet = col ? new Set(col.badgerIds) : new Set();
+      matches = matches.filter(function(b){ return idSet.has(b.id); });
     }
 
     var sortSelectEl = document.getElementById('homeSortSelect');
@@ -1660,6 +2514,14 @@ var BADGERS = [
       withCounts.sort(function(a, b){ return sortMode === 'most' ? b.count - a.count : a.count - b.count; });
       matches = withCounts.map(function(x){ return x.badger; });
       if (sortStatusEl) sortStatusEl.textContent = '';
+    } else if (sortMode === 'custom'){
+      matches = applyCustomOrder(matches);
+    }
+
+    // Custom order is the user's own explicit arrangement - don't re-shuffle
+    // it by pulling favorites to the top.
+    if (sortMode !== 'custom'){
+      matches = partitionFavorites(matches, function(b){ return isBadgerFavorite(b.id); });
     }
 
     document.getElementById('searchClearBtn').classList.toggle('visible', !!filter);
@@ -1673,10 +2535,17 @@ var BADGERS = [
     for (var i=0;i<matches.length;i++){
       (function(badger, index){
         var card = document.createElement('div');
-        card.className = 'badger-card';
+        card.className = 'badger-card' + (isBadgerFavorite(badger.id) ? ' badger-card-fav' : '');
         card.tabIndex = 0;
         card.setAttribute('role', 'button');
         card.setAttribute('data-index', index);
+
+        var favBtn = createFavButton(isBadgerFavorite(badger.id), badger.name, function(){
+          toggleBadgerFavorite(badger.id);
+          card.classList.toggle('badger-card-fav', isBadgerFavorite(badger.id));
+          renderHome(document.getElementById('homeSearch').value);
+          return isBadgerFavorite(badger.id);
+        });
 
         var seal = document.createElement('input');
         seal.type = 'checkbox';
@@ -1686,6 +2555,7 @@ var BADGERS = [
         seal.addEventListener('change', function(){
   storageSet('badgerdone-' + badger.id, seal.checked ? '1' : '');
   card.classList.toggle('badger-card-done', seal.checked);
+  if (seal.checked) recordActivity();
   updateBadgerCounter();
 });
         storageGet('badgerdone-' + badger.id).then(function(v){
@@ -1704,6 +2574,18 @@ var BADGERS = [
         diffDiv.style.color = difficultyColor(badger.difficulty);
         left.appendChild(nameDiv);
         left.appendChild(diffDiv);
+        var tags = getTags(badger.id);
+        if (tags.length){
+          var tagsDiv = document.createElement('div');
+          tagsDiv.className = 'badger-card-tags';
+          tags.forEach(function(t){
+            var chip = document.createElement('span');
+            chip.className = 'tag-chip';
+            chip.textContent = t;
+            tagsDiv.appendChild(chip);
+          });
+          left.appendChild(tagsDiv);
+        }
 
         var right = document.createElement('div');
         right.className = 'badger-card-right';
@@ -1718,7 +2600,48 @@ var BADGERS = [
         right.appendChild(countDiv);
         right.appendChild(barTrack);
 
+        var collectionBtn = document.createElement('button');
+        collectionBtn.type = 'button';
+        collectionBtn.className = 'badger-card-collection-btn';
+        collectionBtn.title = 'Add to a collection';
+        collectionBtn.setAttribute('aria-label', 'Add ' + badger.name + ' to a collection');
+        collectionBtn.textContent = '📁';
+        collectionBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          e.preventDefault();
+          openCollectionQuickAdd(badger, collectionBtn);
+        });
+
         card.appendChild(seal);
+        if (sortMode === 'custom'){
+          var handle = document.createElement('span');
+          handle.className = 'drag-handle';
+          handle.textContent = '⠿';
+          handle.title = 'Drag to reorder';
+          card.appendChild(handle);
+          card.setAttribute('draggable', 'true');
+          card.addEventListener('dragstart', function(e){
+            card.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', badger.id);
+            e.dataTransfer.effectAllowed = 'move';
+          });
+          card.addEventListener('dragend', function(){ card.classList.remove('dragging'); });
+          card.addEventListener('dragover', function(e){
+            e.preventDefault();
+            card.classList.add('drag-over');
+          });
+          card.addEventListener('dragleave', function(){ card.classList.remove('drag-over'); });
+          card.addEventListener('drop', function(e){
+            e.preventDefault();
+            card.classList.remove('drag-over');
+            var draggedId = e.dataTransfer.getData('text/plain');
+            if (!draggedId || draggedId === badger.id) return;
+            reorderCustomOrder(draggedId, badger.id);
+            renderHome(document.getElementById('homeSearch').value);
+          });
+        }
+        card.appendChild(favBtn);
+        card.appendChild(collectionBtn);
         card.appendChild(left);
         card.appendChild(right);
         card.addEventListener('click', function(){ openBadger(badger); });
@@ -1871,12 +2794,34 @@ var BADGERS = [
   // ---------------- Detail view ----------------
   async function openBadger(badger){
     currentBadger = badger;
+    lastStatsPct = null;
     progressData = await loadBadgerProgress(badger.id);
+    await loadGameFavorites(badger.id);
+    await loadBadgeFavorites(badger.id);
+    recordRecentBadger(badger.id);
+    renderDetailTags();
 
     try { history.replaceState(null, '', '#badger=' + encodeURIComponent(badger.id)); } catch(e){}
 
     document.getElementById('homeView').style.display = 'none';
     document.getElementById('detailView').style.display = 'block';
+    renderStickyNotes();
+
+    var nameRow = document.getElementById('detailNameRow');
+    if (!nameRow){
+      nameRow = document.createElement('div');
+      nameRow.id = 'detailNameRow';
+      nameRow.className = 'detail-fav-row';
+      var nameEl = document.getElementById('detailName');
+      nameEl.parentNode.insertBefore(nameRow, nameEl);
+      nameRow.appendChild(nameEl);
+    }
+    nameRow.querySelectorAll('.fav-btn').forEach(function(el){ el.remove(); });
+    var detailFavBtn = createFavButton(isBadgerFavorite(badger.id), badger.name, function(){
+      toggleBadgerFavorite(badger.id);
+      return isBadgerFavorite(badger.id);
+    });
+    nameRow.insertBefore(detailFavBtn, document.getElementById('detailName'));
 
     document.getElementById('detailName').textContent = badger.name;
     var diffEl = document.getElementById('detailDifficulty');
@@ -1980,8 +2925,10 @@ var BADGERS = [
 
   document.getElementById('backBtn').addEventListener('click', function(){
     try { history.replaceState(null, '', location.pathname + location.search); } catch(e){}
+    currentBadger = null;
     document.getElementById('detailView').style.display = 'none';
     document.getElementById('homeView').style.display = 'block';
+    renderStickyNotes();
     renderHome(document.getElementById('homeSearch').value);
   });
 
@@ -2017,122 +2964,217 @@ var BADGERS = [
       : 0;
 
     var pill = document.createElement('div');
-    pill.className = 'milestone';
+    pill.className = 'milestone' + (pct >= 100 ? ' milestone-done' : '');
     pill.textContent = m.name + ': ' + done + '/' + m.target + ' (' + pct + '%)';
     container.appendChild(pill);
   });
 }
 
+  function renderBadgeRow(b, listEl){
+    var k = badgeKey(currentBadger.id, b);
+    var done = !!progressData[k];
+
+    var row = document.createElement('div');
+    row.className = 'row' + (done ? ' done' : '');
+    if (b.bgColor) row.style.backgroundColor = b.bgColor;
+
+    var seal = document.createElement('input');
+    seal.type = 'checkbox';
+    seal.className = 'seal';
+    seal.checked = done;
+    seal.setAttribute('aria-label', 'Mark ' + b.name + ' as collected');
+    seal.addEventListener('change', function(){
+      progressData[k] = seal.checked;
+      saveBadgerProgress();
+      if (seal.checked) recordActivity();
+      var hideDone = document.getElementById('hideDoneBox').checked;
+      if (hideDone && seal.checked){
+        // Give the check a moment to register visually before the row
+        // disappears - an instant re-render here yanks the row out from
+        // under the user's finger and snaps the next item into its place,
+        // which reads as the list randomly "teleporting."
+        row.classList.add('row-removing');
+        setTimeout(function(){
+          // If they unchecked it again during the delay, cancel the removal.
+          if (progressData[k] && document.getElementById('hideDoneBox').checked){
+            renderList();
+          } else {
+            row.classList.remove('row-removing');
+            row.classList.toggle('done', seal.checked);
+          }
+        }, 350);
+      } else if (hideDone && !seal.checked){
+        renderList();
+      } else {
+        row.classList.toggle('done', seal.checked);
+      }
+      updateStats();
+    });
+    row.appendChild(seal);
+
+    var badgeFavBtn = createFavButton(isBadgeFavorite(currentBadger.id, b), b.name || 'this badge', function(){
+      var nowFav = toggleBadgeFavorite(currentBadger.id, b);
+      if (document.getElementById('favBadgesOnlyBox').checked && !nowFav){
+        renderList();
+      }
+      return nowFav;
+    });
+    row.appendChild(badgeFavBtn);
+
+    if (b.image){
+      var img = document.createElement('img');
+      img.className = 'row-image';
+      img.src = b.image;
+      img.alt = b.name;
+      img.loading = 'lazy';
+      img.addEventListener('error', function(){
+        var ph = document.createElement('div');
+        ph.className = 'row-image-placeholder';
+        ph.textContent = '🏅';
+        img.replaceWith(ph);
+      });
+      row.appendChild(img);
+    } else {
+      var placeholder = document.createElement('div');
+      placeholder.className = 'row-image-placeholder';
+      placeholder.textContent = '🏅';
+      row.appendChild(placeholder);
+    }
+
+    var main = document.createElement('div');
+    main.className = 'row-main';
+
+    var name = document.createElement('div');
+    name.className = 'row-name';
+    name.textContent = b.name || 'Loading badge name…';
+    name.style.color = b.nameColor ? b.nameColor : (!b.name ? 'var(--text-faint)' : '');
+    main.appendChild(name);
+
+    if (b.description){
+      var desc = document.createElement('div');
+      desc.className = 'row-desc';
+      desc.textContent = b.description;
+      if (b.descriptionColor) desc.style.color = b.descriptionColor;
+      main.appendChild(desc);
+    }
+
+    const badgeTypes = Array.isArray(b.type) ? b.type : [b.type];
+    const typeText = badgeTypes.filter(Boolean).join(", ");
+
+    if (typeText.trim()) {
+        var typeSpan = document.createElement('span');
+        typeSpan.className = 'row-type';
+        typeSpan.textContent = 'Type: ' + typeText;
+        typeSpan.style.color = b.typeColor ? b.typeColor : difficultyColor;
+        main.appendChild(typeSpan);
+    }
+
+    if (b.game || b.link){
+      var meta = document.createElement('div');
+      meta.className = 'row-meta';
+      if (b.game){
+        var gameSpan = document.createElement('span');
+        gameSpan.textContent = b.game;
+        if (b.gameColor) gameSpan.style.color = b.gameColor;
+        meta.appendChild(gameSpan);
+      }
+      if (b.link){
+        var a = document.createElement('a');
+        a.href = b.link; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = 'View badge ↗';
+        meta.appendChild(a);
+      }
+      main.appendChild(meta);
+    }
+
+    row.appendChild(main);
+    listEl.appendChild(row);
+  }
+
   function renderList(){
     var listEl = document.getElementById('list');
     var search = document.getElementById('badgeSearch').value.toLowerCase();
     var hideDone = document.getElementById('hideDoneBox').checked;
+    var typeFilter = document.getElementById('badgeTypeFilter').value.toLowerCase().trim();
+    var favOnly = document.getElementById('favBadgesOnlyBox').checked;
     listEl.innerHTML = '';
 
     var visible = currentBadges.filter(function(b){
       var done = !!progressData[badgeKey(currentBadger.id, b)];
       if (hideDone && done) return false;
+      if (favOnly && !isBadgeFavorite(currentBadger.id, b)) return false;
+      if (!badgeTypesMatch(b, typeFilter)) return false;
       if (search && (b.name||'').toLowerCase().indexOf(search) === -1 &&
           (b.game||'').toLowerCase().indexOf(search) === -1) return false;
       return true;
     });
 
+    var groups = {};
+    var groupOrder = [];
     visible.forEach(function(b){
-      var k = badgeKey(currentBadger.id, b);
-      var done = !!progressData[k];
+      var gk = gameKeyForBadge(b);
+      if (!groups[gk]){
+        groups[gk] = { key: gk, badges: [], sample: b };
+        groupOrder.push(gk);
+      }
+      groups[gk].badges.push(b);
+    });
 
-      var row = document.createElement('div');
-      row.className = 'row' + (done ? ' done' : '');
-      if (b.bgColor) row.style.backgroundColor = b.bgColor;
+    var favSet = gameFavoritesByBadger[currentBadger.id] || new Set();
+    // Keep games in the order they appear in the badge list (spreadsheet/code
+    // order) - only favorites get pulled to the front. Array.sort is stable,
+    // so a tie (0) leaves non-favorites in their original relative order.
+    groupOrder.sort(function(a, b){
+      var af = favSet.has(a) ? 0 : 1;
+      var bf = favSet.has(b) ? 0 : 1;
+      return af - bf;
+    });
 
-      var seal = document.createElement('input');
-      seal.type = 'checkbox';
-      seal.className = 'seal';
-      seal.checked = done;
-      seal.setAttribute('aria-label', 'Mark ' + b.name + ' as collected');
-      seal.addEventListener('change', function(){
-        progressData[k] = seal.checked;
-        saveBadgerProgress();
-        if (document.getElementById('hideDoneBox').checked){
-          renderList();
-        } else {
-          row.classList.toggle('done', seal.checked);
-        }
-        updateStats();
+    groupOrder.forEach(function(gk){
+      var group = groups[gk];
+      var label = gameLabelForKey(gk, group.sample);
+      var isFav = favSet.has(gk);
+
+      var section = document.createElement('div');
+      section.className = 'game-group';
+
+      var header = document.createElement('div');
+      header.className = 'game-group-header' + (isFav ? ' is-fav' : '');
+      var favBtn = createFavButton(isFav, label, function(){
+        if (!gameFavoritesByBadger[currentBadger.id]) gameFavoritesByBadger[currentBadger.id] = new Set();
+        var set = gameFavoritesByBadger[currentBadger.id];
+        if (set.has(gk)) set.delete(gk);
+        else set.add(gk);
+        saveGameFavorites(currentBadger.id);
+        renderList();
+        return set.has(gk);
       });
-      row.appendChild(seal);
+      var title = document.createElement('span');
+      title.textContent = label + ' (' + group.badges.length + ')';
+      header.appendChild(favBtn);
+      header.appendChild(title);
+      section.appendChild(header);
 
-      if (b.image){
-        var img = document.createElement('img');
-        img.className = 'row-image';
-        img.src = b.image;
-        img.alt = b.name;
-        img.loading = 'lazy';
-        img.addEventListener('error', function(){
-          var ph = document.createElement('div');
-          ph.className = 'row-image-placeholder';
-          ph.textContent = '🏅';
-          img.replaceWith(ph);
-        });
-        row.appendChild(img);
-      } else {
-        var placeholder = document.createElement('div');
-        placeholder.className = 'row-image-placeholder';
-        placeholder.textContent = '🏅';
-        row.appendChild(placeholder);
-      }
-
-      var main = document.createElement('div');
-      main.className = 'row-main';
-
-      var name = document.createElement('div');
-      name.className = 'row-name';
-      name.textContent = b.name || 'Loading badge name…';
-      name.style.color = b.nameColor ? b.nameColor : (!b.name ? 'var(--text-faint)' : '');
-      main.appendChild(name);
-
-      if (b.description){
-        var desc = document.createElement('div');
-        desc.className = 'row-desc';
-        desc.textContent = b.description;
-        if (b.descriptionColor) desc.style.color = b.descriptionColor;
-        main.appendChild(desc);
-      }
-
-      const badgeTypes = Array.isArray(b.type) ? b.type : [b.type];
-      const typeText = badgeTypes.filter(Boolean).join(", ");
-
-      if (typeText.trim()) {
-          var typeSpan = document.createElement('span');
-          typeSpan.className = 'row-type';
-          typeSpan.textContent = 'Type: ' + typeText;
-          typeSpan.style.color = b.typeColor ? b.typeColor : difficultyColor;
-          main.appendChild(typeSpan);
-      }
-
-      if (b.game || b.link){
-        var meta = document.createElement('div');
-        meta.className = 'row-meta';
-        if (b.game){
-          var gameSpan = document.createElement('span');
-          gameSpan.textContent = b.game;
-          if (b.gameColor) gameSpan.style.color = b.gameColor;
-          meta.appendChild(gameSpan);
-        }
-        if (b.link){
-          var a = document.createElement('a');
-          a.href = b.link; a.target = '_blank'; a.rel = 'noopener';
-          a.textContent = 'View badge ↗';
-          meta.appendChild(a);
-        }
-        main.appendChild(meta);
-      }
-
-      row.appendChild(main);
-      listEl.appendChild(row);
+      var badgeWrap = document.createElement('div');
+      badgeWrap.className = 'game-group-badges';
+      group.badges.forEach(function(b){ renderBadgeRow(b, badgeWrap); });
+      section.appendChild(badgeWrap);
+      listEl.appendChild(section);
     });
   }
 
+  function updateTypeFilterVisibility(){
+    var input = document.getElementById('badgeTypeFilter');
+    if (!input) return;
+    var hasAnyType = currentBadges.some(function(b){
+      var types = Array.isArray(b.type) ? b.type : [b.type];
+      return types.some(function(t){ return (t || '').trim() !== ''; });
+    });
+    if (!hasAnyType && input.value){ input.value = ''; }
+    input.style.display = hasAnyType ? '' : 'none';
+  }
+
+  var lastStatsPct = null;
   function updateStats(){
     var total = currentBadges.length;
     var done = countDone(currentBadger.id, currentBadges, progressData);
@@ -2141,14 +3183,21 @@ var BADGERS = [
     document.getElementById('statCount').textContent = done + ' / ' + total;
     document.getElementById('statPct').textContent = pct + '%';
     renderMilestones();
+    renderTimeEstimate();
+    updateTypeFilterVisibility();
+    if (total > 0 && pct === 100 && lastStatsPct !== null && lastStatsPct !== 100) fireConfetti();
+    lastStatsPct = pct;
   }
 
   document.getElementById('badgeSearch').addEventListener('input', renderList);
   document.getElementById('hideDoneBox').addEventListener('change', renderList);
+  document.getElementById('badgeTypeFilter').addEventListener('input', renderList);
+  document.getElementById('favBadgesOnlyBox').addEventListener('change', renderList);
 
   document.getElementById('checkAllBtn').addEventListener('click', function(){
     currentBadges.forEach(function(b){ progressData[badgeKey(currentBadger.id, b)] = true; });
     saveBadgerProgress();
+    recordActivity();
     renderList();
     updateStats();
   });
@@ -2159,12 +3208,499 @@ var BADGERS = [
     updateStats();
   });
 
-  storageMode = detectStorage();
-  var initialSlug = (location.hash || '').replace(/^#badger=/, '');
-  var initialBadger = initialSlug ? findBadgerBySlug(decodeURIComponent(initialSlug)) : null;
-  if (initialBadger){
-    openBadger(initialBadger);
-  } else {
-    renderHome('');
+  // ---- Tag chips on the detail page ----
+  function renderDetailTags(){
+    var chipsEl = document.getElementById('detailTagChips');
+    if (!chipsEl || !currentBadger) return;
+    chipsEl.innerHTML = '';
+    getTags(currentBadger.id).forEach(function(tag){
+      var chip = document.createElement('span');
+      chip.className = 'tag-chip';
+      var label = document.createElement('span');
+      label.textContent = tag;
+      var removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.textContent = '✕';
+      removeBtn.setAttribute('aria-label', 'Remove tag ' + tag);
+      removeBtn.addEventListener('click', function(){
+        removeTag(currentBadger.id, tag);
+        renderDetailTags();
+      });
+      chip.appendChild(label);
+      chip.appendChild(removeBtn);
+      chipsEl.appendChild(chip);
+    });
   }
+  var detailTagInput = document.getElementById('detailTagInput');
+  if (detailTagInput){
+    detailTagInput.addEventListener('keydown', function(e){
+      if (e.key === 'Enter'){
+        e.preventDefault();
+        if (!currentBadger) return;
+        addTag(currentBadger.id, detailTagInput.value);
+        detailTagInput.value = '';
+        renderDetailTags();
+      }
+    });
+  }
+
+  // ---- Custom drag-to-reorder ----
+  // Reorders the persisted custom order (extended with any badgers missing
+  // from it, in their natural position) so drag-and-drop works correctly
+  // even while a search/difficulty filter is narrowing what's on screen.
+  function reorderCustomOrder(draggedId, targetId){
+    var base = customOrder.length ? customOrder.slice() : BADGERS.map(function(b){ return b.id; });
+    var seen = {};
+    base.forEach(function(id){ seen[id] = true; });
+    BADGERS.forEach(function(b){ if (!seen[b.id]){ base.push(b.id); seen[b.id] = true; } });
+    base = base.filter(function(id){ return id !== draggedId; });
+    var targetIdx = base.indexOf(targetId);
+    if (targetIdx === -1) targetIdx = base.length;
+    base.splice(targetIdx, 0, draggedId);
+    customOrder = base;
+    saveCustomOrder();
+  }
+
+  // ---- Collections: filter dropdown + manage panel ----
+  function populateCollectionFilterOptions(){
+    var sel = document.getElementById('collectionFilterSelect');
+    if (sel){
+      var current = sel.value;
+      sel.innerHTML = '<option value="">All badgers</option>';
+      collections.forEach(function(c){
+        var opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name + ' (' + c.badgerIds.length + ')';
+        sel.appendChild(opt);
+      });
+      if (collections.some(function(c){ return c.id === current; })) sel.value = current;
+    }
+    renderCollectionsManageList();
+  }
+
+  function renderCollectionsManageList(){
+    var listEl = document.getElementById('collectionsList');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+    if (collections.length === 0){
+      var empty = document.createElement('div');
+      empty.className = 'list-status';
+      empty.textContent = 'No collections yet. Add one above.';
+      listEl.appendChild(empty);
+      return;
+    }
+    collections.forEach(function(col){
+      var row = document.createElement('div');
+      row.className = 'collection-row';
+
+      var nameWrap = document.createElement('div');
+      var nameEl = document.createElement('div');
+      nameEl.className = 'collection-row-name';
+      nameEl.textContent = col.name;
+      var countEl = document.createElement('div');
+      countEl.className = 'collection-row-count';
+      countEl.textContent = col.badgerIds.length + ' badger' + (col.badgerIds.length === 1 ? '' : 's');
+      nameWrap.appendChild(nameEl);
+      nameWrap.appendChild(countEl);
+
+      var actions = document.createElement('div');
+      actions.className = 'collection-row-actions';
+      var editBtn = document.createElement('button');
+      editBtn.type = 'button';
+      editBtn.textContent = '✎ Badgers';
+      editBtn.title = 'Choose which badgers are in this collection';
+      var deleteBtn = document.createElement('button');
+      deleteBtn.type = 'button';
+      deleteBtn.textContent = '🗑';
+      deleteBtn.title = 'Delete collection';
+      deleteBtn.addEventListener('click', function(){
+        if (!confirm('Delete collection "' + col.name + '"? This does not delete any badgers.')) return;
+        deleteCollection(col.id);
+        populateCollectionFilterOptions();
+      });
+      actions.appendChild(editBtn);
+      actions.appendChild(deleteBtn);
+
+      row.appendChild(nameWrap);
+      row.appendChild(actions);
+      listEl.appendChild(row);
+
+      var membershipList = document.createElement('div');
+      membershipList.className = 'collection-membership-list';
+      membershipList.style.display = 'none';
+      BADGERS.forEach(function(b){
+        var item = document.createElement('label');
+        item.className = 'collection-membership-item';
+        var cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = col.badgerIds.indexOf(b.id) !== -1;
+        cb.addEventListener('change', function(){
+          toggleBadgerInCollection(col.id, b.id);
+          countEl.textContent = col.badgerIds.length + ' badger' + (col.badgerIds.length === 1 ? '' : 's');
+          var optForThis = document.querySelector('#collectionFilterSelect option[value="' + col.id + '"]');
+          if (optForThis) optForThis.textContent = col.name + ' (' + col.badgerIds.length + ')';
+        });
+        var span = document.createElement('span');
+        span.textContent = b.name;
+        item.appendChild(cb);
+        item.appendChild(span);
+        membershipList.appendChild(item);
+      });
+      editBtn.addEventListener('click', function(){
+        membershipList.style.display = membershipList.style.display === 'none' ? 'flex' : 'none';
+      });
+      listEl.appendChild(membershipList);
+    });
+  }
+
+  document.getElementById('manageCollectionsBtn').addEventListener('click', function(){
+    var panel = document.getElementById('collectionsManagePanel');
+    panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+  });
+  document.getElementById('addCollectionBtn').addEventListener('click', function(){
+    var input = document.getElementById('newCollectionName');
+    if (createCollection(input.value)){
+      input.value = '';
+      populateCollectionFilterOptions();
+    }
+  });
+  document.getElementById('newCollectionName').addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){ e.preventDefault(); document.getElementById('addCollectionBtn').click(); }
+  });
+  document.getElementById('collectionFilterSelect').addEventListener('change', function(){
+    renderHome(searchInput.value);
+  });
+
+  // Small floating popup (from the 📁 button on a home card) for quickly
+  // toggling which collections a single badger belongs to.
+  var openCollectionPopup = null;
+  function closeCollectionQuickAdd(){
+    if (openCollectionPopup){ openCollectionPopup.remove(); openCollectionPopup = null; }
+    document.removeEventListener('mousedown', handleOutsideCollectionClick);
+  }
+  function handleOutsideCollectionClick(e){
+    if (openCollectionPopup && !openCollectionPopup.contains(e.target)) closeCollectionQuickAdd();
+  }
+  function openCollectionQuickAdd(badger, anchorBtn){
+    if (openCollectionPopup){ closeCollectionQuickAdd(); return; }
+    var popup = document.createElement('div');
+    popup.className = 'collections-manage-panel';
+    popup.style.position = 'fixed';
+    var rect = anchorBtn.getBoundingClientRect();
+    popup.style.top = (rect.bottom + 6) + 'px';
+    popup.style.left = Math.max(8, rect.right - 220) + 'px';
+    popup.style.width = '220px';
+    popup.style.zIndex = 9600;
+
+    if (collections.length === 0){
+      var hint = document.createElement('div');
+      hint.className = 'list-status';
+      hint.textContent = 'No collections yet.';
+      popup.appendChild(hint);
+    } else {
+      collections.forEach(function(col){
+        var item = document.createElement('label');
+        item.className = 'collection-membership-item';
+        var cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = col.badgerIds.indexOf(badger.id) !== -1;
+        cb.addEventListener('change', function(){
+          toggleBadgerInCollection(col.id, badger.id);
+          populateCollectionFilterOptions();
+        });
+        var span = document.createElement('span');
+        span.textContent = col.name;
+        item.appendChild(cb);
+        item.appendChild(span);
+        popup.appendChild(item);
+      });
+    }
+    var newRow = document.createElement('div');
+    newRow.className = 'id-search-actions';
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'id-search-input';
+    input.placeholder = 'New collection…';
+    input.style.flex = '1';
+    var addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'bulk-btn';
+    addBtn.textContent = 'Add';
+    addBtn.addEventListener('click', function(){
+      var col = createCollection(input.value);
+      if (col){
+        toggleBadgerInCollection(col.id, badger.id);
+        populateCollectionFilterOptions();
+        closeCollectionQuickAdd();
+        openCollectionQuickAdd(badger, anchorBtn);
+      }
+    });
+    newRow.appendChild(input);
+    newRow.appendChild(addBtn);
+    popup.appendChild(newRow);
+
+    document.body.appendChild(popup);
+    openCollectionPopup = popup;
+    setTimeout(function(){ document.addEventListener('mousedown', handleOutsideCollectionClick); }, 0);
+  }
+
+  // ---- Settings panel wiring ----
+  document.getElementById('settingsBtn').addEventListener('click', function(){
+    var panel = document.getElementById('settingsPanel');
+    panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+  });
+  document.getElementById('themeSelect').addEventListener('change', function(){
+    currentSettings.theme = VALID_THEMES.indexOf(this.value) !== -1 ? this.value : 'dark';
+    saveSettings();
+    var themeTextOnSwitch = getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
+    if (themeTextOnSwitch){
+      if (!currentSettings.titleColor) document.getElementById('titleColorInput').value = themeTextOnSwitch;
+      if (!currentSettings.badgerTitleColor) document.getElementById('badgerTitleColorInput').value = themeTextOnSwitch;
+    }
+  });
+  document.getElementById('gradientFromInput').addEventListener('input', function(){
+    currentSettings.gradientFrom = this.value;
+    saveSettings();
+  });
+  document.getElementById('gradientToInput').addEventListener('input', function(){
+    currentSettings.gradientTo = this.value;
+    saveSettings();
+  });
+  document.getElementById('gradientAngleSelect').addEventListener('change', function(){
+    currentSettings.gradientAngle = this.value;
+    saveSettings();
+  });
+  document.getElementById('accentColorInput').addEventListener('input', function(){
+    currentSettings.accent = this.value;
+    saveSettings();
+  });
+  document.getElementById('resetAccentBtn').addEventListener('click', function(){
+    currentSettings.accent = DEFAULT_ACCENT;
+    document.getElementById('accentColorInput').value = DEFAULT_ACCENT;
+    saveSettings();
+  });
+  document.getElementById('titleColorInput').addEventListener('input', function(){
+    currentSettings.titleColor = this.value;
+    saveSettings();
+  });
+  document.getElementById('resetTitleColorBtn').addEventListener('click', function(){
+    currentSettings.titleColor = '';
+    saveSettings();
+    var themeText = getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
+    if (themeText) document.getElementById('titleColorInput').value = themeText;
+  });
+  document.getElementById('badgerTitleColorInput').addEventListener('input', function(){
+    currentSettings.badgerTitleColor = this.value;
+    saveSettings();
+  });
+  document.getElementById('resetBadgerTitleColorBtn').addEventListener('click', function(){
+    currentSettings.badgerTitleColor = '';
+    saveSettings();
+    var themeText2 = getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
+    if (themeText2) document.getElementById('badgerTitleColorInput').value = themeText2;
+  });
+  document.getElementById('shortcutsToggle').addEventListener('change', function(){
+    currentSettings.shortcuts = this.checked;
+    saveSettings();
+  });
+
+  document.getElementById('resetStreakBtn').addEventListener('click', function(){
+    if (!confirm('Reset your streak and activity history? This clears the streak count but does not touch any checked-off badges.')) return;
+    activityLog = {};
+    storageSet('activity-log', JSON.stringify(activityLog));
+    renderStreak();
+    var status = document.getElementById('settingsDataStatus');
+    status.textContent = 'Streak and activity history reset.';
+    setTimeout(function(){ status.textContent = ''; }, 3000);
+  });
+  document.getElementById('clearNotesBtn').addEventListener('click', function(){
+    if (!confirm('Delete all sticky notes on every page? This cannot be undone.')) return;
+    stickyNotesByPage = {};
+    storageSet('sticky-notes', JSON.stringify(stickyNotesByPage));
+    renderStickyNotes();
+    var status = document.getElementById('settingsDataStatus');
+    status.textContent = 'All sticky notes cleared.';
+    setTimeout(function(){ status.textContent = ''; }, 3000);
+  });
+
+  // ---- Stats dashboard ----
+  function statLine(label, value, sub){
+    var card = document.createElement('div');
+    card.className = 'stats-card';
+    var labelEl = document.createElement('div');
+    labelEl.className = 'stats-card-label';
+    labelEl.textContent = label;
+    var valueEl = document.createElement('div');
+    valueEl.className = 'stats-card-value';
+    valueEl.textContent = value;
+    card.appendChild(labelEl);
+    card.appendChild(valueEl);
+    if (sub){
+      var subEl = document.createElement('div');
+      subEl.className = 'stats-card-sub';
+      subEl.textContent = sub;
+      card.appendChild(subEl);
+    }
+    return card;
+  }
+
+  async function renderStatsDashboard(){
+    var content = document.getElementById('statsContent');
+    content.innerHTML = '<div class="list-status">Crunching numbers\u2026</div>';
+
+    var perBadger = await Promise.all(BADGERS.map(async function(b){
+      var effective = await getEffectiveBadges(b);
+      var badges = effective.badges || [];
+      var prog = await loadBadgerProgress(b.id);
+      var done = countDone(b.id, badges, prog);
+      var typeCounts = {};
+      badges.forEach(function(bd){
+        if (!prog[badgeKey(b.id, bd)]) return;
+        var types = Array.isArray(bd.type) ? bd.type : [bd.type];
+        types.filter(Boolean).forEach(function(t){ typeCounts[t] = (typeCounts[t] || 0) + 1; });
+      });
+      return { badger: b, total: badges.length, done: done, typeCounts: typeCounts };
+    }));
+
+    var totalBadges = 0, totalDone = 0;
+    var typeTotals = {};
+    perBadger.forEach(function(r){
+      totalBadges += r.total;
+      totalDone += r.done;
+      Object.keys(r.typeCounts).forEach(function(t){ typeTotals[t] = (typeTotals[t] || 0) + r.typeCounts[t]; });
+    });
+    var overallPct = totalBadges ? Math.round((totalDone/totalBadges)*100) : 0;
+
+    var inProgress = perBadger.filter(function(r){ return r.total > 0 && r.done > 0 && r.done < r.total; });
+    var mostComplete = inProgress.slice().sort(function(a,b){ return (b.done/b.total) - (a.done/a.total); })[0];
+    var leastComplete = inProgress.slice().sort(function(a,b){ return (a.done/a.total) - (b.done/b.total); })[0];
+    var streaks = computeStreaks();
+
+    content.innerHTML = '';
+    var grid = document.createElement('div');
+    grid.className = 'stats-grid';
+    grid.appendChild(statLine('Badges collected', totalDone + ' / ' + totalBadges, overallPct + '% overall'));
+    grid.appendChild(statLine('Current streak', streaks.current + ' day' + (streaks.current === 1 ? '' : 's'), 'longest: ' + streaks.longest));
+    if (mostComplete){
+      grid.appendChild(statLine('Furthest along', mostComplete.badger.name, Math.round((mostComplete.done/mostComplete.total)*100) + '% (' + mostComplete.done + '/' + mostComplete.total + ')'));
+    }
+    if (leastComplete && leastComplete !== mostComplete){
+      grid.appendChild(statLine('Just getting started', leastComplete.badger.name, Math.round((leastComplete.done/leastComplete.total)*100) + '% (' + leastComplete.done + '/' + leastComplete.total + ')'));
+    }
+    content.appendChild(grid);
+
+    var typeEntries = Object.keys(typeTotals).map(function(t){ return { type: t, count: typeTotals[t] }; }).sort(function(a,b){ return b.count - a.count; });
+    if (typeEntries.length){
+      var title = document.createElement('div');
+      title.className = 'stats-section-title';
+      title.textContent = 'Collected badges by type';
+      content.appendChild(title);
+      var maxCount = typeEntries[0].count;
+      typeEntries.slice(0, 12).forEach(function(entry){
+        var row = document.createElement('div');
+        row.className = 'stats-bar-row';
+        var label = document.createElement('div');
+        label.className = 'stats-bar-label';
+        label.textContent = entry.type;
+        label.title = entry.type;
+        var track = document.createElement('div');
+        track.className = 'stats-bar-track';
+        var fill = document.createElement('div');
+        fill.className = 'stats-bar-fill';
+        fill.style.width = Math.round((entry.count/maxCount)*100) + '%';
+        track.appendChild(fill);
+        var count = document.createElement('div');
+        count.className = 'stats-bar-count';
+        count.textContent = entry.count;
+        row.appendChild(label);
+        row.appendChild(track);
+        row.appendChild(count);
+        content.appendChild(row);
+      });
+    }
+
+    if (totalBadges === 0){
+      content.innerHTML = '<div class="empty">No badges to show stats for yet.</div>';
+    }
+  }
+
+  document.getElementById('statsBtn').addEventListener('click', function(){
+    document.getElementById('homeView').style.display = 'none';
+    document.getElementById('statsView').style.display = 'block';
+    renderStatsDashboard();
+  });
+  document.getElementById('statsBackBtn').addEventListener('click', function(){
+    document.getElementById('statsView').style.display = 'none';
+    document.getElementById('homeView').style.display = 'block';
+  });
+
+  // ---- Keyboard shortcuts ----
+  document.addEventListener('keydown', function(e){
+    if (!currentSettings.shortcuts) return;
+    var tag = (document.activeElement && document.activeElement.tagName) || '';
+    var isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' ||
+      (document.activeElement && document.activeElement.isContentEditable);
+
+    if (e.key === '?' && !isTyping){
+      e.preventDefault();
+      var panel = document.getElementById('settingsPanel');
+      panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+      return;
+    }
+    if (isTyping){
+      if (e.key === 'Escape') document.activeElement.blur();
+      return;
+    }
+    if (e.key === '/'){
+      e.preventDefault();
+      var statsVisible = document.getElementById('statsView').style.display !== 'none';
+      var detailVisible = document.getElementById('detailView').style.display !== 'none';
+      if (detailVisible) document.getElementById('badgeSearch').focus();
+      else if (!statsVisible) document.getElementById('homeSearch').focus();
+      return;
+    }
+    if (e.key === 'Escape'){
+      var detailVisible2 = document.getElementById('detailView').style.display !== 'none';
+      var statsVisible2 = document.getElementById('statsView').style.display !== 'none';
+      if (detailVisible2) document.getElementById('backBtn').click();
+      else if (statsVisible2) document.getElementById('statsBackBtn').click();
+      return;
+    }
+    if (document.getElementById('detailView').style.display !== 'none'){
+      if (e.key === 'c' || e.key === 'C') document.getElementById('checkAllBtn').click();
+      if (e.key === 'u' || e.key === 'U') document.getElementById('uncheckAllBtn').click();
+      if (e.key === 'n' || e.key === 'N') document.getElementById('addNoteBtn').click();
+    }
+  });
+
+  storageMode = detectStorage();
+  loadBadgerFavorites().then(async function(){
+    await Promise.all([
+      loadStickyNotes(),
+      loadSettings(),
+      loadTags(),
+      loadCustomOrder(),
+      loadCollections(),
+      loadActivityLog()
+    ]);
+    document.getElementById('themeSelect').value = currentSettings.theme;
+    document.getElementById('accentColorInput').value = currentSettings.accent;
+    document.getElementById('shortcutsToggle').checked = currentSettings.shortcuts;
+    document.getElementById('gradientFromInput').value = currentSettings.gradientFrom;
+    document.getElementById('gradientToInput').value = currentSettings.gradientTo;
+    document.getElementById('gradientAngleSelect').value = currentSettings.gradientAngle;
+    document.getElementById('customGradientRow').style.display = currentSettings.theme === 'custom' ? 'flex' : 'none';
+    var themeTextB = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#ECE9E2';
+    document.getElementById('titleColorInput').value = currentSettings.titleColor || themeTextB;
+    document.getElementById('badgerTitleColorInput').value = currentSettings.badgerTitleColor || themeTextB;
+    renderStreak();
+    populateCollectionFilterOptions();
+    var initialSlug = (location.hash || '').replace(/^#badger=/, '');
+    var initialBadger = initialSlug ? findBadgerBySlug(decodeURIComponent(initialSlug)) : null;
+    if (initialBadger){
+      openBadger(initialBadger);
+    } else {
+      renderHome('');
+    }
+  });
 })();

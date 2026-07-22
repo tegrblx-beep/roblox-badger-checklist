@@ -6,6 +6,63 @@
     --green: #58D6A0; --amber: #F0B94A; --coral: #EE6F6F; --violet: #4a7fea; --red: #930000; --gray: #686868; --darkgray: #ff00ff; --neutral-diff: #ffffff;
     --radius: 10px;
   }
+  [data-theme="light"]{
+    --bg: #F3F1EA; --panel: #FFFFFF; --panel-2: #ECE8DC;
+    --border: #DCD6C4; --border-strong: #C7C0A8;
+    --text: #211F18; --text-dim: #5B5748; --text-faint: #8B866F;
+    --gold-dim: #F0DDA3;
+  }
+  [data-theme="midnight"]{
+    --bg: #0B0E1A; --panel: #141928; --panel-2: #1A2036;
+    --border: #262D45; --border-strong: #333C5C;
+    --text: #E7E9F5; --text-dim: #9297B8; --text-faint: #5C6288;
+    --gold-dim: #35406b;
+  }
+  [data-theme="forest"]{
+    --bg: #0E1712; --panel: #16211B; --panel-2: #1B2921;
+    --border: #263A2E; --border-strong: #33503E;
+    --text: #E7EFE7; --text-dim: #93A897; --text-faint: #5E7264;
+    --gold-dim: #2c4a34;
+  }
+  [data-theme="sunset"]{
+    --bg: #1A1014; --panel: #24161B; --panel-2: #2C1B21;
+    --border: #3E2530; --border-strong: #58303F;
+    --text: #F4E9E6; --text-dim: #B99298; --text-faint: #7C5E64;
+    --gold-dim: #5b2f3a;
+  }
+  [data-theme="ocean"]{
+    --bg: #0A161C; --panel: #0F212A; --panel-2: #142A35;
+    --border: #1D3A47; --border-strong: #295064;
+    --text: #E4F1F5; --text-dim: #89AEBB; --text-faint: #4F707C;
+    --gold-dim: #1c4c5c;
+  }
+  [data-theme="rose"]{
+    --bg: #180E14; --panel: #22141C; --panel-2: #2B1922;
+    --border: #3D2430; --border-strong: #563142;
+    --text: #F5E7EE; --text-dim: #B994A5; --text-faint: #7A5C68;
+    --gold-dim: #5a2f42;
+  }
+  [data-theme="slate"]{
+    --bg: #12161C; --panel: #1A2028; --panel-2: #202832;
+    --border: #2B3542; --border-strong: #3A4759;
+    --text: #E6EBF0; --text-dim: #94A2B3; --text-faint: #5C6A7A;
+    --gold-dim: #3a4a5c;
+  }
+  [data-theme="amber"]{
+    --bg: #171009; --panel: #22190E; --panel-2: #2B2011;
+    --border: #3D2E17; --border-strong: #574020;
+    --text: #F3E9D8; --text-dim: #BBA37F; --text-faint: #7C6C51;
+    --gold-dim: #5c421c;
+  }
+  /* "Custom" reuses the dark palette for panels/text - only --bg gets
+     overridden inline (as a gradient) once the user picks colors. */
+  [data-theme="custom"]{
+    --bg: #12141A; --panel: #1B1E27; --panel-2: #21252F;
+    --border: #2A2E3A; --border-strong: #383D4C;
+    --text: #ECE9E2; --text-dim: #9497A8; --text-faint: #62667A;
+    --gold-dim: #6b5726;
+  }
+  body{ transition: background 0.2s ease, color 0.2s ease; }
   *{ box-sizing: border-box; }
   body{ margin:0; background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; padding: 0 0 4rem; }
   .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px; }
@@ -13,7 +70,7 @@
 
   /* ---------- Home / search view ---------- */
   #homeView header{ padding: 3rem 0 1.5rem; }
-  #homeView h1{ font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 0.02em; margin: 0 0 8px; line-height: 1; }
+  #homeView h1{ font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 0.02em; margin: 0 0 8px; line-height: 1; color: var(--title-color, var(--text)); }
   #homeView .sub{ color: var(--text-dim); font-size: 15px; margin: 0 0 1.5rem; max-width: 520px; line-height: 1.5; }
 
   .search-wrap{ position: relative; margin-bottom: 20px; }
@@ -63,7 +120,7 @@
   .badger-card.badger-card-done{ border-color: var(--gold-dim); opacity: 0.7; }
   .badger-seal{ flex-shrink: 0; margin: 0; }
   .badger-card-left{ display:flex; flex-direction:column; gap:4px; flex: 1; min-width: 0; }
-  .badger-card-name{ font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.01em; line-height:1; }
+  .badger-card-name{ font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.01em; line-height:1; color: var(--badger-title-color, var(--text)); }
   .badger-card-diff{ font-family:'IBM Plex Mono', monospace; font-size: 12px; font-weight:600; letter-spacing: 0.04em; text-transform: uppercase; }
   .badger-card-right{ text-align:right; display:flex; flex-direction:column; gap:4px; flex-shrink:0; }
   .badger-card-count{ font-family:'IBM Plex Mono', monospace; font-size: 15px; color: var(--text); }
@@ -93,7 +150,7 @@
   .back-btn:hover{ color: var(--gold); }
 
   header.detail-header{ padding: 1rem 0 1.5rem; }
-  .badger-name{ font-family: 'Bebas Neue', sans-serif; font-size: 56px; letter-spacing: 0.02em; line-height: 1; margin: 0 0 6px; }
+  .badger-name{ font-family: 'Bebas Neue', sans-serif; font-size: 56px; letter-spacing: 0.02em; line-height: 1; margin: 0 0 6px; color: var(--badger-title-color, var(--text)); }
   .difficulty-label{ font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.75rem; }
   .game-link-line{ margin-bottom: 1rem; }
   .game-link-line a{ color: var(--text-faint); font-size: 13px; }
@@ -111,15 +168,20 @@
     background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
     padding: 6px 12px; font-size: 13px; font-family: 'IBM Plex Mono', monospace; color: var(--text-dim);
   }
+  .milestone.milestone-done{
+    text-decoration: line-through; text-decoration-color: var(--text-faint);
+    border-color: var(--gold-dim); color: var(--text-faint); opacity: 0.75;
+  }
   .list-status-row{ display:flex; align-items:center; justify-content: space-between; gap: 12px; margin-top: 10px; }
   .list-status{ font-size: 13px; color: var(--text-faint); min-height: 16px; }
   .list-status.err{ color: var(--coral); }
 
   .controls-row{ display:flex; gap:12px; margin: 1.5rem 0 16px; }
   .controls-row input[type=text]{
-    flex:1; background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    flex:1; min-width: 160px; background: var(--panel); border: 1px solid var(--border); color: var(--text);
     border-radius: 8px; padding: 9px 12px; font-size: 13px; font-family: inherit;
   }
+  #badgeSearch{ flex-basis: 100%; }
   .controls-row label{ display:flex; align-items:center; gap:6px; font-size: 13px; color: var(--text-dim); white-space: nowrap; }
   .bulk-btn{
     background: var(--panel); border: 1px solid var(--border-strong); color: var(--text-dim);
@@ -128,7 +190,15 @@
   .bulk-btn:hover{ border-color: var(--gold); color: var(--gold); }
 
   #list{ display:flex; flex-direction:column; gap: 10px; }
-  .row{ display:flex; align-items:flex-start; gap: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .row{
+    display:flex; align-items:flex-start; gap: 14px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .row.row-removing{ opacity: 0; transform: scale(0.97); pointer-events: none; }
+  @media (prefers-reduced-motion: reduce){
+    .row{ transition: none; }
+    .row.row-removing{ opacity: 0.55; transform: none; }
+  }
   .row.done{ opacity: 0.55; }
 
   .seal{
@@ -158,3 +228,198 @@
   .row-meta{ display:flex; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
   .row-meta span, .row-meta a{ font-size: 12px; color: var(--text-faint); }
   .row-meta a:hover{ color: var(--gold); }
+
+  /* ---------- Favorites ---------- */
+  .fav-btn{
+    background: none; border: none; cursor: pointer; font-size: 18px; line-height: 1;
+    padding: 2px 4px; flex-shrink: 0; color: var(--text-faint); transition: color 0.15s ease, transform 0.1s ease;
+  }
+  .fav-btn:hover{ color: var(--gold); transform: scale(1.1); }
+  .fav-btn.is-fav{ color: var(--gold); }
+  .fav-btn:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
+  .badger-card{ position: relative; }
+  .badger-card .fav-btn{ margin-right: 2px; }
+  .badger-card-fav{ border-color: var(--gold-dim); }
+  .detail-fav-row{ display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; }
+  .detail-fav-row .fav-btn{ font-size: 22px; }
+
+  .game-group{ margin-bottom: 4px; }
+  .game-group-header{
+    display: flex; align-items: center; gap: 8px; padding: 10px 4px 6px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim);
+    border-bottom: 1px solid var(--border); margin-bottom: 8px;
+  }
+  .game-group-header.is-fav{ color: var(--gold); border-bottom-color: var(--gold-dim); }
+  .game-group-header .fav-btn{ font-size: 16px; }
+  .game-group-badges{ display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+
+  /* ---------- Sticky notes ---------- */
+  #notesLayer{
+    position: fixed; inset: 0; pointer-events: none; z-index: 9000; overflow: hidden;
+  }
+  .sticky-note{
+    position: absolute; pointer-events: auto; min-width: 120px; min-height: 80px;
+    background: #2a2618; border: 1px solid var(--gold-dim); border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45); display: flex; flex-direction: column; resize: none;
+  }
+  .sticky-note-header{
+    display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    padding: 6px 8px; cursor: grab; background: rgba(232,178,61,0.12);
+    border-bottom: 1px solid var(--gold-dim); border-radius: 7px 7px 0 0; user-select: none;
+  }
+  .sticky-note-header:active{ cursor: grabbing; }
+  .sticky-note-title{ font-size: 11px; color: var(--gold); font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.04em; }
+  .sticky-note-delete{
+    background: none; border: none; color: var(--text-faint); cursor: pointer; font-size: 14px; line-height: 1; padding: 2px 4px;
+  }
+  .sticky-note-delete:hover{ color: var(--coral); }
+  .sticky-note-body{
+    flex: 1; min-height: 0; padding: 8px 10px; font-size: 13px; line-height: 1.45;
+    color: var(--text); outline: none; overflow: auto; white-space: pre-wrap; word-break: break-word;
+  }
+  .sticky-note-body:empty::before{ content: 'Type your note…'; color: var(--text-faint); }
+  .sticky-note-resize{
+    position: absolute; right: 0; bottom: 0; width: 16px; height: 16px;
+    cursor: nwse-resize; border-radius: 0 0 7px 0;
+  }
+  .sticky-note-resize::after{
+    content: ''; position: absolute; right: 4px; bottom: 4px; width: 8px; height: 8px;
+    border-right: 2px solid var(--text-faint); border-bottom: 2px solid var(--text-faint); opacity: 0.6;
+  }
+  .add-note-btn{
+    position: fixed; right: 20px; bottom: 20px; z-index: 9001;
+    background: var(--panel); border: 1px solid var(--gold-dim); color: var(--gold);
+    border-radius: 999px; padding: 10px 16px; font-size: 13px; font-family: inherit;
+    cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  }
+  .add-note-btn:hover{ border-color: var(--gold); background: var(--panel-2); }
+
+  /* ---------- Recent badgers ---------- */
+  .data-tools-row{ display:flex; flex-wrap:wrap; align-items:center; gap: 10px; margin-top: 12px; }
+  .recent-section{ margin-bottom: 20px; }
+  .recent-heading{
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px;
+  }
+  .recent-list{ display:flex; flex-wrap:wrap; gap: 8px; }
+  .recent-chip{
+    background: var(--panel); border: 1px solid var(--border); border-radius: 999px;
+    padding: 8px 14px; font-size: 13px; color: var(--text-dim); cursor: pointer; font-family: inherit;
+  }
+  .recent-chip:hover{ border-color: var(--gold); color: var(--gold); }
+
+  /* ---------- Badge row favorites ---------- */
+  .row{ position: relative; }
+  .row .fav-btn{ font-size: 15px; margin-top: 4px; }
+  .row.row-fav{ border-color: var(--gold-dim); }
+  .controls-row .badge-type-filter{
+    width: 130px; flex: none; background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    border-radius: 8px; padding: 9px 12px; font-size: 13px; font-family: inherit;
+  }
+  .controls-row{ flex-wrap: wrap; }
+  /* ---------- Settings panel ---------- */
+  .settings-panel{
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; margin-top: 12px; display:flex; flex-direction:column; gap: 10px;
+  }
+  .settings-row{ display:flex; align-items:center; gap: 10px; flex-wrap: wrap; }
+  .settings-row input[type=color]{
+    width: 36px; height: 30px; padding: 2px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--panel-2); cursor: pointer;
+  }
+  .settings-row label{ display:flex; align-items:center; gap:6px; font-size: 13px; color: var(--text-dim); }
+  .settings-hint{ font-size: 12px; color: var(--text-faint); line-height: 1.6; }
+  .settings-hint kbd{
+    background: var(--panel-2); border: 1px solid var(--border-strong); border-radius: 4px;
+    padding: 1px 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim);
+  }
+  .settings-divider{ height: 1px; background: var(--border); margin: 2px 0; }
+
+  /* ---------- Streak ---------- */
+  .streak-widget{
+    margin-bottom: 16px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .streak-line{ display:flex; align-items:baseline; gap: 8px; }
+  .streak-line .streak-num{ font-family:'Bebas Neue', sans-serif; font-size: 26px; color: var(--gold); line-height:1; }
+  .streak-line .streak-label{ font-size: 12px; color: var(--text-dim); }
+  .streak-line .streak-longest{ font-size: 12px; color: var(--text-faint); margin-left: auto; }
+  .streak-caption{ font-size: 11px; color: var(--text-faint); margin-top: 8px; line-height: 1.5; }
+
+  /* ---------- Tags ---------- */
+  .tags-row{ display:flex; align-items:center; gap: 8px; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .tag-chips{ display:flex; flex-wrap:wrap; gap: 6px; }
+  .tag-chip{
+    display:inline-flex; align-items:center; gap: 6px; background: var(--panel-2);
+    border: 1px solid var(--border-strong); color: var(--text-dim); border-radius: 999px;
+    padding: 4px 10px; font-size: 12px; font-family: 'IBM Plex Mono', monospace;
+  }
+  .tag-chip button{
+    background:none; border:none; color: var(--text-faint); cursor:pointer; font-size: 12px;
+    line-height: 1; padding: 0;
+  }
+  .tag-chip button:hover{ color: var(--coral); }
+  .tag-input{ width: 150px !important; padding: 6px 10px !important; font-size: 12px !important; }
+  .badger-card-tags{ display:flex; flex-wrap:wrap; gap: 4px; margin-top: 2px; }
+  .badger-card-tags .tag-chip{ padding: 2px 8px; font-size: 10px; }
+
+  /* ---------- Time estimate ---------- */
+  .time-estimate{ font-size: 12px; color: var(--text-faint); margin-top: 8px; }
+
+  /* ---------- Collections ---------- */
+  .collections-row{ display:flex; align-items:center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .collections-manage-panel{
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 16px; display:flex; flex-direction:column; gap: 10px;
+  }
+  .collections-list{ display:flex; flex-direction:column; gap: 6px; }
+  .collection-row{
+    display:flex; align-items:center; justify-content:space-between; gap: 10px;
+    background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px;
+  }
+  .collection-row-name{ font-size: 13px; color: var(--text); }
+  .collection-row-count{ font-size: 11px; color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; }
+  .collection-row-actions{ display:flex; gap: 6px; }
+  .collection-row-actions button{
+    background:none; border:none; color: var(--text-faint); cursor:pointer; font-size: 13px; padding: 2px 4px;
+  }
+  .collection-row-actions button:hover{ color: var(--gold); }
+  .collection-membership-list{ display:flex; flex-direction:column; gap: 4px; max-height: 220px; overflow-y:auto; margin-top: 6px; }
+  .collection-membership-item{ display:flex; align-items:center; gap: 8px; font-size: 13px; color: var(--text-dim); padding: 3px 0; }
+  .badger-card-collection-btn{
+    background:none; border:none; color: var(--text-faint); cursor:pointer; font-size: 15px;
+    padding: 2px 4px; flex-shrink: 0;
+  }
+  .badger-card-collection-btn:hover{ color: var(--gold); }
+
+  /* ---------- Drag reorder ---------- */
+  .badger-card[draggable="true"]{ cursor: grab; }
+  .badger-card[draggable="true"]:active{ cursor: grabbing; }
+  .badger-card.dragging{ opacity: 0.4; }
+  .badger-card.drag-over{ border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .drag-handle{ color: var(--text-faint); font-size: 14px; flex-shrink:0; cursor: grab; padding: 0 2px; }
+
+  /* ---------- Stats dashboard ---------- */
+  .stats-content{ padding-bottom: 3rem; }
+  .stats-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stats-card{ background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .stats-card-label{ font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; font-family: 'IBM Plex Mono', monospace; margin-bottom: 6px; }
+  .stats-card-value{ font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: var(--gold); line-height: 1; }
+  .stats-card-sub{ font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+  .stats-section-title{ font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight:600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); margin: 20px 0 10px; }
+  .stats-bar-row{ display:flex; align-items:center; gap: 10px; margin-bottom: 8px; }
+  .stats-bar-label{ width: 130px; flex-shrink:0; font-size: 12px; color: var(--text-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .stats-bar-track{ flex:1; height: 8px; border-radius: 5px; background: var(--panel-2); border: 1px solid var(--border); overflow:hidden; }
+  .stats-bar-fill{ height:100%; background: var(--gold); }
+  .stats-bar-count{ width: 50px; text-align:right; flex-shrink:0; font-size: 11px; color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; }
+
+  /* ---------- Confetti ---------- */
+  #confettiLayer{ position: fixed; inset: 0; pointer-events: none; z-index: 9500; overflow: hidden; }
+  .confetti-piece{ position: absolute; top: -12px; border-radius: 2px; animation: confetti-fall linear forwards; }
+  @keyframes confetti-fall{
+    to{ transform: translateY(105vh) rotate(540deg); opacity: 0.9; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .confetti-piece{ animation: none; display: none; }
+  }

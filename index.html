@@ -25,6 +25,72 @@
       <span class="stat-count" id="badgerCounterCount">0 / 0</span>
       <span class="stat-label">badgers complete</span>
       </div>
+      <div class="streak-widget" id="streakWidget">
+        <div class="streak-line" id="streakLine"></div>
+        <div class="streak-caption">Checking off just <strong>one badge, in any game</strong>, keeps your streak going - a whole badger isn't required. Miss a day and the streak resets to 0.</div>
+      </div>
+      <div class="data-tools-row">
+        <button type="button" class="bulk-btn" id="exportDataBtn">Export progress</button>
+        <button type="button" class="bulk-btn" id="importDataBtn">Import progress</button>
+        <input type="file" id="importDataInput" accept=".json,application/json" hidden />
+        <button type="button" class="bulk-btn" id="statsBtn">📊 Stats</button>
+        <button type="button" class="bulk-btn" id="settingsBtn">⚙ Settings</button>
+        <span class="list-status" id="dataToolsStatus"></span>
+      </div>
+      <div class="settings-panel" id="settingsPanel" style="display:none;">
+        <div class="settings-row">
+          <label for="themeSelect" class="sort-label">Theme</label>
+          <select id="themeSelect" class="sort-select">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="midnight">Midnight</option>
+            <option value="forest">Forest</option>
+            <option value="sunset">Sunset</option>
+            <option value="ocean">Ocean</option>
+            <option value="rose">Rose</option>
+            <option value="slate">Slate</option>
+            <option value="amber">Amber</option>
+            <option value="custom">Custom gradient</option>
+          </select>
+        </div>
+        <div class="settings-row" id="customGradientRow" style="display:none;">
+          <label for="gradientFromInput" class="sort-label">Gradient</label>
+          <input type="color" id="gradientFromInput" value="#12141A" />
+          <input type="color" id="gradientToInput" value="#2A1E3A" />
+          <select id="gradientAngleSelect" class="sort-select">
+            <option value="135deg">Diagonal ↘</option>
+            <option value="180deg">Top → Bottom</option>
+            <option value="90deg">Left → Right</option>
+            <option value="45deg">Diagonal ↗</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <label for="accentColorInput" class="sort-label">Accent color</label>
+          <input type="color" id="accentColorInput" value="#E8B23D" />
+          <button type="button" class="bulk-btn" id="resetAccentBtn">Reset</button>
+        </div>
+        <div class="settings-row">
+          <label for="titleColorInput" class="sort-label">Main title</label>
+          <input type="color" id="titleColorInput" value="#ECE9E2" />
+          <button type="button" class="bulk-btn" id="resetTitleColorBtn">Reset</button>
+        </div>
+        <div class="settings-row">
+          <label for="badgerTitleColorInput" class="sort-label">Badger titles</label>
+          <input type="color" id="badgerTitleColorInput" value="#ECE9E2" />
+          <button type="button" class="bulk-btn" id="resetBadgerTitleColorBtn">Reset</button>
+        </div>
+        <div class="settings-row">
+          <label><input type="checkbox" id="shortcutsToggle" checked> Enable keyboard shortcuts</label>
+        </div>
+        <div class="settings-hint">Shortcuts: <kbd>/</kbd> focus search &nbsp; <kbd>Esc</kbd> back / clear &nbsp; <kbd>C</kbd> check all &nbsp; <kbd>U</kbd> uncheck all &nbsp; <kbd>N</kbd> new note &nbsp; <kbd>?</kbd> toggle this panel</div>
+        <div class="settings-divider"></div>
+        <div class="settings-row">
+          <button type="button" class="bulk-btn" id="resetStreakBtn">Reset streak &amp; activity history</button>
+          <button type="button" class="bulk-btn" id="clearNotesBtn">Clear all sticky notes</button>
+        </div>
+        <span class="list-status" id="settingsDataStatus"></span>
+      </div>
+
     </header>
     <div class="id-search-toggle-row">
       <button type="button" class="bulk-btn" id="idSearchToggleBtn">🔍 Search by badge or game ID instead (this will take a while...)</button>
@@ -51,6 +117,7 @@
         <option value="hardest">Hardest to Easiest</option>
         <option value="most">Most badges to Least badges</option>
         <option value="least">Least badges to Most badges</option>
+        <option value="custom">Custom order (drag to reorder)</option>
       </select>
       <span class="list-status" id="homeSortStatus"></span>
     </div>
@@ -60,6 +127,21 @@
       <input type="text" id="difficultyFilterInput" class="difficulty-filter-input" placeholder="e.g. hard" autocomplete="off" />
     </div>
 
+    <div class="collections-row">
+      <label for="collectionFilterSelect" class="sort-label">Collection</label>
+      <select id="collectionFilterSelect" class="sort-select">
+        <option value="">All badgers</option>
+      </select>
+      <button type="button" class="bulk-btn" id="manageCollectionsBtn">Manage collections</button>
+    </div>
+    <div class="collections-manage-panel" id="collectionsManagePanel" style="display:none;">
+      <div class="id-search-actions">
+        <input type="text" id="newCollectionName" class="id-search-input" placeholder="New collection name" autocomplete="off" style="flex:1" />
+        <button type="button" class="bulk-btn" id="addCollectionBtn">Add</button>
+      </div>
+      <div id="collectionsList" class="collections-list"></div>
+    </div>
+
     <div class="search-wrap">
       <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
@@ -67,6 +149,10 @@
       </svg>
       <input type="text" id="homeSearch" placeholder="Search by badger name or game ID" autocomplete="off" />
       <button type="button" class="search-clear" id="searchClearBtn" aria-label="Clear search">✕</button>
+    </div>
+    <div id="recentBadgersSection" class="recent-section" style="display:none;">
+      <div class="recent-heading">Recently opened</div>
+      <div id="recentBadgersList" class="recent-list"></div>
     </div>
     <div id="badgerList"></div>
     <div class="empty" id="homeEmpty" style="display:none;">No badger matches that search.</div>
@@ -78,6 +164,10 @@
     <header class="detail-header">
       <h2 class="badger-name" id="detailName"></h2>
       <div class="difficulty-label" id="detailDifficulty"></div>
+      <div class="tags-row" id="detailTagsRow">
+        <div class="tag-chips" id="detailTagChips"></div>
+        <input type="text" id="detailTagInput" class="difficulty-filter-input tag-input" placeholder="Add tag + Enter" autocomplete="off" />
+      </div>
       <div class="game-link-line" id="detailGameLink"></div>
       <div class="stat-line">
         <span class="stat-count" id="statCount">0 / 0</span>
@@ -85,6 +175,7 @@
         <span class="stat-label">collected</span>
       </div>
       <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+      <div class="time-estimate" id="timeEstimate"></div>
       <div class="milestones" id="milestones"></div>
       <div class="list-status-row">
         <div id="listStatus" class="list-status"></div>
@@ -94,7 +185,9 @@
 
     <div class="controls-row">
       <input type="text" id="badgeSearch" placeholder="Filter by badge or game name" />
+      <input type="text" id="badgeTypeFilter" class="badge-type-filter" placeholder="Filter by type" />
       <label><input type="checkbox" id="hideDoneBox"> Hide collected</label>
+      <label><input type="checkbox" id="favBadgesOnlyBox"> Favorites only</label>
       <button type="button" class="bulk-btn" id="checkAllBtn">Check all</button>
       <button type="button" class="bulk-btn" id="uncheckAllBtn">Uncheck all</button>
     </div>
@@ -102,7 +195,20 @@
     <div id="list"></div>
   </div>
 
+  <!-- ===================== STATS VIEW ===================== -->
+  <div id="statsView" style="display:none;">
+    <button class="back-btn" id="statsBackBtn">← All badgers</button>
+    <header class="detail-header">
+      <h2 class="badger-name">Stats Dashboard</h2>
+    </header>
+    <div id="statsContent" class="stats-content"></div>
+  </div>
+
 </div>
+
+<div id="notesLayer" aria-hidden="true"></div>
+<div id="confettiLayer" aria-hidden="true"></div>
+<button type="button" class="add-note-btn" id="addNoteBtn" title="Add a sticky note">+ Note</button>
 
 <script>
 // ==================================================================================
