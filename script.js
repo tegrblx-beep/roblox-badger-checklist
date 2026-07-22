@@ -1475,6 +1475,31 @@ var BADGERS = [
     return null;
   }
 
+  // Fast local search across every badger's badge list, matching badge name
+  // or game name as a substring. No per-badge network calls needed (unlike
+  // the ID/game-ID search below) - getEffectiveBadges already has sheet data
+  // cached or fetched at the badger level, so this just filters what's
+  // already in memory. Returns which specific badges matched in each badger,
+  // not just which badger, so you can see exactly what you were looking for.
+  async function findBadgersByBadgeName(query, onProgress, shouldCancel){
+    var q = (query || '').trim().toLowerCase();
+    if (!q) return [];
+    var matches = [];
+    for (var i = 0; i < BADGERS.length; i++){
+      if (shouldCancel && shouldCancel()) break;
+      var badger = BADGERS[i];
+      if (onProgress) onProgress(i + 1, BADGERS.length, badger.name, '');
+      var effective = await getEffectiveBadges(badger);
+      var badgeList = effective.badges || [];
+      var hits = badgeList.filter(function(b){
+        return ((b.name || '').toLowerCase().indexOf(q) !== -1) ||
+               ((b.game || '').toLowerCase().indexOf(q) !== -1);
+      });
+      if (hits.length) matches.push({ badger: badger, badges: hits });
+    }
+    return matches;
+  }
+
   // Checks every badger's badge list (sheet + manual) for a badge matching
   // the given badge ID or game ID. Badge ID matching is free (already in
   // the data). Game ID matching resolves one badge at a time and stops as
@@ -2780,20 +2805,39 @@ var BADGERS = [
     if (e.key === 'ArrowDown'){ e.preventDefault(); var fc = document.querySelector('.badger-card'); if (fc) fc.focus(); }
   });
 
-  function renderIdSearchResults(matches){
+  function renderIdSearchResults(matches, showMatchedBadges){
     var el = document.getElementById('idSearchResults');
     el.innerHTML = '';
     if (matches.length === 0){
-      el.textContent = 'No badgers found with a badge matching that ID.';
+      el.textContent = 'No matches found.';
       return;
     }
-    matches.forEach(function(badger){
+    matches.forEach(function(entry){
+      var badger = showMatchedBadges ? entry.badger : entry;
+      var wrap = document.createElement('div');
+      wrap.className = 'id-search-result';
+
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'badger-card';
       btn.textContent = badger.name;
       btn.addEventListener('click', function(){ openBadger(badger); });
-      el.appendChild(btn);
+      wrap.appendChild(btn);
+
+      if (showMatchedBadges && entry.badges && entry.badges.length){
+        var matchList = document.createElement('div');
+        matchList.className = 'id-search-matched-badges';
+        var label = document.createElement('span');
+        label.className = 'id-search-matched-label';
+        label.textContent = 'Matched: ';
+        matchList.appendChild(label);
+        matchList.appendChild(document.createTextNode(
+          entry.badges.slice(0, 6).map(function(b){ return b.name || '(unnamed badge)'; }).join(', ') +
+          (entry.badges.length > 6 ? ', +' + (entry.badges.length - 6) + ' more' : '')
+        ));
+        wrap.appendChild(matchList);
+      }
+      el.appendChild(wrap);
     });
   }
 
@@ -2815,19 +2859,25 @@ var BADGERS = [
     var query = input.value.trim();
 
     if (!query){
-      statusEl.textContent = 'Enter a badge ID or game ID first.';
+      statusEl.textContent = 'Enter a badge/game name or ID first.';
       statusEl.className = 'list-status err';
       return;
     }
 
+    // A pure number is treated as an ID (needs the slower per-badge/game
+    // lookup below); anything else is a fast local name search.
+    var isIdQuery = /^\d+$/.test(query);
+
     idSearchCancelled = false;
     btn.disabled = true;
-    cancelBtn.style.display = 'inline-flex';
+    cancelBtn.style.display = isIdQuery ? 'inline-flex' : 'none';
     resultsEl.innerHTML = '';
     statusEl.className = 'list-status';
-    statusEl.textContent = 'Starting search\u2026';
+    statusEl.textContent = isIdQuery ? 'Starting search\u2026' : 'Searching every badger\u2026';
 
-    findBadgersByBadgeOrGameId(
+    var searchFn = isIdQuery ? findBadgersByBadgeOrGameId : findBadgersByBadgeName;
+
+    searchFn(
       query,
       function(i, total, name, detail){
         statusEl.textContent = 'Checking badger ' + i + ' of ' + total + ' (' + name + ')' + (detail || '') + '\u2026';
@@ -2835,7 +2885,7 @@ var BADGERS = [
       function(){ return idSearchCancelled; }
     ).then(function(matches){
       statusEl.textContent = (idSearchCancelled ? 'Search stopped early. ' : '') + matches.length + ' badger(s) found.';
-      renderIdSearchResults(matches);
+      renderIdSearchResults(matches, !isIdQuery);
     }).catch(function(e){
       statusEl.textContent = 'Search failed: ' + e.message;
       statusEl.className = 'list-status err';
