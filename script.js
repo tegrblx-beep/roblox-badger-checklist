@@ -1158,6 +1158,21 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "the-badgers-garden",
+    name: "The Badger's Garden",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/17175467488/The-Badgers-Garden",
+    milestones: [
+      { name: '°10 BADGES°', target: 10 },
+      { name: '°°°20 BADGES°°°', target: 20 },
+      { name: '[30 BADGES]:', target: 30 },
+      { name: '[[[WINNER]]]:', target: 40 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=336986757#gid=336986757",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
