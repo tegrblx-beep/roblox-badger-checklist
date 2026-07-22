@@ -1173,6 +1173,20 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "stabs-badge-hunt-v3",
+    name: "Stab's Badge Hunt v3",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/18321371573/Stabs-Badge-Hunt-v3",
+    milestones: [
+      { name: '10 Badges Completed', target: 10 },
+      { name: '20 Badges Completed', target: 20 },
+      { name: 'Badge Enthusiast', target: 23 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=83818101#gid=83818101",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
