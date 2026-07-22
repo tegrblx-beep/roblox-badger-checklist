@@ -2276,13 +2276,23 @@ var BADGERS = [
     });
   });
 
-  function gameKeyForBadge(badge){
-    return ((badge.game || '').trim().toLowerCase()) || '__unknown__';
+  // Strips a trailing count annotation like " (15)" from a game name. Sheet
+  // data sometimes has the same game listed as both "Find the Barbaras" and
+  // "Find the Barbaras (15)" across different rows (e.g. a tier/count note
+  // that was typed inconsistently) - without this, those get treated as two
+  // different games and split into separate groups instead of one.
+  function normalizeGameLabel(name){
+    return (name || '').trim().replace(/\s*\(\d+\)\s*$/, '').trim();
   }
-
+  function gameKeyForBadge(badge){
+    var raw = (badge.game || '').trim();
+    if (!raw) return '__unknown__';
+    return (normalizeGameLabel(raw) || raw).toLowerCase();
+  }
   function gameLabelForKey(key, sampleBadge){
     if (key === '__unknown__') return 'Unknown game';
-    return (sampleBadge && sampleBadge.game) ? sampleBadge.game.trim() : key;
+    var raw = (sampleBadge && sampleBadge.game) ? sampleBadge.game.trim() : key;
+    return normalizeGameLabel(raw) || raw;
   }
 
   function createFavButton(isFav, label, onToggle){
@@ -2876,6 +2886,7 @@ var BADGERS = [
 
     document.getElementById('homeView').style.display = 'none';
     document.getElementById('detailView').style.display = 'block';
+    window.scrollTo(0, 0);
     renderStickyNotes();
 
     var nameRow = document.getElementById('detailNameRow');
@@ -2999,6 +3010,7 @@ var BADGERS = [
     currentBadger = null;
     document.getElementById('detailView').style.display = 'none';
     document.getElementById('homeView').style.display = 'block';
+    window.scrollTo(0, 0);
     renderStickyNotes();
     renderHome(document.getElementById('homeSearch').value);
   });
@@ -3710,11 +3722,13 @@ var BADGERS = [
   document.getElementById('statsBtn').addEventListener('click', function(){
     document.getElementById('homeView').style.display = 'none';
     document.getElementById('statsView').style.display = 'block';
+    window.scrollTo(0, 0);
     renderStatsDashboard();
   });
   document.getElementById('statsBackBtn').addEventListener('click', function(){
     document.getElementById('statsView').style.display = 'none';
     document.getElementById('homeView').style.display = 'block';
+    window.scrollTo(0, 0);
   });
 
   // ---- Keyboard shortcuts ----
