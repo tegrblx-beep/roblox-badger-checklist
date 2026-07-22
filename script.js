@@ -1767,7 +1767,7 @@ var BADGERS = [
   var currentSettings = {
     theme: 'dark', accent: DEFAULT_ACCENT, shortcuts: true,
     gradientFrom: DEFAULT_GRADIENT_FROM, gradientTo: DEFAULT_GRADIENT_TO, gradientAngle: DEFAULT_GRADIENT_ANGLE,
-    titleColor: '', badgerTitleColor: ''
+    titleColor: '', badgerTitleColor: '', panelColor: ''
   };
 
   function hexToRgb(hex){
@@ -1785,6 +1785,13 @@ var BADGERS = [
     if (!c) return hex;
     factor = factor == null ? 0.32 : factor;
     return rgbToHex(c.r*factor, c.g*factor, c.b*factor);
+  }
+  // Lightened version of a color, used to derive --panel-2 from a custom --panel
+  function lightenColor(hex, amount){
+    var c = hexToRgb(hex);
+    if (!c) return hex;
+    amount = amount == null ? 22 : amount;
+    return rgbToHex(c.r + amount, c.g + amount, c.b + amount);
   }
 
   function applySettings(){
@@ -1812,6 +1819,14 @@ var BADGERS = [
     else document.documentElement.style.removeProperty('--title-color');
     if (currentSettings.badgerTitleColor) document.documentElement.style.setProperty('--badger-title-color', currentSettings.badgerTitleColor);
     else document.documentElement.style.removeProperty('--badger-title-color');
+
+    if (currentSettings.panelColor){
+      document.documentElement.style.setProperty('--panel', currentSettings.panelColor);
+      document.documentElement.style.setProperty('--panel-2', lightenColor(currentSettings.panelColor));
+    } else {
+      document.documentElement.style.removeProperty('--panel');
+      document.documentElement.style.removeProperty('--panel-2');
+    }
   }
 
   async function loadSettings(){
@@ -1826,13 +1841,14 @@ var BADGERS = [
         gradientTo: parsed.gradientTo || DEFAULT_GRADIENT_TO,
         gradientAngle: parsed.gradientAngle || DEFAULT_GRADIENT_ANGLE,
         titleColor: parsed.titleColor || '',
-        badgerTitleColor: parsed.badgerTitleColor || ''
+        badgerTitleColor: parsed.badgerTitleColor || '',
+        panelColor: parsed.panelColor || ''
       };
     } catch(e){
       currentSettings = {
         theme: 'dark', accent: DEFAULT_ACCENT, shortcuts: true,
         gradientFrom: DEFAULT_GRADIENT_FROM, gradientTo: DEFAULT_GRADIENT_TO, gradientAngle: DEFAULT_GRADIENT_ANGLE,
-        titleColor: '', badgerTitleColor: ''
+        titleColor: '', badgerTitleColor: '', panelColor: ''
       };
     }
     applySettings();
@@ -2128,6 +2144,8 @@ var BADGERS = [
       var themeTextA = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#ECE9E2';
       document.getElementById('titleColorInput').value = currentSettings.titleColor || themeTextA;
       document.getElementById('badgerTitleColorInput').value = currentSettings.badgerTitleColor || themeTextA;
+      var themePanelA = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#1B1E27';
+      document.getElementById('panelColorInput').value = currentSettings.panelColor || themePanelA;
     }
     populateCollectionFilterOptions();
     if (currentBadger){
@@ -3457,6 +3475,8 @@ var BADGERS = [
       if (!currentSettings.titleColor) document.getElementById('titleColorInput').value = themeTextOnSwitch;
       if (!currentSettings.badgerTitleColor) document.getElementById('badgerTitleColorInput').value = themeTextOnSwitch;
     }
+    var themePanelOnSwitch = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim();
+    if (themePanelOnSwitch && !currentSettings.panelColor) document.getElementById('panelColorInput').value = themePanelOnSwitch;
   });
   document.getElementById('gradientFromInput').addEventListener('input', function(){
     currentSettings.gradientFrom = this.value;
@@ -3478,6 +3498,16 @@ var BADGERS = [
     currentSettings.accent = DEFAULT_ACCENT;
     document.getElementById('accentColorInput').value = DEFAULT_ACCENT;
     saveSettings();
+  });
+  document.getElementById('panelColorInput').addEventListener('input', function(){
+    currentSettings.panelColor = this.value;
+    saveSettings();
+  });
+  document.getElementById('resetPanelColorBtn').addEventListener('click', function(){
+    currentSettings.panelColor = '';
+    saveSettings();
+    var themePanel = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim();
+    if (themePanel) document.getElementById('panelColorInput').value = themePanel;
   });
   document.getElementById('titleColorInput').addEventListener('input', function(){
     currentSettings.titleColor = this.value;
@@ -3693,6 +3723,8 @@ var BADGERS = [
     var themeTextB = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#ECE9E2';
     document.getElementById('titleColorInput').value = currentSettings.titleColor || themeTextB;
     document.getElementById('badgerTitleColorInput').value = currentSettings.badgerTitleColor || themeTextB;
+    var themePanelB = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#1B1E27';
+    document.getElementById('panelColorInput').value = currentSettings.panelColor || themePanelB;
     renderStreak();
     populateCollectionFilterOptions();
     var initialSlug = (location.hash || '').replace(/^#badger=/, '');
