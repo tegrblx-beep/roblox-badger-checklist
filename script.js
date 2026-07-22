@@ -22,17 +22,17 @@ var BADGERS = [
     ],
     sheetUrl: "",
     badges: [
-    {link: "https://www.roblox.com/badges/2124472953/You-have-driven-1-000-miles",},
-    {link: "https://www.roblox.com/badges/2125206535/Witness-The-Nuke"},
-    {link: "https://www.roblox.com/badges/2273926518094043/Hidden-Badge-3"},
-    {link: "https://www.roblox.com/badges/2153303182/Just-Desserts"},
-    {link: "https://www.roblox.com/badges/2125766083/200-Draws-Completed"},
-    {link: "https://www.roblox.com/badges/2130910016/Balloon-Fridge"},
-    {link: "https://www.roblox.com/badges/2144905124/IMPRESSIVE"},
-    {link: "https://www.roblox.com/badges/2124439928/Shipwreck-Bay"},
-    {link: "https://www.roblox.com/badges/2124871492/First-Win"},
-    {link: "https://www.roblox.com/badges/2124913147/No-u"},
-    {link: "https://www.roblox.com/badges/2128202645/You-toppled-the-tower"},
+      {link: "https://www.roblox.com/badges/2124472953/You-have-driven-1-000-miles",},
+      {link: "https://www.roblox.com/badges/2125206535/Witness-The-Nuke"},
+      {link: "https://www.roblox.com/badges/2273926518094043/Hidden-Badge-3"},
+      {link: "https://www.roblox.com/badges/2153303182/Just-Desserts"},
+      {link: "https://www.roblox.com/badges/2125766083/200-Draws-Completed"},
+      {link: "https://www.roblox.com/badges/2130910016/Balloon-Fridge"},
+      {link: "https://www.roblox.com/badges/2144905124/IMPRESSIVE"},
+      {link: "https://www.roblox.com/badges/2124439928/Shipwreck-Bay"},
+      {link: "https://www.roblox.com/badges/2124871492/First-Win"},
+      {link: "https://www.roblox.com/badges/2124913147/No-u"},
+      {link: "https://www.roblox.com/badges/2128202645/You-toppled-the-tower"},
       {link: "https://www.roblox.com/badges/2124765933/Level-20"},
       {link: "https://www.roblox.com/badges/2151997834/You-Pushed-the-Button"},
       {link: "https://www.roblox.com/badges/2129793326/Final-Blow"},
@@ -1143,6 +1143,18 @@ var BADGERS = [
       { name: 'Reached For the Skies!', target: 15 },
     ],
     sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=167075227#gid=167075227",
+    badges: [
+    ]
+  },
+  {
+    id: "30-random-badges-badger",
+    name: "30 Random Badges Badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/18386467340/30-Random-Badges-Badger",
+    milestones: [
+      { name: 'Beat All Random Badges', target: 30 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1864135397#gid=1864135397",
     badges: [
     ]
   },
