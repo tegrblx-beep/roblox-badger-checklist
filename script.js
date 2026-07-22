@@ -1187,6 +1187,18 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "ether",
+    name: "Puzzle Difficulty Chart (ether)",
+    difficulty: "Intense",
+    gameLink: "https://www.roblox.com/games/8568665606/Puzzle-Difficulty-Chart",
+    milestones: [
+      { name: 'ether.badge', target: 56 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=110317936#gid=110317936",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
