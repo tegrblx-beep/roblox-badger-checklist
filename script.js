@@ -1218,10 +1218,22 @@ var BADGERS = [
     difficulty: "Hard",
     gameLink: "https://www.roblox.com/games/17762010787/A-Typical-Badger",
     milestones: [
-      { name: 'TJobbing Builder 🔨', target: 22 },
+      { name: 'Jobbing Builder 🔨', target: 22 },
       { name: 'Sparky 🔧', target: 44 },
     ],
     sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=693687970#gid=693687970",
+    badges: [
+    ]
+  },
+  {
+    id: "ohio-badger",
+    name: "OHIO BADGER",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/18542602307/OHIO-BADGER",
+    milestones: [
+      { name: 'GET ALL BADGES except one', target: 40 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=47104885#gid=47104885",
     badges: [
     ]
   },
