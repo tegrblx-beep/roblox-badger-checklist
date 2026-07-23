@@ -1279,6 +1279,18 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "hyper-badger-sequel",
+    name: "hyper's badger thingy's sequel with 100 badges",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/18216748452/hypers-badger-things-sequel-with-100-badges",
+    milestones: [
+      { name: 'you done did it', target: 40 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1275352502#gid=1275352502",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
