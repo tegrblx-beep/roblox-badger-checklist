@@ -1267,6 +1267,18 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "the-fnaf-coop-badger",
+    name: "The FNaF Coop Badger",
+    difficulty: "Difficult",
+    gameLink: "https://www.roblox.com/games/18685439638/The-FNaF-COOP-Badger",
+    milestones: [
+      { name: 'you done did it', target: 40 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1006767408#gid=1006767408",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
@@ -1340,19 +1352,36 @@ var BADGERS = [
   }
 
   // Two badges can end up with the same base id if the data has a typo -
-  // a duplicated or missing link, say. Without disambiguation that would
-  // make them share one progress/favorite key, so checking or favoriting
-  // one would silently affect the other(s) too. Give any duplicates past
-  // the first a distinguishing suffix based on their position.
+  // the same link copy-pasted onto two different badge rows, say. Without
+  // disambiguation they'd share one progress/favorite key, so checking or
+  // favoriting one would silently affect the other too.
+  //
+  // This used to disambiguate using each badge's *position* in
+  // currentBadges. That's the wrong thing to key off of: currentBadges
+  // gets rebuilt into a brand-new array of brand-new badge objects several
+  // times for any sheet-driven badger (once from cache, again once the
+  // live sheet fetch resolves, again after Roblox enrichment runs), and a
+  // badge's position among its duplicates isn't guaranteed to survive
+  // that. If it shifted, the checkmark you just placed could silently
+  // land on a different badge after the next background refresh - the
+  // "check one, several others react" bug.
+  //
+  // _srcIndex (stamped once, either from the badge's row number in the
+  // sheet or its position in a static code-defined `badges: [...]` array)
+  // is stable across every one of those rebuilds, because it describes
+  // where the badge lives in the *source data*, not in whatever JS array
+  // currently holds it.
   function disambiguatedBadgeId(badge){
     var base = baseBadgeStableId(badge);
-    var idx = currentBadges.indexOf(badge);
-    if (idx === -1) return base;
-    var dupIdx = 0;
-    for (var i = 0; i < idx; i++){
-      if (baseBadgeStableId(currentBadges[i]) === base) dupIdx++;
+    if (badge._srcIndex === undefined) return base;
+    var dupCount = 0;
+    for (var i = 0; i < currentBadges.length; i++){
+      var other = currentBadges[i];
+      if (other === badge) continue;
+      if (other._srcIndex === undefined) continue;
+      if (baseBadgeStableId(other) === base && other._srcIndex < badge._srcIndex) dupCount++;
     }
-    return dupIdx > 0 ? (base + '#' + dupIdx) : base;
+    return dupCount > 0 ? (base + '#' + dupCount) : base;
   }
 
   function badgeKey(badgerId, badge){
@@ -1415,7 +1444,15 @@ var BADGERS = [
         gameColor: gameColorCol !== -1 ? (row[gameColorCol]||'').trim() : '',
         descriptionColor: descColorCol !== -1 ? (row[descColorCol]||'').trim() : '',
         typeColor: typeColorCol !== -1 ? (row[typeColorCol]||'').trim() : '',
-        bgColor: bgColorCol !== -1 ? (row[bgColorCol]||'').trim() : ''
+        bgColor: bgColorCol !== -1 ? (row[bgColorCol]||'').trim() : '',
+        // The row's position in the actual spreadsheet. Re-parsing the same
+        // sheet (cache vs. a fresh fetch) reproduces this deterministically,
+        // unlike the row's position in whatever JS array happens to be
+        // holding it at the moment - which gets rebuilt from scratch
+        // several times per badger and isn't guaranteed to land in the same
+        // order twice. Used only to tell apart two rows that share a link
+        // by mistake (see disambiguatedBadgeId below).
+        _srcIndex: r2
       });
     }
     return out;
@@ -1476,8 +1513,20 @@ var BADGERS = [
   // a promise the caller can await later to pick up anything that changed).
   // Only on the very first-ever load for a badger, with nothing cached yet,
   // do we actually make the caller wait on the network.
+  // Static, code-defined `badges: [...]` arrays are never rebuilt or
+  // reordered at runtime, so a badge's position in its own badger's array
+  // is already a stable, immutable identifier - this just records it in
+  // the same _srcIndex field the sheet parser uses, so both sources can be
+  // disambiguated the same way.
+  function stampSrcIndices(arr){
+    (arr || []).forEach(function(b, i){
+      if (b._srcIndex === undefined) b._srcIndex = i;
+    });
+    return arr;
+  }
+
   async function getEffectiveBadges(badger){
-    var manual = badger.badges || [];
+    var manual = stampSrcIndices(badger.badges || []);
     if (!badger.sheetUrl) return { badges: manual, status: '', isErr: false };
 
     var cachedRaw = await storageGet('sheetcache-' + badger.id);
@@ -1713,7 +1762,18 @@ var BADGERS = [
           var fetchedGame = (data.awardingUniverse && data.awardingUniverse.name) || '';
         var fetchedDesc = data.description || '';
           if (!b.name && fetchedName){ b.name = fetchedName; changed = true; }
-          if (!b.game && fetchedGame){ b.game = fetchedGame; changed = true; }
+          if (!b.game && fetchedGame){
+    console.log(
+        "Setting game for",
+        id,
+        "from",
+        b.game,
+        "to",
+        fetchedGame
+    );
+    b.game = fetchedGame;
+    changed = true;
+}
           if (!b.description && fetchedDesc){ b.description = fetchedDesc; changed = true; }
           if (changed){
             // Only cache what THIS fetch actually returned - not whatever
@@ -2414,7 +2474,10 @@ var BADGERS = [
   // that was typed inconsistently) - without this, those get treated as two
   // different games and split into separate groups instead of one.
   function normalizeGameLabel(name){
-    return (name || '').trim().replace(/\s*\(\d+\)\s*$/, '').trim();
+  return (name || '')
+    .trim()
+    .replace(/\s*\([^)]*\)\s*$/, '')
+    .trim();
   }
   function gameKeyForBadge(badge){
     var raw = (badge.game || '').trim();
@@ -3093,7 +3156,11 @@ var BADGERS = [
 
     // Always start from the live `badges` config - never cached, so code
     // edits show up immediately every time.
-    currentBadges = badger.badges || [];
+    currentBadges = stampSrcIndices(badger.badges || []);
+    console.log(
+  currentBadges.filter(b => (b.link || "").includes("219998524"))
+);
+console.log(currentBadges.slice(0, 10));
     setListStatus(badger.sheetUrl ? 'Loading checklist from sheet…' : '', false);
     renderMilestones();
     renderList();
