@@ -70,7 +70,7 @@
 
   /* ---------- Home / search view ---------- */
   #homeView header{ padding: 3rem 0 1.5rem; }
-  #homeView h1{ font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 0.02em; margin: 0 0 8px; line-height: 1; color: var(--title-color, var(--text)); }
+  #homeView h1{ font-family: var(--title-font, 'Bebas Neue'), sans-serif; font-size: 52px; letter-spacing: 0.02em; margin: 0 0 8px; line-height: 1; color: var(--title-color, var(--text)); }
   #homeView .sub{ color: var(--text-dim); font-size: 15px; margin: 0 0 1.5rem; max-width: 520px; line-height: 1.5; }
 
   .search-wrap{ position: relative; margin-bottom: 20px; }
@@ -120,7 +120,7 @@
   .badger-card.badger-card-done{ border-color: var(--gold-dim); opacity: 0.7; }
   .badger-seal{ flex-shrink: 0; margin: 0; }
   .badger-card-left{ display:flex; flex-direction:column; gap:4px; flex: 1; min-width: 0; }
-  .badger-card-name{ font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.01em; line-height:1; color: var(--badger-title-color, var(--text)); }
+  .badger-card-name{ font-family: var(--title-font, 'Bebas Neue'), sans-serif; font-size: 24px; letter-spacing: 0.01em; line-height:1; color: var(--badger-title-color, var(--text)); }
   .badger-card-diff{ font-family:'IBM Plex Mono', monospace; font-size: 12px; font-weight:600; letter-spacing: 0.04em; text-transform: uppercase; }
   .badger-card-right{ text-align:right; display:flex; flex-direction:column; gap:4px; flex-shrink:0; }
   .badger-card-count{ font-family:'IBM Plex Mono', monospace; font-size: 15px; color: var(--text); }
@@ -153,7 +153,7 @@
   .back-btn:hover{ color: var(--gold); }
 
   header.detail-header{ padding: 1rem 0 1.5rem; }
-  .badger-name{ font-family: 'Bebas Neue', sans-serif; font-size: 56px; letter-spacing: 0.02em; line-height: 1; margin: 0 0 6px; color: var(--badger-title-color, var(--text)); }
+  .badger-name{ font-family: var(--title-font, 'Bebas Neue'), sans-serif; font-size: 56px; letter-spacing: 0.02em; line-height: 1; margin: 0 0 6px; color: var(--badger-title-color, var(--text)); }
   .difficulty-label{ font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.75rem; }
   .game-link-line{ margin-bottom: 1rem; }
   .game-link-line a{ color: var(--text-faint); font-size: 13px; }
@@ -345,7 +345,7 @@
     border-radius: 10px; padding: 14px 16px;
   }
   .streak-line{ display:flex; align-items:baseline; gap: 8px; }
-  .streak-line .streak-num{ font-family:'Bebas Neue', sans-serif; font-size: 26px; color: var(--gold); line-height:1; }
+  .streak-line .streak-num{ font-family: var(--title-font, 'Bebas Neue'), sans-serif; font-size: 26px; color: var(--gold); line-height:1; }
   .streak-line .streak-label{ font-size: 12px; color: var(--text-dim); }
   .streak-line .streak-longest{ font-size: 12px; color: var(--text-faint); margin-left: auto; }
   .streak-caption{ font-size: 11px; color: var(--text-faint); margin-top: 8px; line-height: 1.5; }
@@ -408,7 +408,7 @@
   .stats-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
   .stats-card{ background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
   .stats-card-label{ font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; font-family: 'IBM Plex Mono', monospace; margin-bottom: 6px; }
-  .stats-card-value{ font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: var(--gold); line-height: 1; }
+  .stats-card-value{ font-family: var(--title-font, 'Bebas Neue'), sans-serif; font-size: 30px; color: var(--gold); line-height: 1; }
   .stats-card-sub{ font-size: 12px; color: var(--text-dim); margin-top: 4px; }
   .stats-section-title{ font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight:600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); margin: 20px 0 10px; }
   .stats-bar-row{ display:flex; align-items:center; gap: 10px; margin-bottom: 8px; }
@@ -425,4 +425,39 @@
   }
   @media (prefers-reduced-motion: reduce){
     .confetti-piece{ animation: none; display: none; }
+  }
+
+  /* ---------- Undo toast ---------- */
+  #toastLayer{
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    z-index: 9700; display:flex; flex-direction:column; gap: 8px; align-items:center;
+    pointer-events: none;
+  }
+  .toast{
+    pointer-events: auto; display:flex; align-items:center; gap: 14px;
+    background: var(--panel); border: 1px solid var(--border-strong); border-radius: 10px;
+    padding: 12px 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    animation: toast-in 0.2s ease; max-width: 90vw;
+  }
+  .toast-msg{ font-size: 13px; color: var(--text); white-space: nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .toast-undo-btn{
+    background: none; border: 1px solid var(--gold-dim); color: var(--gold);
+    border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; flex-shrink: 0; white-space: nowrap;
+  }
+  .toast-undo-btn:hover{ background: var(--gold-dim); }
+  @keyframes toast-in{ from{ opacity:0; transform: translateY(8px); } to{ opacity:1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .toast{ animation: none; } }
+
+  /* ---------- Custom local badgers ---------- */
+  .custom-badger-controls{ margin: 0 0 1rem; }
+  .custom-badger-controls .settings-hint{ display:flex; align-items:center; gap: 10px; flex-wrap: wrap; }
+  .custom-badge-delete-btn{
+    background:none; border:none; color: var(--text-faint); cursor:pointer; font-size: 14px;
+    padding: 2px 4px; flex-shrink: 0;
+  }
+  .custom-badge-delete-btn:hover{ color: var(--coral); }
+  .badger-card-custom-tag{
+    font-size: 10px; font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--gold); border: 1px solid var(--gold-dim); border-radius: 4px; padding: 1px 6px; margin-left: 6px;
   }

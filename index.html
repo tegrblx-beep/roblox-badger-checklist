@@ -7,7 +7,7 @@
 <title>Badger Checklist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&family=Oswald:wght@600&family=Archivo+Black&family=Righteous&family=Permanent+Marker&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <link rel="stylesheet" href="style.css">
 <script src="script.js" defer></script>
@@ -35,7 +35,28 @@
         <input type="file" id="importDataInput" accept=".json,application/json" hidden />
         <button type="button" class="bulk-btn" id="statsBtn">📊 Stats</button>
         <button type="button" class="bulk-btn" id="settingsBtn">⚙ Settings</button>
+        <button type="button" class="bulk-btn" id="addBadgerBtn">+ Add badger</button>
         <span class="list-status" id="dataToolsStatus"></span>
+      </div>
+      <div class="collections-manage-panel" id="addBadgerPanel" style="display:none;">
+        <div class="settings-hint">Adds a badger only on this device - it won't affect anyone else using this checklist.</div>
+        <div class="settings-row">
+          <label for="newBadgerName" class="sort-label">Name</label>
+          <input type="text" id="newBadgerName" class="id-search-input" placeholder="Badger name" autocomplete="off" style="flex:1" />
+        </div>
+        <div class="settings-row">
+          <label for="newBadgerDifficulty" class="sort-label">Difficulty</label>
+          <input type="text" id="newBadgerDifficulty" class="id-search-input" placeholder="e.g. Hard (optional)" autocomplete="off" style="flex:1" />
+        </div>
+        <div class="settings-row">
+          <label for="newBadgerGameLink" class="sort-label">Game link</label>
+          <input type="text" id="newBadgerGameLink" class="id-search-input" placeholder="https://www.roblox.com/games/... (optional)" autocomplete="off" style="flex:1" />
+        </div>
+        <div class="id-search-actions">
+          <button type="button" class="bulk-btn" id="createBadgerBtn">Create badger</button>
+          <button type="button" class="bulk-btn" id="cancelBadgerBtn">Cancel</button>
+        </div>
+        <span class="list-status" id="addBadgerStatus"></span>
       </div>
       <div class="settings-panel" id="settingsPanel" style="display:none;">
         <div class="settings-row">
@@ -83,6 +104,17 @@
           <label for="badgerTitleColorInput" class="sort-label">Badger titles</label>
           <input type="color" id="badgerTitleColorInput" value="#ECE9E2" />
           <button type="button" class="bulk-btn" id="resetBadgerTitleColorBtn">Reset</button>
+        </div>
+        <div class="settings-row">
+          <label for="titleFontSelect" class="sort-label">Title font</label>
+          <select id="titleFontSelect" class="sort-select">
+            <option value="Bebas Neue">Bebas Neue (default)</option>
+            <option value="Anton">Anton</option>
+            <option value="Oswald">Oswald</option>
+            <option value="Archivo Black">Archivo Black</option>
+            <option value="Righteous">Righteous</option>
+            <option value="Permanent Marker">Permanent Marker</option>
+          </select>
         </div>
         <div class="settings-row">
           <label><input type="checkbox" id="shortcutsToggle" checked> Enable keyboard shortcuts</label>
@@ -188,6 +220,12 @@
       </div>
     </header>
 
+    <div class="custom-badger-controls" id="customBadgerControls" style="display:none;">
+      <div class="settings-hint">This badger only exists on this device.
+        <button type="button" class="bulk-btn" id="deleteBadgerBtn">Delete this badger</button>
+      </div>
+    </div>
+
     <div class="controls-row">
       <input type="text" id="badgeSearch" placeholder="Filter by badge or game name" />
       <input type="text" id="badgeTypeFilter" class="badge-type-filter" placeholder="Filter by type" />
@@ -195,6 +233,28 @@
       <label><input type="checkbox" id="favBadgesOnlyBox"> Favorites only</label>
       <button type="button" class="bulk-btn" id="checkAllBtn">Check all</button>
       <button type="button" class="bulk-btn" id="uncheckAllBtn">Uncheck all</button>
+    </div>
+
+    <div class="collections-manage-panel" id="addBadgeToBadgerPanel" style="display:none;">
+      <div class="settings-row">
+        <label for="newBadgeName" class="sort-label">Badge name</label>
+        <input type="text" id="newBadgeName" class="id-search-input" placeholder="Badge name" autocomplete="off" style="flex:1" />
+      </div>
+      <div class="settings-row">
+        <label for="newBadgeGame" class="sort-label">Game</label>
+        <input type="text" id="newBadgeGame" class="id-search-input" placeholder="Game it's grouped under (optional)" autocomplete="off" style="flex:1" />
+      </div>
+      <div class="settings-row">
+        <label for="newBadgeLink" class="sort-label">Link</label>
+        <input type="text" id="newBadgeLink" class="id-search-input" placeholder="Roblox badge link (optional)" autocomplete="off" style="flex:1" />
+      </div>
+      <div class="id-search-actions">
+        <button type="button" class="bulk-btn" id="createBadgeBtn">Add badge</button>
+      </div>
+      <span class="list-status" id="addBadgeStatus"></span>
+    </div>
+    <div class="id-search-toggle-row" id="addBadgeToggleRow" style="display:none;">
+      <button type="button" class="bulk-btn" id="addBadgeToggleBtn">+ Add badge to this badger</button>
     </div>
 
     <div id="list"></div>
@@ -213,6 +273,7 @@
 
 <div id="notesLayer" aria-hidden="true"></div>
 <div id="confettiLayer" aria-hidden="true"></div>
+<div id="toastLayer" aria-hidden="true"></div>
 <button type="button" class="add-note-btn" id="addNoteBtn" title="Add a sticky note">+ Note</button>
 
 <script>

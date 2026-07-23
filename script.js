@@ -1199,6 +1199,19 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "btot",
+    name: "Badger's Towers of Tutorial",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/99181135266193/Badgers-Towers-of-Tutorials",
+    milestones: [
+      { name: 'Toastified', target: 50 },
+      { name: 'Truly Toastified', target: 55 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=294714505#gid=294714505",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
@@ -1208,6 +1221,29 @@ var BADGERS = [
   var currentBadger = null;
   var currentBadges = [];
   var progressData = {}; // key -> boolean
+
+  // Badgers added locally via "+ Add badger" - stored only in this browser,
+  // never touching the hardcoded BADGERS list above. allBadgers() is what
+  // every part of the app should read from instead of BADGERS directly, so
+  // custom badgers show up everywhere the built-in ones do (search, sort,
+  // stats, collections, custom order...).
+  var customBadgers = [];
+  function allBadgers(){
+    return BADGERS.concat(customBadgers);
+  }
+  async function loadCustomBadgers(){
+    try {
+      var raw = await storageGet('custom-badgers');
+      customBadgers = raw ? JSON.parse(raw) : [];
+    } catch(e){ customBadgers = []; }
+  }
+  function saveCustomBadgers(){
+    storageSet('custom-badgers', JSON.stringify(customBadgers));
+  }
+  function isCustomBadger(badgerOrId){
+    var id = typeof badgerOrId === 'string' ? badgerOrId : (badgerOrId && badgerOrId.id);
+    return customBadgers.some(function(b){ return b.id === id; });
+  }
 
   function detectStorage(){
     if (typeof window.storage !== 'undefined' && window.storage && typeof window.storage.get === 'function') return 'artifact';
@@ -1485,12 +1521,18 @@ var BADGERS = [
     var q = (query || '').trim().toLowerCase();
     if (!q) return [];
     var matches = [];
-    for (var i = 0; i < BADGERS.length; i++){
+    for (var i = 0; i < allBadgers().length; i++){
       if (shouldCancel && shouldCancel()) break;
-      var badger = BADGERS[i];
-      if (onProgress) onProgress(i + 1, BADGERS.length, badger.name, '');
+      var badger = allBadgers()[i];
+      if (onProgress) onProgress(i + 1, allBadgers().length, badger.name, '');
       var effective = await getEffectiveBadges(badger);
       var badgeList = effective.badges || [];
+      // Manually-entered badges don't have name/game filled in until
+      // enriched from Roblox - normally that only happens once you open
+      // that specific badger. Without this, search would silently find
+      // nothing in any badger you hadn't already opened this session.
+      // Cached IDs resolve instantly; only genuinely new ones hit the network.
+      try { await enrichBadgesFromRoblox(badgeList, function(){}); } catch(e){}
       var hits = badgeList.filter(function(b){
         return ((b.name || '').toLowerCase().indexOf(q) !== -1) ||
                ((b.game || '').toLowerCase().indexOf(q) !== -1);
@@ -1512,10 +1554,10 @@ var BADGERS = [
     var matches = [];
     var cache = await getEnrichmentCache();
 
-    for (var i = 0; i < BADGERS.length; i++){
+    for (var i = 0; i < allBadgers().length; i++){
       if (shouldCancel && shouldCancel()) break;
-      var badger = BADGERS[i];
-      if (onProgress) onProgress(i + 1, BADGERS.length, badger.name, '');
+      var badger = allBadgers()[i];
+      if (onProgress) onProgress(i + 1, allBadgers().length, badger.name, '');
 
       var effective = await getEffectiveBadges(badger);
       var badgeList = effective.badges || [];
@@ -1526,7 +1568,7 @@ var BADGERS = [
       var gameIdHit = false;
       for (var j = 0; j < badgeList.length; j++){
         if (shouldCancel && shouldCancel()) break;
-        if (onProgress) onProgress(i + 1, BADGERS.length, badger.name, ' (badge ' + (j + 1) + '/' + badgeList.length + ')');
+        if (onProgress) onProgress(i + 1, allBadgers().length, badger.name, ' (badge ' + (j + 1) + '/' + badgeList.length + ')');
         var gid = await resolveBadgeGameId(badgeList[j], cache);
         if (gid === q){ gameIdHit = true; break; }
         await new Promise(function(r){ setTimeout(r, 60); });
@@ -1817,7 +1859,7 @@ var BADGERS = [
     }
 
     var items = recentBadgerIds.map(function(id){
-      return BADGERS.find(function(b){ return b.id === id; });
+      return allBadgers().find(function(b){ return b.id === id; });
     }).filter(Boolean);
 
     if (items.length === 0){
@@ -1905,6 +1947,12 @@ var BADGERS = [
       document.documentElement.style.removeProperty('--panel');
       document.documentElement.style.removeProperty('--panel-2');
     }
+
+    if (currentSettings.titleFont && currentSettings.titleFont !== 'Bebas Neue'){
+      document.documentElement.style.setProperty('--title-font', "'" + currentSettings.titleFont + "'");
+    } else {
+      document.documentElement.style.removeProperty('--title-font');
+    }
   }
 
   async function loadSettings(){
@@ -1920,13 +1968,14 @@ var BADGERS = [
         gradientAngle: parsed.gradientAngle || DEFAULT_GRADIENT_ANGLE,
         titleColor: parsed.titleColor || '',
         badgerTitleColor: parsed.badgerTitleColor || '',
-        panelColor: parsed.panelColor || ''
+        panelColor: parsed.panelColor || '',
+        titleFont: parsed.titleFont || 'Bebas Neue'
       };
     } catch(e){
       currentSettings = {
         theme: 'dark', accent: DEFAULT_ACCENT, shortcuts: true,
         gradientFrom: DEFAULT_GRADIENT_FROM, gradientTo: DEFAULT_GRADIENT_TO, gradientAngle: DEFAULT_GRADIENT_ANGLE,
-        titleColor: '', badgerTitleColor: '', panelColor: ''
+        titleColor: '', badgerTitleColor: '', panelColor: '', titleFont: 'Bebas Neue'
       };
     }
     applySettings();
@@ -2162,7 +2211,8 @@ var BADGERS = [
     'badger-tags': '{}',
     'custom-order': '[]',
     'collections': '[]',
-    'activity-log': '{}'
+    'activity-log': '{}',
+    'custom-badgers': '[]'
   };
 
   async function collectAllUserData(){
@@ -2173,8 +2223,8 @@ var BADGERS = [
     var keys = {};
     var i;
 
-    for (i = 0; i < BADGERS.length; i++){
-      var id = BADGERS[i].id;
+    for (i = 0; i < allBadgers().length; i++){
+      var id = allBadgers()[i].id;
       for (var prefix in STORAGE_DEFAULTS){
         var storageKey = prefix + '-' + id;
         var val = await storageGet(storageKey);
@@ -2209,6 +2259,7 @@ var BADGERS = [
     await loadCustomOrder();
     await loadCollections();
     await loadActivityLog();
+    await loadCustomBadgers();
     renderStreak();
     var themeSelectEl = document.getElementById('themeSelect');
     if (themeSelectEl){
@@ -2224,6 +2275,7 @@ var BADGERS = [
       document.getElementById('badgerTitleColorInput').value = currentSettings.badgerTitleColor || themeTextA;
       var themePanelA = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#1B1E27';
       document.getElementById('panelColorInput').value = currentSettings.panelColor || themePanelA;
+      document.getElementById('titleFontSelect').value = currentSettings.titleFont || 'Bebas Neue';
     }
     populateCollectionFilterOptions();
     if (currentBadger){
@@ -2553,10 +2605,10 @@ var BADGERS = [
   // ---------------- Home view ----------------
 
   async function updateBadgerCounter(){
-    var total = BADGERS.length;
+    var total = allBadgers().length;
     var done = 0;
     try {
-      var results = await Promise.all(BADGERS.map(function(b){
+      var results = await Promise.all(allBadgers().map(function(b){
         return storageGet('badgerdone-' + b.id);
       }));
       done = results.filter(function(v){ return v === '1'; }).length;
@@ -2577,7 +2629,7 @@ var BADGERS = [
     var emptyEl = document.getElementById('homeEmpty');
     listEl.innerHTML = '';
     var f = (filter||'').toLowerCase().trim();
-    var matches = BADGERS.filter(function(b){
+    var matches = allBadgers().filter(function(b){
       if (!f) return true;
       if (b.name.toLowerCase().indexOf(f) !== -1) return true;
       if (getTags(b.id).some(function(t){ return t.toLowerCase().indexOf(f) !== -1; })) return true;
@@ -2674,6 +2726,12 @@ var BADGERS = [
         var nameDiv = document.createElement('div');
         nameDiv.className = 'badger-card-name';
         nameDiv.appendChild(highlightMatch(badger.name, filter));
+        if (isCustomBadger(badger)){
+          var customTag = document.createElement('span');
+          customTag.className = 'badger-card-custom-tag';
+          customTag.textContent = 'Custom';
+          nameDiv.appendChild(customTag);
+        }
         var diffDiv = document.createElement('div');
         diffDiv.className = 'badger-card-diff';
         diffDiv.textContent = badger.difficulty || '';
@@ -2870,10 +2928,10 @@ var BADGERS = [
 
     idSearchCancelled = false;
     btn.disabled = true;
-    cancelBtn.style.display = isIdQuery ? 'inline-flex' : 'none';
+    cancelBtn.style.display = 'inline-flex';
     resultsEl.innerHTML = '';
     statusEl.className = 'list-status';
-    statusEl.textContent = isIdQuery ? 'Starting search\u2026' : 'Searching every badger\u2026';
+    statusEl.textContent = 'Starting search\u2026';
 
     var searchFn = isIdQuery ? findBadgersByBadgeOrGameId : findBadgersByBadgeName;
 
@@ -2914,12 +2972,12 @@ var BADGERS = [
   // so external links can jump straight to one badger's checklist.
   function findBadgerBySlug(q){
     if (!q) return null;
-    var exactId = BADGERS.find(function(b){ return b.id === q; });
+    var exactId = allBadgers().find(function(b){ return b.id === q; });
     if (exactId) return exactId;
     var lower = q.toLowerCase();
-    var exactName = BADGERS.find(function(b){ return (b.name || '').toLowerCase() === lower; });
+    var exactName = allBadgers().find(function(b){ return (b.name || '').toLowerCase() === lower; });
     if (exactName) return exactName;
-    return BADGERS.find(function(b){ return (b.name || '').toLowerCase().indexOf(lower) !== -1; }) || null;
+    return allBadgers().find(function(b){ return (b.name || '').toLowerCase().indexOf(lower) !== -1; }) || null;
   }
 
   // ---------------- Detail view ----------------
@@ -2959,6 +3017,11 @@ var BADGERS = [
     var diffEl = document.getElementById('detailDifficulty');
     diffEl.textContent = badger.difficulty || '';
     diffEl.style.color = difficultyColor(badger.difficulty);
+
+    var isCustom = isCustomBadger(badger);
+    document.getElementById('customBadgerControls').style.display = isCustom ? 'block' : 'none';
+    document.getElementById('addBadgeToggleRow').style.display = isCustom ? 'block' : 'none';
+    document.getElementById('addBadgeToBadgerPanel').style.display = 'none';
 
     var linkEl = document.getElementById('detailGameLink');
     linkEl.innerHTML = '';
@@ -3221,6 +3284,28 @@ var BADGERS = [
     }
 
     row.appendChild(main);
+
+    if (isCustomBadger(currentBadger)){
+      var deleteBadgeBtn = document.createElement('button');
+      deleteBadgeBtn.type = 'button';
+      deleteBadgeBtn.className = 'custom-badge-delete-btn';
+      deleteBadgeBtn.title = 'Remove this badge';
+      deleteBadgeBtn.setAttribute('aria-label', 'Remove ' + (b.name || 'this badge'));
+      deleteBadgeBtn.textContent = '\u2715';
+      deleteBadgeBtn.addEventListener('click', function(){
+        if (!confirm('Remove "' + (b.name || 'this badge') + '" from this badger?')) return;
+        var idx = currentBadger.badges.indexOf(b);
+        if (idx !== -1) currentBadger.badges.splice(idx, 1);
+        delete progressData[k];
+        saveBadgerProgress();
+        saveCustomBadgers();
+        currentBadges = currentBadger.badges;
+        renderList();
+        updateStats();
+      });
+      row.appendChild(deleteBadgeBtn);
+    }
+
     listEl.appendChild(row);
   }
 
@@ -3327,18 +3412,70 @@ var BADGERS = [
   document.getElementById('badgeTypeFilter').addEventListener('input', renderList);
   document.getElementById('favBadgesOnlyBox').addEventListener('change', renderList);
 
+  // Returns a plain-object copy of progressData so a snapshot taken before a
+  // bulk change survives even though progressData itself keeps mutating.
+  function snapshotProgress(){
+    var copy = {};
+    for (var k in progressData) copy[k] = progressData[k];
+    return copy;
+  }
+
+  function showUndoToast(message, badgerId, snapshot){
+    var layer = document.getElementById('toastLayer');
+    if (!layer) return;
+    var toast = document.createElement('div');
+    toast.className = 'toast';
+    var msg = document.createElement('span');
+    msg.className = 'toast-msg';
+    msg.textContent = message;
+    var undoBtn = document.createElement('button');
+    undoBtn.type = 'button';
+    undoBtn.className = 'toast-undo-btn';
+    undoBtn.textContent = 'Undo';
+
+    var dismissTimer = setTimeout(removeToast, 6000);
+    function removeToast(){
+      clearTimeout(dismissTimer);
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }
+    undoBtn.addEventListener('click', function(){
+      storageSet('progress-' + badgerId, JSON.stringify(snapshot));
+      // Only touch the live view if you're still looking at that badger -
+      // if you've moved on, the storage write above is still applied, it'll
+      // just show correctly next time that badger is opened.
+      if (currentBadger && currentBadger.id === badgerId){
+        progressData = snapshot;
+        renderList();
+        updateStats();
+      }
+      removeToast();
+    });
+
+    toast.appendChild(msg);
+    toast.appendChild(undoBtn);
+    layer.appendChild(toast);
+  }
+
   document.getElementById('checkAllBtn').addEventListener('click', function(){
+    var snapshot = snapshotProgress();
+    var badgerId = currentBadger.id;
+    var badgerName = currentBadger.name;
     currentBadges.forEach(function(b){ progressData[badgeKey(currentBadger.id, b)] = true; });
     saveBadgerProgress();
     recordActivity();
     renderList();
     updateStats();
+    showUndoToast('Checked all badges for ' + badgerName + '.', badgerId, snapshot);
   });
   document.getElementById('uncheckAllBtn').addEventListener('click', function(){
+    var snapshot = snapshotProgress();
+    var badgerId = currentBadger.id;
+    var badgerName = currentBadger.name;
     currentBadges.forEach(function(b){ progressData[badgeKey(currentBadger.id, b)] = false; });
     saveBadgerProgress();
     renderList();
     updateStats();
+    showUndoToast('Unchecked all badges for ' + badgerName + '.', badgerId, snapshot);
   });
 
   // ---- Tag chips on the detail page ----
@@ -3382,10 +3519,10 @@ var BADGERS = [
   // from it, in their natural position) so drag-and-drop works correctly
   // even while a search/difficulty filter is narrowing what's on screen.
   function reorderCustomOrder(draggedId, targetId){
-    var base = customOrder.length ? customOrder.slice() : BADGERS.map(function(b){ return b.id; });
+    var base = customOrder.length ? customOrder.slice() : allBadgers().map(function(b){ return b.id; });
     var seen = {};
     base.forEach(function(id){ seen[id] = true; });
-    BADGERS.forEach(function(b){ if (!seen[b.id]){ base.push(b.id); seen[b.id] = true; } });
+    allBadgers().forEach(function(b){ if (!seen[b.id]){ base.push(b.id); seen[b.id] = true; } });
     base = base.filter(function(id){ return id !== draggedId; });
     var targetIdx = base.indexOf(targetId);
     if (targetIdx === -1) targetIdx = base.length;
@@ -3461,7 +3598,7 @@ var BADGERS = [
       var membershipList = document.createElement('div');
       membershipList.className = 'collection-membership-list';
       membershipList.style.display = 'none';
-      BADGERS.forEach(function(b){
+      allBadgers().forEach(function(b){
         var item = document.createElement('label');
         item.className = 'collection-membership-item';
         var cb = document.createElement('input');
@@ -3502,6 +3639,94 @@ var BADGERS = [
   });
   document.getElementById('collectionFilterSelect').addEventListener('change', function(){
     renderHome(searchInput.value);
+  });
+
+  // ---- Custom local badgers ----
+  document.getElementById('addBadgerBtn').addEventListener('click', function(){
+    var panel = document.getElementById('addBadgerPanel');
+    panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+    if (panel.style.display === 'flex') document.getElementById('newBadgerName').focus();
+  });
+  document.getElementById('cancelBadgerBtn').addEventListener('click', function(){
+    document.getElementById('addBadgerPanel').style.display = 'none';
+    document.getElementById('newBadgerName').value = '';
+    document.getElementById('newBadgerDifficulty').value = '';
+    document.getElementById('newBadgerGameLink').value = '';
+    document.getElementById('addBadgerStatus').textContent = '';
+  });
+  document.getElementById('createBadgerBtn').addEventListener('click', function(){
+    var nameInput = document.getElementById('newBadgerName');
+    var name = nameInput.value.trim();
+    var statusEl = document.getElementById('addBadgerStatus');
+    if (!name){
+      statusEl.textContent = 'Give it a name first.';
+      statusEl.className = 'list-status err';
+      return;
+    }
+    var id = 'custom_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
+    var badger = {
+      id: id,
+      name: name,
+      difficulty: document.getElementById('newBadgerDifficulty').value.trim(),
+      gameLink: document.getElementById('newBadgerGameLink').value.trim(),
+      milestones: [],
+      badges: []
+    };
+    customBadgers.push(badger);
+    saveCustomBadgers();
+    document.getElementById('cancelBadgerBtn').click();
+    renderHome(document.getElementById('homeSearch').value);
+    openBadger(badger);
+  });
+  document.getElementById('newBadgerName').addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){ e.preventDefault(); document.getElementById('createBadgerBtn').click(); }
+  });
+
+  document.getElementById('deleteBadgerBtn').addEventListener('click', function(){
+    if (!currentBadger) return;
+    if (!confirm('Delete "' + currentBadger.name + '" and all its badges? This only removes it from this device and cannot be undone.')) return;
+    var id = currentBadger.id;
+    customBadgers = customBadgers.filter(function(b){ return b.id !== id; });
+    saveCustomBadgers();
+    storageSet('progress-' + id, '{}');
+    storageSet('badgerdone-' + id, '');
+    document.getElementById('backBtn').click();
+  });
+
+  document.getElementById('addBadgeToggleBtn').addEventListener('click', function(){
+    var panel = document.getElementById('addBadgeToBadgerPanel');
+    panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+    if (panel.style.display === 'flex') document.getElementById('newBadgeName').focus();
+  });
+  document.getElementById('createBadgeBtn').addEventListener('click', function(){
+    var nameInput = document.getElementById('newBadgeName');
+    var name = nameInput.value.trim();
+    var statusEl = document.getElementById('addBadgeStatus');
+    if (!name){
+      statusEl.textContent = 'Give the badge a name first.';
+      statusEl.className = 'list-status err';
+      return;
+    }
+    if (!currentBadger || !isCustomBadger(currentBadger)) return;
+    var badge = { name: name };
+    var game = document.getElementById('newBadgeGame').value.trim();
+    var link = document.getElementById('newBadgeLink').value.trim();
+    if (game) badge.game = game;
+    if (link) badge.link = link;
+    currentBadger.badges.push(badge);
+    saveCustomBadgers();
+    currentBadges = currentBadger.badges;
+    renderList();
+    updateStats();
+    document.getElementById('newBadgeName').value = '';
+    document.getElementById('newBadgeGame').value = '';
+    document.getElementById('newBadgeLink').value = '';
+    statusEl.className = 'list-status';
+    statusEl.textContent = 'Added "' + name + '".';
+    nameInput.focus();
+  });
+  document.getElementById('newBadgeName').addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){ e.preventDefault(); document.getElementById('createBadgeBtn').click(); }
   });
 
   // Small floating popup (from the 📁 button on a home card) for quickly
@@ -3644,6 +3869,10 @@ var BADGERS = [
     var themeText2 = getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
     if (themeText2) document.getElementById('badgerTitleColorInput').value = themeText2;
   });
+  document.getElementById('titleFontSelect').addEventListener('change', function(){
+    currentSettings.titleFont = this.value;
+    saveSettings();
+  });
   document.getElementById('shortcutsToggle').addEventListener('change', function(){
     currentSettings.shortcuts = this.checked;
     saveSettings();
@@ -3693,7 +3922,7 @@ var BADGERS = [
     var content = document.getElementById('statsContent');
     content.innerHTML = '<div class="list-status">Crunching numbers\u2026</div>';
 
-    var perBadger = await Promise.all(BADGERS.map(async function(b){
+    var perBadger = await Promise.all(allBadgers().map(async function(b){
       var effective = await getEffectiveBadges(b);
       var badges = effective.badges || [];
       var prog = await loadBadgerProgress(b.id);
@@ -3828,7 +4057,8 @@ var BADGERS = [
       loadTags(),
       loadCustomOrder(),
       loadCollections(),
-      loadActivityLog()
+      loadActivityLog(),
+      loadCustomBadgers()
     ]);
     document.getElementById('themeSelect').value = currentSettings.theme;
     document.getElementById('accentColorInput').value = currentSettings.accent;
@@ -3842,6 +4072,7 @@ var BADGERS = [
     document.getElementById('badgerTitleColorInput').value = currentSettings.badgerTitleColor || themeTextB;
     var themePanelB = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#1B1E27';
     document.getElementById('panelColorInput').value = currentSettings.panelColor || themePanelB;
+    document.getElementById('titleFontSelect').value = currentSettings.titleFont || 'Bebas Neue';
     renderStreak();
     populateCollectionFilterOptions();
     var initialSlug = (location.hash || '').replace(/^#badger=/, '');
