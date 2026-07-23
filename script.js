@@ -1237,6 +1237,24 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "obtainable-urn-badge-checker",
+    name: "Obtainable URN Badge Checker",
+    difficulty: "Intense",
+    gameLink: "https://www.roblox.com/games/17190328306/Obtainable-URN-Badge-Checker",
+    milestones: [
+      { name: '10 Obtainable URN Badges.', target: 10 },
+      { name: '20 Obtainable URN Badges.', target: 20 },
+      { name: '30 Obtainable URN Badges.', target: 30 },
+      { name: '40 Obtainable URN Badges.', target: 40 },
+      { name: '50 Obtainable URN Badges.', target: 50 },
+      { name: '60 Obtainable URN Badges.', target: 60 },
+      { name: 'Collect all badges. (0.15)', target: 73 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1481575835#gid=1481575835",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
