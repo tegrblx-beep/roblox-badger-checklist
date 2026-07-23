@@ -1297,7 +1297,7 @@ var BADGERS = [
     difficulty: "Hard",
     gameLink: "https://www.roblox.com/games/110984835821591/GBD-Replaced",
     milestones: [
-      { name: 'Win!', target: 11 },
+      { name: 'Win!', target: 10 },
     ],
     sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1124627022#gid=1124627022",
     badges: [
