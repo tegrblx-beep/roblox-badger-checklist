@@ -1255,6 +1255,18 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "taxi-simulator-badger",
+    name: "Taxi Simulator Badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/18576793452/Taxi-Simulator-Badger",
+    milestones: [
+      { name: 'you did it', target: 92 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=57216355#gid=57216355",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
