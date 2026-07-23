@@ -1212,6 +1212,19 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "typical-badger",
+    name: "Typical Badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/17762010787/A-Typical-Badger",
+    milestones: [
+      { name: 'TJobbing Builder 🔨', target: 22 },
+      { name: 'Sparky 🔧', target: 44 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=693687970#gid=693687970",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
