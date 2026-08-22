@@ -7,7 +7,7 @@
 <title>Badger Checklist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@500;600;700;800&family=Bebas+Neue&family=Anton&family=Oswald:wght@600&family=Archivo+Black&family=Righteous&family=Permanent+Marker&family=IBM+Plex+Mono:wght@500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@500;600;700;800&family=Bebas+Neue&family=Anton&family=Oswald:wght@600&family=Archivo+Black&family=Righteous&family=Permanent+Marker&family=IBM+Plex+Mono:wght@500;600&family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <link rel="stylesheet" href="style.css">
 <script src="script.js" defer></script>
@@ -19,7 +19,10 @@
   <!-- ===================== HOME VIEW ===================== -->
   <div id="homeView">
     <header>
-      <h1>Badger Checklist</h1>
+      <div class="brand-row">
+        <div class="brand-mark" aria-hidden="true"><span>B</span></div>
+        <h1>Badger Checklist</h1>
+      </div>
       <p class="sub">Search for a badger and jump straight into its checklist.</p>
       <div class="stat-line" id="badgerCounterLine">
       <span class="stat-count" id="badgerCounterCount">0 / 0</span>
@@ -35,7 +38,7 @@
         <input type="file" id="importDataInput" accept=".json,application/json" hidden />
         <button type="button" class="bulk-btn" id="statsBtn">📊 Stats</button>
         <button type="button" class="bulk-btn" id="settingsBtn">⚙ Settings</button>
-        <button type="button" class="bulk-btn" id="addBadgerBtn">+ Add badger</button>
+        <button type="button" class="bulk-btn bulk-btn-primary" id="addBadgerBtn">+ Add badger</button>
         <span class="list-status" id="dataToolsStatus"></span>
       </div>
       <div class="collections-manage-panel" id="addBadgerPanel" style="display:none;">
@@ -53,7 +56,7 @@
           <input type="text" id="newBadgerGameLink" class="id-search-input" placeholder="https://www.roblox.com/games/... (optional)" autocomplete="off" style="flex:1" />
         </div>
         <div class="id-search-actions">
-          <button type="button" class="bulk-btn" id="createBadgerBtn">Create badger</button>
+          <button type="button" class="bulk-btn bulk-btn-primary" id="createBadgerBtn">Create badger</button>
           <button type="button" class="bulk-btn" id="cancelBadgerBtn">Cancel</button>
         </div>
         <span class="list-status" id="addBadgerStatus"></span>
@@ -62,8 +65,8 @@
         <div class="settings-row">
           <label for="themeSelect" class="sort-label">Theme</label>
           <select id="themeSelect" class="sort-select">
-            <option value="dark">Roblox Light (default)</option>
-            <option value="light">Light</option>
+            <option value="dark">Roblox Dark (default)</option>
+            <option value="light">Roblox Light</option>
             <option value="midnight">Midnight</option>
             <option value="forest">Forest</option>
             <option value="sunset">Sunset</option>
@@ -87,28 +90,29 @@
         </div>
         <div class="settings-row">
           <label for="accentColorInput" class="sort-label">Accent color</label>
-          <input type="color" id="accentColorInput" value="#3661FF" />
+          <input type="color" id="accentColorInput" value="#00B06F" />
           <button type="button" class="bulk-btn" id="resetAccentBtn">Reset</button>
         </div>
         <div class="settings-row">
           <label for="panelColorInput" class="sort-label">Card/panel color</label>
-          <input type="color" id="panelColorInput" value="#1B1E27" />
+          <input type="color" id="panelColorInput" value="#1E1E24" />
           <button type="button" class="bulk-btn" id="resetPanelColorBtn">Reset</button>
         </div>
         <div class="settings-row">
           <label for="titleColorInput" class="sort-label">Main title</label>
-          <input type="color" id="titleColorInput" value="#ECE9E2" />
+          <input type="color" id="titleColorInput" value="#FFFFFF" />
           <button type="button" class="bulk-btn" id="resetTitleColorBtn">Reset</button>
         </div>
         <div class="settings-row">
           <label for="badgerTitleColorInput" class="sort-label">Badger titles</label>
-          <input type="color" id="badgerTitleColorInput" value="#ECE9E2" />
+          <input type="color" id="badgerTitleColorInput" value="#FFFFFF" />
           <button type="button" class="bulk-btn" id="resetBadgerTitleColorBtn">Reset</button>
         </div>
         <div class="settings-row">
           <label for="titleFontSelect" class="sort-label">Title font</label>
           <select id="titleFontSelect" class="sort-select">
-            <option value="Baloo 2">Baloo 2 (default)</option>
+            <option value="Inter">Inter (default)</option>
+            <option value="Baloo 2">Baloo 2</option>
             <option value="Fredoka">Fredoka</option>
             <option value="Bebas Neue">Bebas Neue</option>
             <option value="Anton">Anton</option>
@@ -139,7 +143,7 @@
         <input type="text" id="idSearchInput" class="id-search-input" placeholder="Badge name, game name, badge ID, or game ID" autocomplete="off" />
       </div>
       <div class="id-search-actions">
-        <button type="button" class="bulk-btn" id="idSearchBtn">Search</button>
+        <button type="button" class="bulk-btn bulk-btn-primary" id="idSearchBtn">Search</button>
         <button type="button" class="bulk-btn" id="idSearchCancelBtn" style="display:none;">Cancel</button>
       </div>
       <div class="list-status" id="idSearchStatus"></div>
@@ -176,7 +180,7 @@
     <div class="collections-manage-panel" id="collectionsManagePanel" style="display:none;">
       <div class="id-search-actions">
         <input type="text" id="newCollectionName" class="id-search-input" placeholder="New collection name" autocomplete="off" style="flex:1" />
-        <button type="button" class="bulk-btn" id="addCollectionBtn">Add</button>
+        <button type="button" class="bulk-btn bulk-btn-primary" id="addCollectionBtn">Add</button>
       </div>
       <div id="collectionsList" class="collections-list"></div>
     </div>
@@ -251,7 +255,7 @@
         <input type="text" id="newBadgeLink" class="id-search-input" placeholder="Roblox badge link (optional)" autocomplete="off" style="flex:1" />
       </div>
       <div class="id-search-actions">
-        <button type="button" class="bulk-btn" id="createBadgeBtn">Add badge</button>
+        <button type="button" class="bulk-btn bulk-btn-primary" id="createBadgeBtn">Add badge</button>
       </div>
       <span class="list-status" id="addBadgeStatus"></span>
     </div>
@@ -282,8 +286,9 @@
 // ==================================================================================
 //  EDIT THIS SECTION IN VS CODE — this is your entire badger database.
 //  (Unchanged — keep your existing script.js with your BADGERS array. This file
-//  only changed its <head> font imports and a couple of default color-picker
-//  values above, to match the new Roblox-style theme in style.css.)
+//  only changed its <head> font imports, added a small Roblox-style brand mark
+//  next to the title, and swapped a couple of default color-picker values above
+//  to match the new Roblox Dark theme in style.css.)
 // ==================================================================================
 </script>
 </body>
