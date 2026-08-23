@@ -1482,6 +1482,18 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "mmbh",
+    name: "Mari's Micorocks5555 Badge Hunt",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/398992281/Maris-Nicorocks5555-Badge-Hunt",
+    milestones: [
+      { name: 'Nicorocks5555 Badge Collector', target: 17 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1970641558#gid=1970641558",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
