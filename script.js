@@ -1311,7 +1311,7 @@ var BADGERS = [
     milestones: [
       { name: '６０', target: 60 },
       { name: '１２０', target: 120 },
-      { name: 'ＥＢ ＣＯＭＰＬＥＴＩＯＮ', type: 'EXTREME', target: 13},
+      { name: 'ＥＢ ＣＯＭＰＬＥＴＩＯＮ', type: 'EXTREME', target: 15},
     ],
     sheetUrl: "",
     badges: [
