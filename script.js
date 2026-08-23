@@ -1397,7 +1397,6 @@ var BADGERS = [
       { link: "https://www.roblox.com/badges/797387927812046/Sequence-2", type: "RANDOM" },
       { link: "https://www.roblox.com/badges/3346340590018354/Sequence-4", type: "RANDOM" },
       { link: "https://www.roblox.com/badges/2148854768/DELIQUESCE", type: "RANDOM" },
-      { link: "https://www.roblox.com/badges/2124500580/Summon", type: "RANDOM" },
       { link: "https://www.roblox.com/badges/2128033111/ENDING-5", type: "RANDOM" },
       { link: "https://www.roblox.com/badges/193531439972592/Down-Under", type: "RANDOM" },
       { link: "https://www.roblox.com/badges/4059525185962306/Block-Exterminator", type: "RANDOM" },
