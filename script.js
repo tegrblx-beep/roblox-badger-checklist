@@ -160,7 +160,7 @@ var BADGERS = [
     id: "trustys-badger",
     name: "Trusty's Badger",
     difficulty: "Hard",
-    gameLink: "https://www.roblox.com/games/79757130917226/Dystopian-Badger",
+    gameLink: "https://www.roblox.com/games/15873213569/Trustys-Badger",
     milestones: [
       { name: "One Quarter of the way!", target: 3 },
       { name: "Halfway there!", target: 6 },
