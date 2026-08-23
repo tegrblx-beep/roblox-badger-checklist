@@ -1484,13 +1484,25 @@ var BADGERS = [
   },
   {
     id: "mmbh",
-    name: "Mari's Micorocks5555 Badge Hunt",
+    name: "Mari's Nicorocks5555 Badge Hunt",
     difficulty: "Hard",
     gameLink: "https://www.roblox.com/games/398992281/Maris-Nicorocks5555-Badge-Hunt",
     milestones: [
       { name: 'Nicorocks5555 Badge Collector', target: 17 },
     ],
     sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1970641558#gid=1970641558",
+    badges: [
+    ]
+  },
+  {
+    id: "the-badger",
+    name: "THE BADGER",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/398992281/Maris-Nicorocks5555-Badge-Hunt",
+    milestones: [
+      { name: '75', target: 75 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=320935842#gid=320935842",
     badges: [
     ]
   },
