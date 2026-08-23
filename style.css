@@ -83,7 +83,7 @@
     font-family: 'Poppins', 'Nunito', system-ui, sans-serif;
     padding: 0 0 4rem;
   }
-  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px; }
   a{ color: var(--gold); text-decoration: none; font-weight: 700; }
   a:hover{ text-decoration: underline; }
 
@@ -148,7 +148,7 @@
      into that reuse. */
   #badgerList{
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
     gap: 16px 14px;
   }
   .badger-card{
