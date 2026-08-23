@@ -1303,185 +1303,6 @@ var BADGERS = [
     badges: [
     ]
   },
-  {
-    id: "ubg",
-    name: "Untitled Badger Game",
-    difficulty: "Insane",
-    gameLink: "https://www.roblox.com/games/15876522230/UBG-Untitled-Badger-Game",
-    milestones: [
-      { name: '６０', target: 60 },
-      { name: '１２０', target: 120 },
-      { name: 'ＥＢ ＣＯＭＰＬＥＴＩＯＮ', type: 'EXTREME', target: 15},
-    ],
-    sheetUrl: "",
-    badges: [
-      { link: "https://www.roblox.com/badges/2127184071/Welcome", type: "PLATFORMERS", typeColor: "#7FA8D8" },
-{ link: "https://www.roblox.com/badges/2127220501/A-Journey-Begins", type: "PLATFORMERS", typeColor: "#7FA8D8" },
-{ link: "https://www.roblox.com/badges/1810466796614453/The-Relic-of-Brickstel", type: "PLATFORMERS", typeColor: "#7FA8D8" },
-{ link: "https://www.roblox.com/badges/2144605453/unnamed", type: "PLATFORMERS", typeColor: "#7FA8D8" },
-{ link: "https://www.roblox.com/badges/1672130604256820/100-World-5", type: "PLATFORMERS", typeColor: "#7FA8D8" },
-{ link: "https://www.roblox.com/badges/2146563824/You-Beat-Chapter-1", type: "PLATFORMERS", typeColor: "#7FA8D8" },
-{ link: "https://www.roblox.com/badges/57459841922718/100m", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/468002214181035/200m", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/749241599214205/300m", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/2153685845/200-meters", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/3774959253313007/100M", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/2150993012/Strawberry-Seed-Packet", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/945563230609199/welcome", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/327004686384601/Level-5", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/3834009833326150/200-Meters-World-1", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/3407228509266968/500-Meters-World-1", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/2124480289/The-Escape", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/1158292670176226/200M", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/2144275912/Finally-Freedom", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/2144276121/Where-Is-It-From", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/739217611694281/Chapter-1", type: "2 PLAYERS", typeColor: "#78BFA3" },
-{ link: "https://www.roblox.com/badges/2150766884/The-end", type: "OBBIES", typeColor: "#D49A70" },
-{ link: "https://www.roblox.com/badges/2145628337/200M", type: "OBBIES", typeColor: "#D49A70" },
-{ link: "https://www.roblox.com/badges/2124628581/Completed-Game-Alpha", type: "OBBIES", typeColor: "#D49A70" },
-{ link: "https://www.roblox.com/badges/2148302828/You-win", type: "OBBIES", typeColor: "#D49A70" },
-{ link: "https://www.roblox.com/badges/22018260707857/Dream-Path", type: "OBBIES", typeColor: "#D49A70" },
-{ link: "https://www.roblox.com/badges/1668980617595471/Bonfire", type: "OBBIES", typeColor: "#D49A70" },
-{ link: "https://www.roblox.com/badges/2860723842190267/Helped-A-Soul", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2150486517/100-Meters", type: "OBBIES", typeColor: "#D49A70" },
-{ link: "https://www.roblox.com/badges/2124525707/The-Infectious", type: "OBBIES", typeColor: "#D49A70" },
-{ link: "https://www.roblox.com/badges/2125036729/No-Jumping-Zone-Completionist", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/2153688774/To-Be-Continued", type: "OBBIES", typeColor: "#D49A70" },
-{ link: "https://www.roblox.com/badges/2124948842/Power-Maintenance", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/2143572528/Deeper", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/550720072203319/Experiment-Complete-STANDARD", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/2147307490/Reflectance", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/557560653391781/Chapter-5-Finished", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/2153829905/Trapped-Chapter-4-Finished", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/2417344284385648/Christmas-Event-Finished", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/804760675520331/Chaos-End", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/1159110097479489/NO-MOORE", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/370386084812344/Good-Ending-Win", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/3528992613910095/Beat-Zone-B", type: "PUZZLES", typeColor: "#C59A9A" },
-{ link: "https://www.roblox.com/badges/2140848332/Completed-Level-16-Level-Run-For-Your-Life", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2124743005/Its-Out-There", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2154008975/remarks", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2127566715/Reanimation", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2153806602/UPDATE-1-COMPLETED", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/213251725544912/Incursion", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/3461846384721616/Mission-Completed", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/4065305206801773/Row-Your-Boat-Past-Buried", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/316795968309437/Whats-Next", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2919010320641534/Stuck-Ending", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2153273312/Deceased", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2144588213/Followed-Ending", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2153518253/Vivid-Imagination", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2153963466/The-Hazard", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2229816434295341/Canon-Ending", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/1167264913774274/Escape", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2682091092392084/Survivor", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2314967906736000/Chapter-1-Completed", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2186760448000923/END", type: "HORRORS", typeColor: "#A67F91" },
-{ link: "https://www.roblox.com/badges/2124760931/3D", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124738156/Throwing-Hands", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2311077989378990/Christmas", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/539066036446080/symphonies", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/4212889892319566/concertos", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/3317080992397559/sonatas", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2152864249/Button-Genius", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/3914793836196259/Guard-Dog", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124515861/The-Cold-Truth", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2143549849/Neon-City-Brickman-Park", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2127762135/Brave-Legend", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/2124497914/Capta-oceani", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124500580/Summon", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/3281428483363798/Arcade-Jacket", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2125404304/Runner-Up", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2146995437/Relief", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/1146373449101107/Completed-the-Dream-Survey", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/797387927812046/Sequence-2", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/3346340590018354/Sequence-4", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2148854768/DELIQUESCE", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2128033111/ENDING-5", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/193531439972592/Down-Under", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/4059525185962306/Block-Exterminator", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/840916353487020/New-Town-New-Life", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2768202273135132/ANNIHILATOR", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124883473/Heads-Turned", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124703340/unnamed", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/361476182122506/TAKE-OVER", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124577065/Tomorrow", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/645251903377444/Completion", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/4167723100429766/Defeat-Ballzo", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/3553153193050255/In-circles", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/3083010298696375/Too-soon", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/246815606971228/Chapter-2-Completed", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2146878391/Peaceful-Plains", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/4017360164863041/The-End", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2143856625/Back-Together", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/3369297606927757/Just-A-Scratch", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2152929695/polyhedral-progress", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2850294536755157/Lord-Aelfric-Arbiter-of-Souls", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2132605983/It-wasnt-me", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2130256248/Hired", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124814175/RELEASE", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/1712125556606448/unnamed", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124449177/No-More-Survivors", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124497266/For-the-greater-good", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124481535/Winner", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/4164082401010959/Arradise", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124529980/Easy-Way-Out", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2124900285/CHAPTER-ONE", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2127502577/Glass-Game-THIS-WILL-BE-THE-END-OF-YOU", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/1523480533682574/ending", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2130394443/challenge1", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2074693743755613/TRAVERSE", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2681558089064676/Nightmare-Victory", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/862106710836528/bonafide-fisher", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/2149443640/Winner", type: "RANDOM", typeColor: "#B89BCA" },
-{ link: "https://www.roblox.com/badges/498200843816624/Thanks", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/2124427735/Reality-Stone", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/2124425217/Obby-Pro", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/1397769920690150/Maintain", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/896031006468007/Destruction", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/2212477405977220/Until-Dawn", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/2127531044/Forbidden-Story", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/2142981412/Beginning-of-Quests", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/1520985948324234/Maniac", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/2125816590/ACT-I-FINISHED", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/2125701787/Amateur-Bag-Hunter", type: "RIDDLES", typeColor: "#B5A67A" },
-{ link: "https://www.roblox.com/badges/2126881111/Rhythm-Perfectionist", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/244999328657781/Spelunker", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/2148132793/Grade-9", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/3582902922177602/WINGA", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/1662721780815600/Strongest-of-them-all", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/1849870582882714/All-Normal-Endings", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/2124662706/A-True-Nightmare", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/4226891803739860/No-More-Edginess", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/3670628255570756/divinity", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/2148306757/Perfectionist", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/2124632803/Checkpoint-10-Finale", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/2128157421/Win", type: "EXTREME", typeColor: "#A78BC4" },
-{ link: "https://www.roblox.com/badges/2143969801/Finished-Part-I", type: "BONUS", typeColor: "#86AFA6" },
-{ link: "https://www.roblox.com/badges/2125824628/Cautious-Prosperity", type: "BONUS", typeColor: "#86AFA6" },
-{ link: "https://www.roblox.com/badges/3197478675260054/Reached-Sakura-Skies", type: "BONUS", typeColor: "#86AFA6" },
-{ link: "https://www.roblox.com/badges/2146810807/REACHED-CHECKPOINT-2", type: "BONUS", typeColor: "#86AFA6" },
-{ link: "https://www.roblox.com/badges/2124538575/Watermelon-Room", type: "BONUS", typeColor: "#86AFA6" },
-{ link: "https://www.roblox.com/badges/857583166/Completionist", type: "BONUS", typeColor: "#86AFA6" },
-{ link: "https://www.roblox.com/badges/3734243214619116/Fifteen-Collectibles", type: "BONUS", typeColor: "#86AFA6" },
-{ link: "https://www.roblox.com/badges/2125249625933320/From-The-Depths", type: "BONUS", typeColor: "#86AFA6" },
-{ link: "https://www.roblox.com/badges/2151916835/Congratulations", type: "BONUS", typeColor: "#86AFA6" },
-{ link: "https://www.roblox.com/badges/1466737472739769/Saturated-Game", type: "BONUS", typeColor: "#86AFA6" },
-    ]
-  },
-  {
-    id: "puzzler",
-    name: "Puzzler",
-    difficulty: "Hard",
-    gameLink: "https://www.roblox.com/games/18184833645/Puzzler",
-    milestones: [
-      { name: 'Win!', target: 10 },
-    ],
-    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=243895218#gid=243895218",
-    badges: [
-    ]
-  },
-    
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
@@ -2197,7 +2018,7 @@ var BADGERS = [
   }
 
   // ---- Settings (theme, accent color, keyboard shortcuts) ----
-  var DEFAULT_ACCENT = '#E8B23D';
+  var DEFAULT_ACCENT = '#00C177';
   var VALID_THEMES = ['dark', 'light', 'midnight', 'forest', 'sunset', 'ocean', 'rose', 'slate', 'amber', 'custom'];
   var DEFAULT_GRADIENT_FROM = '#12141A';
   var DEFAULT_GRADIENT_TO = '#2A1E3A';
@@ -2945,6 +2766,44 @@ var BADGERS = [
     return match ? match[1] : '';
   }
 
+  // ---- Roblox game thumbnails (place icons, for the home grid) ----
+  // Cached globally by place ID, same idea as the badge enrichment cache
+  // above: looking a game's icon up once (in any badger) makes it instant
+  // everywhere else that game's place ID shows up.
+  var gameIconCache = null;
+  async function getGameIconCache(){
+    if (gameIconCache) return gameIconCache;
+    var raw = await storageGet('game-icon-cache-v1');
+    gameIconCache = raw ? JSON.parse(raw) : {};
+    return gameIconCache;
+  }
+  function saveGameIconCache(){
+    storageSet('game-icon-cache-v1', JSON.stringify(gameIconCache || {}));
+  }
+
+  // Batched (up to 100 place IDs per request) lookup of a game's icon via
+  // Roblox's place-icon thumbnail endpoint. Fire-and-forget from renderHome:
+  // cards render immediately with a placeholder, then swap in the real
+  // thumbnail as soon as this resolves.
+  async function fetchGameIconsBatch(placeIds){
+    var cache = await getGameIconCache();
+    var needed = Array.from(new Set(placeIds)).filter(function(id){ return id && !cache[id]; });
+    for (var i = 0; i < needed.length; i += 100){
+      var batch = needed.slice(i, i + 100);
+      try {
+        var resp = await corsFetch('https://thumbnails.roblox.com/v1/places/gameicons?placeIds=' + batch.join(',') + '&size=150x150&format=Png&isCircular=false');
+        if (resp.ok){
+          var data = await resp.json();
+          (data.data || []).forEach(function(d){
+            if (d.imageUrl) cache[String(d.targetId)] = d.imageUrl;
+          });
+          saveGameIconCache();
+        }
+      } catch(e){ /* both direct and proxy failed - this batch stays a placeholder */ }
+    }
+    return cache;
+  }
+
   async function renderHome(filter){
     var listEl = document.getElementById('badgerList');
     var emptyEl = document.getElementById('homeEmpty');
@@ -3011,6 +2870,11 @@ var BADGERS = [
     }
     emptyEl.style.display = 'none';
 
+    // badgerId -> { img, ph } - filled in as cards are built, then used
+    // below to paint in real thumbnails once fetchGameIconsBatch resolves.
+    var thumbRefs = {};
+    var iconCachePreload = await getGameIconCache();
+
     for (var i=0;i<matches.length;i++){
       (function(badger, index){
         var card = document.createElement('div');
@@ -3019,12 +2883,38 @@ var BADGERS = [
         card.setAttribute('role', 'button');
         card.setAttribute('data-index', index);
 
+        // ---- Thumbnail (Roblox game icon, with a badger placeholder until it loads) ----
+        var thumbWrap = document.createElement('div');
+        thumbWrap.className = 'badger-card-thumb-wrap';
+        var placeId = extractGameId(badger.gameLink);
+        var thumbImg = document.createElement('img');
+        thumbImg.className = 'badger-card-thumb';
+        thumbImg.alt = badger.name;
+        thumbImg.loading = 'lazy';
+        thumbImg.style.display = 'none';
+        var thumbPlaceholder = document.createElement('div');
+        thumbPlaceholder.className = 'badger-card-thumb-placeholder';
+        thumbPlaceholder.textContent = '🦡';
+        if (placeId && iconCachePreload[placeId]){
+          thumbImg.src = iconCachePreload[placeId];
+          thumbImg.style.display = '';
+          thumbPlaceholder.style.display = 'none';
+        }
+        thumbImg.addEventListener('error', function(){
+          thumbImg.style.display = 'none';
+          thumbPlaceholder.style.display = '';
+        });
+        thumbWrap.appendChild(thumbPlaceholder);
+        thumbWrap.appendChild(thumbImg);
+        if (placeId) thumbRefs[badger.id] = { img: thumbImg, ph: thumbPlaceholder, placeId: placeId };
+
         var favBtn = createFavButton(isBadgerFavorite(badger.id), badger.name, function(){
           toggleBadgerFavorite(badger.id);
           card.classList.toggle('badger-card-fav', isBadgerFavorite(badger.id));
           renderHome(document.getElementById('homeSearch').value);
           return isBadgerFavorite(badger.id);
         });
+        favBtn.classList.add('badger-card-thumb-fav');
 
         var seal = document.createElement('input');
         seal.type = 'checkbox';
@@ -3041,6 +2931,8 @@ var BADGERS = [
           seal.checked = v === '1';
           card.classList.toggle('badger-card-done', seal.checked);
         });
+        thumbWrap.appendChild(seal);
+        thumbWrap.appendChild(favBtn);
 
         var left = document.createElement('div');
         left.className = 'badger-card-left';
@@ -3097,7 +2989,14 @@ var BADGERS = [
           openCollectionQuickAdd(badger, collectionBtn);
         });
 
-        card.appendChild(seal);
+        thumbWrap.appendChild(collectionBtn);
+
+        var body = document.createElement('div');
+        body.className = 'badger-card-body';
+        body.appendChild(left);
+        body.appendChild(right);
+
+        card.appendChild(thumbWrap);
         if (sortMode === 'custom'){
           var handle = document.createElement('span');
           handle.className = 'drag-handle';
@@ -3125,10 +3024,7 @@ var BADGERS = [
             renderHome(document.getElementById('homeSearch').value);
           });
         }
-        card.appendChild(favBtn);
-        card.appendChild(collectionBtn);
-        card.appendChild(left);
-        card.appendChild(right);
+        card.appendChild(body);
         card.addEventListener('click', function(){ openBadger(badger); });
         card.addEventListener('keydown', function(e){
           if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openBadger(badger); }
@@ -3163,6 +3059,25 @@ var BADGERS = [
       })(matches[i], i);
     }
     updateBadgerCounter();
+
+    // Batch-resolve every card's game icon that isn't already cached, then
+    // paint each one in as it becomes available. Runs after the cards are
+    // already on screen so this never blocks the initial render.
+    var placeIdsNeeded = Object.keys(thumbRefs)
+      .map(function(id){ return thumbRefs[id].placeId; })
+      .filter(function(pid){ return pid && !iconCachePreload[pid]; });
+    if (placeIdsNeeded.length){
+      fetchGameIconsBatch(placeIdsNeeded).then(function(cache){
+        Object.keys(thumbRefs).forEach(function(badgerId){
+          var ref = thumbRefs[badgerId];
+          if (ref.placeId && cache[ref.placeId]){
+            ref.img.src = cache[ref.placeId];
+            ref.img.style.display = '';
+            ref.ph.style.display = 'none';
+          }
+        });
+      });
+    }
   }
 
   var searchInput = document.getElementById('homeSearch');
