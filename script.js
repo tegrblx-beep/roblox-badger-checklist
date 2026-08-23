@@ -1498,7 +1498,7 @@ var BADGERS = [
     id: "the-badger",
     name: "THE BADGER",
     difficulty: "Hard",
-    gameLink: "https://www.roblox.com/games/398992281/Maris-Nicorocks5555-Badge-Hunt",
+    gameLink: "https://www.roblox.com/games/113390965513647/THE-BADGER",
     milestones: [
       { name: '75', target: 75 },
     ],
