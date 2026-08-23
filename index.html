@@ -207,6 +207,11 @@
     <button class="back-btn" id="backBtn">← All badgers</button>
     <header class="detail-header">
       <h2 class="badger-name" id="detailName"></h2>
+      <div class="detail-thumb-wrap" id="detailThumbWrap">
+        <div class="detail-thumb-placeholder" id="detailThumbPlaceholder">🦡</div>
+        <img class="detail-thumb" id="detailThumb" alt="" hidden />
+      </div>
+      <div class="badger-description" id="badgerDescription" aria-live="polite"></div>
       <div class="difficulty-label" id="detailDifficulty"></div>
       <div class="tags-row" id="detailTagsRow">
         <div class="tag-chips" id="detailTagChips"></div>
@@ -282,7 +287,6 @@
 <div id="confettiLayer" aria-hidden="true"></div>
 <div id="toastLayer" aria-hidden="true"></div>
 <button type="button" class="add-note-btn" id="addNoteBtn" title="Add a sticky note">+ Note</button>
-
 <script>
 // ==================================================================================
 //  EDIT THIS SECTION IN VS CODE — this is your entire badger database.
