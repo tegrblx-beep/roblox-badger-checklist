@@ -248,6 +248,13 @@
   .back-btn:hover{ color: var(--gold); border-color: var(--gold); }
 
   header.detail-header{ padding: 1.25rem 0 1.5rem; }
+  .detail-thumb-wrap{
+    width: min(100%, 420px); aspect-ratio: 1 / 1; margin-bottom: 1.25rem; overflow:hidden;
+    position:relative; background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius);
+  }
+  .detail-thumb{ width:100%; height:100%; object-fit:cover; display:block; }
+  .detail-thumb-placeholder{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:64px; opacity:.5; }
+  .badger-description{ max-width:720px; margin:0 0 1rem; color:var(--text-dim); font-size:14px; line-height:1.6; white-space:pre-wrap; }
   .badger-name{ font-family: var(--title-font, 'Poppins'), sans-serif; font-weight: 900; font-size: 34px; letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 8px; color: var(--badger-title-color, var(--text)); }
   .difficulty-label{
     font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase;
