@@ -65,7 +65,7 @@
   body{ transition: background 0.2s ease, color 0.2s ease; }
   *{ box-sizing: border-box; }
   body{ margin:0; background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; padding: 0 0 4rem; }
-  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 24px; }
   a{ color: inherit; }
 
   /* ---------- Home / search view ---------- */
