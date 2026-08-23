@@ -3007,6 +3007,32 @@ var BADGERS = [
     return cache;
   }
 
+  async function fetchGameDescription(placeId){
+    if (!placeId) return '';
+    var timeoutId;
+    try {
+      var request = (async function(){
+        var universeResponse = await corsFetch('https://apis.roblox.com/universes/v1/places/' + encodeURIComponent(placeId) + '/universe');
+        if (!universeResponse.ok) return '';
+        var universeData = await universeResponse.json();
+        if (!universeData.universeId) return '';
+        var gameResponse = await corsFetch('https://games.roblox.com/v1/games?universeIds=' + encodeURIComponent(universeData.universeId));
+        if (!gameResponse.ok) return '';
+        var gameData = await gameResponse.json();
+        return gameData.data && gameData.data[0] ? (gameData.data[0].description || '') : '';
+      })();
+      var timeout = new Promise(function(resolve){
+        timeoutId = setTimeout(function(){ resolve(null); }, 8000);
+      });
+      var response = await Promise.race([request, timeout]);
+      clearTimeout(timeoutId);
+      return response || '';
+    } catch(e){
+      clearTimeout(timeoutId);
+      return '';
+    }
+  }
+
   async function renderHome(filter){
     var listEl = document.getElementById('badgerList');
     var emptyEl = document.getElementById('homeEmpty');
@@ -3453,6 +3479,29 @@ var BADGERS = [
     nameRow.insertBefore(detailFavBtn, document.getElementById('detailName'));
 
     document.getElementById('detailName').textContent = badger.name;
+    var detailThumb = document.getElementById('detailThumb');
+    var detailThumbPlaceholder = document.getElementById('detailThumbPlaceholder');
+    detailThumb.hidden = true;
+    detailThumb.removeAttribute('src');
+    detailThumb.alt = badger.name;
+    detailThumbPlaceholder.style.display = 'flex';
+    var detailDescription = document.getElementById('badgerDescription');
+    detailDescription.textContent = badger.description || 'No description available for this game.';
+    var detailPlaceId = extractGameId(badger.gameLink);
+    if (detailPlaceId){
+      fetchGameIconsBatch([detailPlaceId]).then(function(cache){
+        if (currentBadger !== badger || !cache[detailPlaceId]) return;
+        detailThumb.src = cache[detailPlaceId];
+        detailThumb.hidden = false;
+        detailThumbPlaceholder.style.display = 'none';
+      });
+      fetchGameDescription(detailPlaceId).then(function(description){
+        if (currentBadger !== badger || badger.description) return;
+        detailDescription.textContent = description || 'No description available for this game.';
+      });
+    } else if (!badger.description) {
+      detailDescription.textContent = 'No description available for this game.';
+    }
     var diffEl = document.getElementById('detailDifficulty');
     diffEl.textContent = badger.difficulty || '';
     diffEl.style.color = difficultyColor(badger.difficulty);
