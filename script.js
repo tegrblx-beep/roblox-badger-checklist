@@ -1470,6 +1470,18 @@ var BADGERS = [
       { link: "https://www.roblox.com/badges/1466737472739769/Saturated-Game", type: "BONUS" },
     ]
   },
+  {
+    id: "puzzler",
+    name: "Puzzler",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/18184833645/Puzzler",
+    milestones: [
+      { name: 'All Puzzles Done!', target: 25 },
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=243895218#gid=243895218",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
