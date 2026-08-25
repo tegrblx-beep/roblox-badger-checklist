@@ -1522,7 +1522,7 @@ var BADGERS = [
   {
     id: "the-possible-badger",
     name: "The Possible Badger",
-    difficulty: "Hard",
+    difficulty: "Challenging",
     gameLink: "https://www.roblox.com/games/104276289659160/The-Possible-Badger",
     milestones: [
       { name: '1/2', target: 25 },
@@ -1535,7 +1535,7 @@ var BADGERS = [
   {
     id: "minesweeper-badger",
     name: "minesweeper Badger",
-    difficulty: "Hard",
+    difficulty: "Challenging",
     gameLink: "https://www.roblox.com/games/92076240807914/minesweeper-badger",
     milestones: [
       { name: 'mine vacuum // 15 badges', target: 15 },
