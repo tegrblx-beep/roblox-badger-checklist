@@ -1506,6 +1506,46 @@ var BADGERS = [
     badges: [
     ]
   },
+  {
+    id: "bad-tower-badger",
+    name: "bad tower badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/124961849064442/bad-tower-badger",
+    milestones: [
+      { name: 'complete the badger', target: 50 },
+      { name: 'the overachiever', target: 60 }
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=465924784#gid=465924784",
+    badges: [
+    ]
+  },
+  {
+    id: "the-possible-badger",
+    name: "The Possible Badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/104276289659160/The-Possible-Badger",
+    milestones: [
+      { name: '1/2', target: 25 },
+      { name: 'Journey Complete', target: 60 }
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=625720061#gid=625720061",
+    badges: [
+    ]
+  },
+  {
+    id: "minesweeper-badger",
+    name: "minesweeper Badger",
+    difficulty: "Hard",
+    gameLink: "https://www.roblox.com/games/92076240807914/minesweeper-badger",
+    milestones: [
+      { name: 'mine vacuum // 15 badges', target: 15 },
+      { name: 'undefeated dodger // 30 badges', target: 30 },
+      { name: 'MINESWEEPER GOD // 36 badges', target: 36 }
+    ],
+    sheetUrl: "https://docs.google.com/spreadsheets/d/1_GXidotsL0OtM2J2FJ1f-cGVgo_E1LR4I_L0xm4Bz1M/edit?gid=1782298224#gid=1782298224",
+    badges: [
+    ]
+  },
   // Add more badger objects here, separated by commas.
 ];
 // ================================================================================== 
