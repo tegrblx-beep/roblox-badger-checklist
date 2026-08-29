@@ -1822,6 +1822,45 @@ var BADGERS = [
     return customBadgers.some(function(b){ return b.id === id; });
   }
 
+  // For any badger with a spreadsheet link (added via "+ Add badger" or one
+  // of the built-in ones already wired to a sheet): turns the sheet's "type"
+  // column into one milestone per distinct type, e.g. a "type" of
+  // PLATFORMERS/OBBIES/EXTREME becomes a "PLATFORMERS: x/y" style milestone
+  // automatically - no need to type each one in by hand.
+  // Marked with `auto: true` so a later refresh can keep the target count in
+  // sync with the sheet without touching any milestone the badger already
+  // had defined by hand (even one that happens to reuse the same name).
+  function applyAutoTypeMilestones(badger, badges){
+    var counts = {};
+    var order = [];
+    (badges || []).forEach(function(b){
+      var t = (b.type || '').trim();
+      if (!t) return;
+      if (!(t in counts)){ counts[t] = 0; order.push(t); }
+      counts[t]++;
+    });
+    if (!order.length) return false;
+
+    if (!badger.milestones) badger.milestones = [];
+    var existingByName = {};
+    badger.milestones.forEach(function(m){ existingByName[(m.name||'').toLowerCase()] = m; });
+
+    var changed = false;
+    order.forEach(function(t){
+      var existing = existingByName[t.toLowerCase()];
+      if (!existing){
+        badger.milestones.push({ name: t, target: counts[t], type: t, auto: true });
+        changed = true;
+      } else if (existing.auto && existing.target !== counts[t]){
+        existing.target = counts[t];
+        changed = true;
+      }
+      // existing && !existing.auto -> the badger already had a milestone by
+      // this exact name (hand-written, e.g. on a built-in badger); leave it.
+    });
+    return changed;
+  }
+
   function detectStorage(){
     if (typeof window.storage !== 'undefined' && window.storage && typeof window.storage.get === 'function') return 'artifact';
     try { var k='__t__'; localStorage.setItem(k,'1'); localStorage.removeItem(k); return 'local'; } catch(e){ return 'memory'; }
@@ -1905,13 +1944,15 @@ var BADGERS = [
     for (var i=0;i<lower.length;i++){ for (var j=0;j<candidates.length;j++){ if (lower[i].indexOf(candidates[j]) !== -1) return i; } }
     return -1;
   }
-  function sheetUrlToCsvUrl(url){
+  function parseSheetUrl(url){
     var m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
     if (!m) throw new Error('Could not find a spreadsheet ID in that link.');
-    var sheetId = m[1];
     var gidMatch = url.match(/[?#&]gid=(\d+)/);
-    var gid = gidMatch ? gidMatch[1] : '0';
-    return 'https://docs.google.com/spreadsheets/d/' + sheetId + '/export?format=csv&gid=' + gid;
+    return { spreadsheetId: m[1], gid: gidMatch ? gidMatch[1] : '0' };
+  }
+  function sheetUrlToCsvUrl(url){
+    var parts = parseSheetUrl(url);
+    return 'https://docs.google.com/spreadsheets/d/' + parts.spreadsheetId + '/export?format=csv&gid=' + parts.gid;
   }
   function parseSheetBadges(csvText){
     var parsed = Papa.parse(csvText, { skipEmptyLines: false });
@@ -1935,7 +1976,7 @@ var BADGERS = [
         break;
       }
     }
-    if (headerRowIdx === -1) return [];
+    if (headerRowIdx === -1) return { badges: [], headerRowIdx: -1, typeCol: -1 };
     var out = [];
     for (var r2 = headerRowIdx + 1; r2 < rows.length; r2++){
       var row = rows[r2];
@@ -1965,14 +2006,104 @@ var BADGERS = [
         _srcIndex: r2
       });
     }
-    return out;
+    return { badges: out, headerRowIdx: headerRowIdx, typeCol: typeCol };
   }
-  async function fetchSheetBadges(sheetUrl){
+
+  // ---- Type-column cell color auto-detection (needs a Google Sheets API key) ----
+  // The CSV export used above only ever carries cell *text*, never
+  // formatting, so there's no way to see a cell's background color from it.
+  // Reading the actual fill color of the "type" column requires the real
+  // Sheets API instead - hence this is entirely optional and no-ops with no
+  // key configured (Settings > Sheets API key), falling back to whatever a
+  // manual "type color" column already provided, exactly as before.
+  function colIndexToLetter(idx){
+    var letter = '', n = idx + 1;
+    while (n > 0){
+      var rem = (n - 1) % 26;
+      letter = String.fromCharCode(65 + rem) + letter;
+      n = Math.floor((n - 1) / 26);
+    }
+    return letter;
+  }
+  function rgbColorToHex(colorObj){
+    if (!colorObj) return '';
+    function ch(v){ return Math.max(0, Math.min(255, Math.round((v || 0) * 255))); }
+    var r = ch(colorObj.red), g = ch(colorObj.green), b = ch(colorObj.blue);
+    // White/unset is Sheets' default fill - treat it as "no color chosen"
+    // rather than forcing every uncolored cell to white chips.
+    if (r === 255 && g === 255 && b === 255) return '';
+    return '#' + [r,g,b].map(function(x){ var h = x.toString(16); return h.length < 2 ? '0'+h : h; }).join('');
+  }
+  // Cache sheetId -> {gid -> title}, so opening/refreshing the same badger
+  // repeatedly doesn't re-resolve the tab title on every fetch.
+  var sheetTitleCache = {};
+  async function resolveSheetTitle(spreadsheetId, gid, apiKey){
+    var cacheKey = spreadsheetId + '::' + gid;
+    if (sheetTitleCache[cacheKey]) return sheetTitleCache[cacheKey];
+    var metaUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + spreadsheetId
+      + '?key=' + encodeURIComponent(apiKey) + '&fields=' + encodeURIComponent('sheets.properties(sheetId,title)');
+    var resp = await fetchWithTimeout(metaUrl, 8000);
+    if (!resp.ok) throw new Error('Sheets API request failed (HTTP ' + resp.status + ').');
+    var meta = await resp.json();
+    var match = (meta.sheets || []).filter(function(s){ return String(s.properties.sheetId) === String(gid); })[0];
+    if (!match) throw new Error('Could not find that tab in the spreadsheet.');
+    sheetTitleCache[cacheKey] = match.properties.title;
+    return match.properties.title;
+  }
+  // Returns { <1-indexed sheet row number>: '#rrggbb' } for the type
+  // column's cell background colors, for the given data-row range.
+  async function fetchTypeColumnColors(spreadsheetId, gid, typeColIdx, firstDataRow, lastDataRow, apiKey){
+    if (!apiKey || typeColIdx < 0 || lastDataRow < firstDataRow) return {};
+    var title = await resolveSheetTitle(spreadsheetId, gid, apiKey);
+    var colLetter = colIndexToLetter(typeColIdx);
+    var range = "'" + title.replace(/'/g, "''") + "'!" + colLetter + firstDataRow + ':' + colLetter + lastDataRow;
+    var dataUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + spreadsheetId
+      + '?ranges=' + encodeURIComponent(range)
+      + '&includeGridData=true&fields=' + encodeURIComponent('sheets.data.rowData.values.effectiveFormat.backgroundColor')
+      + '&key=' + encodeURIComponent(apiKey);
+    var resp = await fetchWithTimeout(dataUrl, 8000);
+    if (!resp.ok) throw new Error('Sheets API request failed (HTTP ' + resp.status + ').');
+    var data = await resp.json();
+    var sheetData = (((data.sheets||[])[0]||{}).data||[])[0];
+    var rowData = (sheetData && sheetData.rowData) || [];
+    var colorsByRow = {};
+    rowData.forEach(function(rd, i){
+      var cell = rd && rd.values && rd.values[0];
+      var hex = rgbColorToHex(cell && cell.effectiveFormat && cell.effectiveFormat.backgroundColor);
+      if (hex) colorsByRow[firstDataRow + i] = hex;
+    });
+    return colorsByRow;
+  }
+
+  async function fetchSheetBadges(sheetUrl, apiKey){
     var csvUrl = sheetUrlToCsvUrl(sheetUrl);
     var resp = await fetchWithTimeout(csvUrl, 8000);
     if (!resp.ok) throw new Error('Sheet request failed (HTTP ' + resp.status + ').');
     var text = await resp.text();
-    return parseSheetBadges(text);
+    var parsedResult = parseSheetBadges(text);
+    var badges = parsedResult.badges;
+
+    if (apiKey && parsedResult.typeCol !== -1 && badges.length){
+      try {
+        var parts = parseSheetUrl(sheetUrl);
+        // _srcIndex is the 0-indexed CSV row, which is also the 1-indexed
+        // sheet row (row 0 in the CSV is sheet row 1) - so it converts
+        // straight to a real spreadsheet row number.
+        var firstDataRow = badges[0]._srcIndex + 1;
+        var lastDataRow = badges[badges.length - 1]._srcIndex + 1;
+        var colorsByRow = await fetchTypeColumnColors(parts.spreadsheetId, parts.gid, parsedResult.typeCol, firstDataRow, lastDataRow, apiKey);
+        badges.forEach(function(b){
+          if (b.typeColor) return; // an explicit "type color" column always wins
+          var hex = colorsByRow[b._srcIndex + 1];
+          if (hex) b.typeColor = hex;
+        });
+      } catch(e){
+        // Cell-color lookup failing shouldn't take the whole sheet load down
+        // with it - the badges themselves already loaded fine above.
+      }
+    }
+
+    return badges;
   }
 
   // Merge sheet-loaded badges with the manual `badges` array. A manual entry
@@ -2004,7 +2135,7 @@ var BADGERS = [
     if (!sheetFetchPromises[badger.id]){
       sheetFetchPromises[badger.id] = (async function(){
         try {
-          var sheetBadges = await fetchSheetBadges(badger.sheetUrl);
+          var sheetBadges = await fetchSheetBadges(badger.sheetUrl, currentSettings.sheetsApiKey);
           await storageSet('sheetcache-' + badger.id, JSON.stringify({ badges: sheetBadges, ts: Date.now() }));
           return { badges: sheetBadges, isErr: false };
         } catch(e){
@@ -2594,13 +2725,15 @@ var BADGERS = [
         titleColor: parsed.titleColor || '',
         badgerTitleColor: parsed.badgerTitleColor || '',
         panelColor: parsed.panelColor || '',
-        titleFont: parsed.titleFont || 'Bebas Neue'
+        titleFont: parsed.titleFont || 'Bebas Neue',
+        sheetsApiKey: parsed.sheetsApiKey || ''
       };
     } catch(e){
       currentSettings = {
         theme: 'dark', accent: DEFAULT_ACCENT, shortcuts: true,
         gradientFrom: DEFAULT_GRADIENT_FROM, gradientTo: DEFAULT_GRADIENT_TO, gradientAngle: DEFAULT_GRADIENT_ANGLE,
-        titleColor: '', badgerTitleColor: '', panelColor: '', titleFont: 'Bebas Neue'
+        titleColor: '', badgerTitleColor: '', panelColor: '', titleFont: 'Bebas Neue',
+        sheetsApiKey: ''
       };
     }
     applySettings();
@@ -2901,6 +3034,7 @@ var BADGERS = [
       var themePanelA = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#1B1E27';
       document.getElementById('panelColorInput').value = currentSettings.panelColor || themePanelA;
       document.getElementById('titleFontSelect').value = currentSettings.titleFont || 'Bebas Neue';
+      document.getElementById('sheetsApiKeyInput').value = currentSettings.sheetsApiKey || '';
     }
     populateCollectionFilterOptions();
     if (currentBadger){
@@ -3844,6 +3978,7 @@ console.log(currentBadges.slice(0, 10));
       var result = await getEffectiveBadges(badger);
       if (currentBadger !== badger) return; // user navigated away before this resolved
       currentBadges = result.badges;
+      if (applyAutoTypeMilestones(badger, currentBadges) && isCustomBadger(badger)) saveCustomBadgers();
       setListStatus(result.status, result.isErr);
       renderMilestones();
       renderList();
@@ -3854,6 +3989,7 @@ console.log(currentBadges.slice(0, 10));
           if (!fresh) return; // background refresh failed - keep showing cached data
           if (currentBadger !== badger) return; // user navigated away before this resolved
           currentBadges = fresh.badges;
+          if (applyAutoTypeMilestones(badger, currentBadges) && isCustomBadger(badger)) saveCustomBadgers();
           setListStatus(fresh.status, false);
           renderMilestones();
           renderList();
@@ -4427,6 +4563,9 @@ console.log(currentBadges.slice(0, 10));
     document.getElementById('newBadgerName').value = '';
     document.getElementById('newBadgerDifficulty').value = '';
     document.getElementById('newBadgerGameLink').value = '';
+    document.getElementById('newBadgerSheetUrl').value = '';
+    document.getElementById('newBadgerMilestoneName').value = '';
+    document.getElementById('newBadgerMilestoneTarget').value = '';
     document.getElementById('addBadgerStatus').textContent = '';
   });
   document.getElementById('createBadgerBtn').addEventListener('click', function(){
@@ -4438,13 +4577,35 @@ console.log(currentBadges.slice(0, 10));
       statusEl.className = 'list-status err';
       return;
     }
+
+    var sheetUrl = document.getElementById('newBadgerSheetUrl').value.trim();
+    if (sheetUrl && !/\/spreadsheets\/d\//.test(sheetUrl)){
+      statusEl.textContent = "That doesn't look like a Google Sheets link - copy it from the address bar while the sheet is open.";
+      statusEl.className = 'list-status err';
+      return;
+    }
+
+    var milestoneName = document.getElementById('newBadgerMilestoneName').value.trim();
+    var milestoneTargetRaw = document.getElementById('newBadgerMilestoneTarget').value.trim();
+    var milestoneTarget = milestoneTargetRaw ? Number(milestoneTargetRaw) : NaN;
+    var milestones = [];
+    if (milestoneName || milestoneTargetRaw){
+      if (!milestoneName || !milestoneTargetRaw || !(milestoneTarget > 0)){
+        statusEl.textContent = 'A milestone needs both a name and a badge count greater than 0.';
+        statusEl.className = 'list-status err';
+        return;
+      }
+      milestones.push({ name: milestoneName, target: milestoneTarget });
+    }
+
     var id = 'custom_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7);
     var badger = {
       id: id,
       name: name,
       difficulty: document.getElementById('newBadgerDifficulty').value.trim(),
       gameLink: document.getElementById('newBadgerGameLink').value.trim(),
-      milestones: [],
+      sheetUrl: sheetUrl,
+      milestones: milestones,
       badges: []
     };
     customBadgers.push(badger);
@@ -4453,8 +4614,10 @@ console.log(currentBadges.slice(0, 10));
     renderHome(document.getElementById('homeSearch').value);
     openBadger(badger);
   });
-  document.getElementById('newBadgerName').addEventListener('keydown', function(e){
-    if (e.key === 'Enter'){ e.preventDefault(); document.getElementById('createBadgerBtn').click(); }
+  ['newBadgerName', 'newBadgerDifficulty', 'newBadgerGameLink', 'newBadgerSheetUrl', 'newBadgerMilestoneName', 'newBadgerMilestoneTarget'].forEach(function(fieldId){
+    document.getElementById(fieldId).addEventListener('keydown', function(e){
+      if (e.key === 'Enter'){ e.preventDefault(); document.getElementById('createBadgerBtn').click(); }
+    });
   });
 
   document.getElementById('deleteBadgerBtn').addEventListener('click', function(){
@@ -4607,6 +4770,10 @@ console.log(currentBadges.slice(0, 10));
   });
   document.getElementById('accentColorInput').addEventListener('input', function(){
     currentSettings.accent = this.value;
+    saveSettings();
+  });
+  document.getElementById('sheetsApiKeyInput').addEventListener('input', function(){
+    currentSettings.sheetsApiKey = this.value.trim();
     saveSettings();
   });
   document.getElementById('resetAccentBtn').addEventListener('click', function(){
@@ -4848,6 +5015,7 @@ console.log(currentBadges.slice(0, 10));
     var themePanelB = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#1B1E27';
     document.getElementById('panelColorInput').value = currentSettings.panelColor || themePanelB;
     document.getElementById('titleFontSelect').value = currentSettings.titleFont || 'Bebas Neue';
+    document.getElementById('sheetsApiKeyInput').value = currentSettings.sheetsApiKey || '';
     renderStreak();
     populateCollectionFilterOptions();
     var initialSlug = (location.hash || '').replace(/^#badger=/, '');
