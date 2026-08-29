@@ -10,7 +10,7 @@
 //
 // Bump CACHE_VERSION whenever index.html/script.js/style.css change so
 // returning visitors pick up the new files instead of a stale shell.
-var CACHE_VERSION = 'badger-shell-v1';
+var CACHE_VERSION = 'badger-shell-v5';
 var SHELL_FILES = [
   './',
   './index.html',
