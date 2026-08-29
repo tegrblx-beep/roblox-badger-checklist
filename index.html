@@ -55,6 +55,16 @@
           <label for="newBadgerGameLink" class="sort-label">Game link</label>
           <input type="text" id="newBadgerGameLink" class="id-search-input" placeholder="https://www.roblox.com/games/... (optional)" autocomplete="off" style="flex:1" />
         </div>
+        <div class="settings-row">
+          <label for="newBadgerSheetUrl" class="sort-label">Spreadsheet</label>
+          <input type="text" id="newBadgerSheetUrl" class="id-search-input" placeholder="Google Sheet link with the badge list (optional)" autocomplete="off" style="flex:1" />
+        </div>
+        <div class="settings-row">
+          <label for="newBadgerMilestoneName" class="sort-label">Milestone</label>
+          <input type="text" id="newBadgerMilestoneName" class="id-search-input" placeholder="Extra milestone name (optional)" autocomplete="off" style="flex:1" />
+          <input type="number" id="newBadgerMilestoneTarget" class="id-search-input" placeholder="Badge count" min="1" style="max-width:110px" />
+        </div>
+        <div class="settings-hint">Spreadsheet needs a header row with a "Badge Name" column - "Game", "Link", "Image", "Description" and "Type" columns are picked up too if present, same as the built-in badgers. If your sheet has a "Type" column, a milestone is created automatically for each type (e.g. "PLATFORMERS: 4/6") - the Milestone field above is only for one extra milestone on top of those.</div>
         <div class="id-search-actions">
           <button type="button" class="bulk-btn bulk-btn-primary" id="createBadgerBtn">Create badger</button>
           <button type="button" class="bulk-btn" id="cancelBadgerBtn">Cancel</button>
@@ -127,6 +137,12 @@
           <label><input type="checkbox" id="shortcutsToggle" checked> Enable keyboard shortcuts</label>
         </div>
         <div class="settings-hint">Shortcuts: <kbd>/</kbd> focus search &nbsp; <kbd>Esc</kbd> back / clear &nbsp; <kbd>C</kbd> check all &nbsp; <kbd>U</kbd> uncheck all &nbsp; <kbd>N</kbd> new note &nbsp; <kbd>?</kbd> toggle this panel</div>
+        <div class="settings-divider"></div>
+        <div class="settings-row">
+          <label for="sheetsApiKeyInput" class="sort-label">Sheets API key</label>
+          <input type="password" id="sheetsApiKeyInput" class="id-search-input" placeholder="Optional - lets type colors auto-fill from the sheet" autocomplete="off" style="flex:1" />
+        </div>
+        <div class="settings-hint">When a spreadsheet-linked badger has a "type" column, its badges' type color normally has to come from a separate "type color" column of hex codes. Paste a <a href="https://console.cloud.google.com/apis/library/sheets.googleapis.com" target="_blank" rel="noopener">Google Sheets API key</a> here and it'll read the actual cell background color of the "type" column instead, for any sheet that's shared as "Anyone with the link". Free to create, only needs the Sheets API enabled.</div>
         <div class="settings-divider"></div>
         <div class="settings-row">
           <button type="button" class="bulk-btn" id="resetStreakBtn">Reset streak &amp; activity history</button>
